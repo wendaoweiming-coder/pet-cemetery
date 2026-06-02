@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>宠物纪念墓碑</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="cemetery-page">
+    <a href="index.html" class="back-link">← 返回首页</a>
+
+    <section class="memorial-card">
+      <h1>小星星的纪念墓碑</h1>
+      <p class="subtitle">愿你在星光里安睡，也永远被爱记得。</p>
+
+      <div class="stone">
+        <div class="photo-frame">
+          🐾
+        </div>
+        <h2>小星星</h2>
+        <p>2016 - 2024</p>
+        <p>谢谢你陪我们走过那么多温柔的日子。</p>
+      </div>
+
+      <div class="gifts">
+        <button onclick="sendGift('🌸 一朵花')">献一朵花</button>
+        <button onclick="sendGift('🥫 一罐猫罐头')">送猫罐头</button>
+        <button onclick="sendGift('🎾 一个小球')">放一个小球</button>
+      </div>
+
+      <div class="message-box">
+        <textarea id="messageInput" placeholder="写下一句想对它说的话..."></textarea>
+        <button onclick="addMessage()">留下留言</button>
+      </div>
+
+      <h3>来访与纪念</h3>
+      <div id="giftList"></div>
+      <div id="messageList"></div>
+    </section>
+
+    <div id="petals"></div>
+    <div id="fireflies"></div>
+    <div id="leaves"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
