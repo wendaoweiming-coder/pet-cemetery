@@ -1,0 +1,64 @@
+/* 基础样式 */
+body {
+  font-family: "微软雅黑", sans-serif;
+  background-color: #fff8f0;
+  color: #5a4a42;
+  margin: 0;
+  padding: 0;
+}
+.container, .cemetery-page {
+  text-align: center;
+  padding: 40px;
+}
+
+/* 按钮 */
+.button, button, .back-link {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #f6d8b3;
+  color: #5a4a42;
+  text-decoration: none;
+  border-radius: 8px;
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+/* 墓碑卡片 */
+.memorial-card {
+  background-color: #fff4e6;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.stone {
+  background-color: #fdf0e3;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+.photo-frame {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+/* 留言 */
+textarea {
+  width: 80%;
+  height: 60px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* 动画容器 */
+#petals, #fireflies, #leaves {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
