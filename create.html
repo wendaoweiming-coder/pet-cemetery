@@ -11,7 +11,7 @@
       min-height: 100vh;
       font-family: "Microsoft YaHei", Arial, sans-serif;
       color: #fffaf5;
-      background: #1f1c1a;
+      background: #efe1d2;
     }
 
     .create-page {
@@ -19,10 +19,11 @@
       background-image:
         linear-gradient(
           90deg,
-          rgba(10, 13, 18, 0.78) 0%,
-          rgba(10, 13, 18, 0.58) 42%,
-          rgba(10, 13, 18, 0.2) 100%
+          rgba(52, 40, 34, 0.46) 0%,
+          rgba(92, 70, 56, 0.26) 45%,
+          rgba(255, 236, 215, 0.18) 100%
         ),
+        radial-gradient(circle at 20% 20%, rgba(255, 238, 213, 0.26), transparent 32%),
         url("hero.png");
       background-size: cover;
       background-position: center;
@@ -33,17 +34,18 @@
 
     .create-header {
       max-width: 1220px;
-      margin: 0 auto 62px;
+      margin: 0 auto 56px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .create-logo {
-      color: rgba(255, 250, 245, 0.9);
+      color: rgba(255, 250, 245, 0.94);
       font-size: 18px;
       letter-spacing: 0.5px;
       text-decoration: none;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
     }
 
     .header-actions {
@@ -54,8 +56,8 @@
 
     .top-link,
     .language-select {
-      border: 1px solid rgba(255, 250, 245, 0.22);
-      background: rgba(255, 250, 245, 0.1);
+      border: 1px solid rgba(255, 250, 245, 0.36);
+      background: rgba(255, 250, 245, 0.22);
       color: #fffaf5;
       padding: 10px 16px;
       border-radius: 999px;
@@ -63,6 +65,7 @@
       backdrop-filter: blur(12px);
       font-size: 14px;
       outline: none;
+      box-shadow: 0 12px 30px rgba(55, 38, 28, 0.12);
     }
 
     .language-select {
@@ -78,7 +81,7 @@
       max-width: 1220px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
+      grid-template-columns: 0.86fr 1.14fr;
       gap: 70px;
       align-items: start;
     }
@@ -86,11 +89,12 @@
     .create-copy {
       max-width: 500px;
       padding-top: 42px;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
     }
 
     .eyebrow {
       margin: 0 0 20px;
-      color: rgba(255, 238, 220, 0.76);
+      color: rgba(255, 238, 220, 0.86);
       font-size: 15px;
       letter-spacing: 0.6px;
     }
@@ -106,54 +110,54 @@
 
     .create-copy p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.82);
+      color: rgba(255, 244, 232, 0.88);
       font-size: 17px;
       line-height: 1.95;
     }
 
     .create-form-card {
       width: 100%;
-      max-width: 640px;
+      max-width: 650px;
       justify-self: end;
-      padding: 30px;
+      padding: 32px;
       box-sizing: border-box;
       border-radius: 34px;
       background:
         linear-gradient(
           180deg,
-          rgba(31, 34, 38, 0.72),
-          rgba(18, 20, 24, 0.82)
+          rgba(255, 248, 239, 0.72),
+          rgba(244, 226, 207, 0.58)
         );
-      color: #fffaf5;
-      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.42);
-      backdrop-filter: blur(22px);
-      border: 1px solid rgba(255, 250, 245, 0.16);
+      color: #51443d;
+      box-shadow: 0 30px 90px rgba(72, 48, 33, 0.28);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.42);
     }
 
     .form-title {
       margin: 0 0 8px;
       font-size: 26px;
       font-weight: 500;
-      color: #fff8ef;
+      color: #443730;
     }
 
     .form-intro {
       margin: 0 0 24px;
-      color: rgba(255, 244, 232, 0.68);
+      color: #7b665a;
       font-size: 14px;
       line-height: 1.7;
     }
 
     .form-section {
       padding: 22px 0;
-      border-top: 1px solid rgba(255, 250, 245, 0.12);
+      border-top: 1px solid rgba(108, 82, 62, 0.14);
     }
 
     .form-section-title {
       margin: 0 0 14px;
       font-size: 15px;
       font-weight: 500;
-      color: rgba(255, 248, 239, 0.92);
+      color: #4d3f37;
       letter-spacing: 0.2px;
     }
 
@@ -173,31 +177,31 @@
     }
 
     .visibility-content {
-      min-height: 86px;
+      min-height: 90px;
       padding: 14px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 250, 245, 0.14);
-      background: rgba(255, 250, 245, 0.08);
+      border: 1px solid rgba(100, 74, 56, 0.16);
+      background: rgba(255, 250, 245, 0.54);
       box-sizing: border-box;
       transition: 0.2s;
     }
 
     .visibility-card input:checked + .visibility-content {
-      border-color: rgba(255, 238, 220, 0.54);
-      background: rgba(255, 250, 245, 0.16);
-      box-shadow: 0 0 0 4px rgba(255, 238, 220, 0.08);
+      border-color: rgba(132, 95, 68, 0.46);
+      background: rgba(255, 250, 245, 0.86);
+      box-shadow: 0 0 0 4px rgba(132, 95, 68, 0.08);
     }
 
     .visibility-content strong {
       display: block;
       margin-bottom: 6px;
-      color: #fff8ef;
+      color: #463830;
       font-size: 14px;
       font-weight: 500;
     }
 
     .visibility-content span {
-      color: rgba(255, 244, 232, 0.62);
+      color: #806b5f;
       font-size: 12px;
       line-height: 1.5;
     }
@@ -205,7 +209,7 @@
     .form-label {
       display: block;
       margin: 15px 0 8px;
-      color: rgba(255, 244, 232, 0.78);
+      color: #665349;
       font-size: 14px;
     }
 
@@ -213,9 +217,9 @@
     textarea {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid rgba(255, 250, 245, 0.16);
-      background: rgba(255, 250, 245, 0.1);
-      color: #fffaf5;
+      border: 1px solid rgba(117, 92, 75, 0.18);
+      background: rgba(255, 250, 245, 0.72);
+      color: #4f413a;
       padding: 14px 16px;
       border-radius: 18px;
       font-size: 15px;
@@ -225,7 +229,7 @@
 
     .form-input::placeholder,
     textarea::placeholder {
-      color: rgba(255, 244, 232, 0.42);
+      color: rgba(92, 72, 60, 0.42);
     }
 
     textarea {
@@ -243,9 +247,9 @@
 
     .form-input:focus,
     textarea:focus {
-      border-color: rgba(255, 238, 220, 0.5);
-      box-shadow: 0 0 0 4px rgba(255, 238, 220, 0.08);
-      background: rgba(255, 250, 245, 0.14);
+      border-color: rgba(143, 109, 88, 0.5);
+      box-shadow: 0 0 0 4px rgba(143, 109, 88, 0.08);
+      background: rgba(255, 250, 245, 0.94);
     }
 
     .date-row {
@@ -263,25 +267,55 @@
     .photo-box {
       padding: 16px;
       border-radius: 22px;
-      border: 1px solid rgba(255, 250, 245, 0.14);
-      background: rgba(255, 250, 245, 0.07);
+      border: 1px solid rgba(100, 74, 56, 0.15);
+      background: rgba(255, 250, 245, 0.48);
     }
 
     .photo-box-title {
       margin: 0 0 6px;
-      color: #fff8ef;
+      color: #4c3e36;
       font-size: 14px;
+      font-weight: 500;
     }
 
     .photo-box-desc {
       margin: 0 0 12px;
-      color: rgba(255, 244, 232, 0.56);
+      color: #806b5f;
       font-size: 12px;
       line-height: 1.6;
     }
 
+    .hidden-file {
+      display: none;
+    }
+
+    .upload-label {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px dashed rgba(120, 88, 65, 0.34);
+      background: rgba(255, 250, 245, 0.64);
+      color: #6a5549;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .upload-label:hover {
+      background: rgba(255, 250, 245, 0.92);
+      border-color: rgba(120, 88, 65, 0.58);
+    }
+
+    .file-name {
+      margin-top: 8px;
+      color: #92796a;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
     .form-tip {
-      color: rgba(255, 244, 232, 0.56);
+      color: #8d7466;
       font-size: 13px;
       line-height: 1.6;
       margin: 12px 0 0;
@@ -290,18 +324,18 @@
     .submit-button {
       width: 100%;
       border: none;
-      background: #fff3e7;
-      color: #40342e;
+      background: #8f6d58;
+      color: #fffaf5;
       padding: 15px 22px;
       border-radius: 999px;
       cursor: pointer;
       font-size: 15px;
       margin-top: 8px;
-      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+      box-shadow: 0 16px 34px rgba(112, 78, 55, 0.22);
     }
 
     .submit-button:hover {
-      background: #ffffff;
+      background: #7f5f4b;
     }
 
     @media (max-width: 900px) {
@@ -342,15 +376,6 @@
 
       .date-row {
         grid-template-columns: 1fr;
-      }
-
-      .header-actions {
-        gap: 8px;
-      }
-
-      .top-link,
-      .language-select {
-        padding: 9px 12px;
       }
     }
   </style>
@@ -493,7 +518,10 @@
               <p class="photo-box-desc" data-key="stonePhotoDesc">
                 This photo appears on the memorial stone.
               </p>
-              <input id="petPhoto" type="file" accept="image/*" class="form-input">
+
+              <input id="petPhoto" type="file" accept="image/*" class="hidden-file" onchange="showFileName('petPhoto', 'stoneFileName')">
+              <label for="petPhoto" class="upload-label" data-key="chooseStonePhoto">Choose tombstone photo</label>
+              <div id="stoneFileName" class="file-name" data-key="noFile">No file chosen</div>
             </div>
 
             <div class="photo-box">
@@ -501,7 +529,10 @@
               <p class="photo-box-desc" data-key="publicPhotosDesc">
                 These photos can be seen by visitors.
               </p>
-              <input id="publicPhotos" type="file" accept="image/*" multiple class="form-input">
+
+              <input id="publicPhotos" type="file" accept="image/*" multiple class="hidden-file" onchange="showFileName('publicPhotos', 'publicFileName')">
+              <label for="publicPhotos" class="upload-label" data-key="choosePublicPhotos">Choose public photos</label>
+              <div id="publicFileName" class="file-name" data-key="noFile">No file chosen</div>
             </div>
 
             <div class="photo-box">
@@ -509,7 +540,10 @@
               <p class="photo-box-desc" data-key="privatePhotosDesc">
                 These photos are meant only for you.
               </p>
-              <input id="privatePhotos" type="file" accept="image/*" multiple class="form-input">
+
+              <input id="privatePhotos" type="file" accept="image/*" multiple class="hidden-file" onchange="showFileName('privatePhotos', 'privateFileName')">
+              <label for="privatePhotos" class="upload-label" data-key="choosePrivatePhotos">Choose private photos</label>
+              <div id="privateFileName" class="file-name" data-key="noFile">No file chosen</div>
             </div>
 
           </div>
@@ -565,6 +599,10 @@
         publicPhotosDesc: "These photos can be seen by visitors.",
         privatePhotosTitle: "Private memory photos",
         privatePhotosDesc: "These photos are meant only for you.",
+        chooseStonePhoto: "Choose tombstone photo",
+        choosePublicPhotos: "Choose public photos",
+        choosePrivatePhotos: "Choose private photos",
+        noFile: "No file chosen",
         photoTip: "In this first version, photos are saved only in your browser. Real private albums require login and database later.",
         saveBtn: "Save and View Memorial"
       },
@@ -602,179 +640,50 @@
         publicPhotosDesc: "这些照片访客可以看到。",
         privatePhotosTitle: "私密回忆照片",
         privatePhotosDesc: "这些照片只给你自己看。",
+        chooseStonePhoto: "选择墓碑照片",
+        choosePublicPhotos: "选择公开照片",
+        choosePrivatePhotos: "选择私密照片",
+        noFile: "还没有选择文件",
         photoTip: "第一版照片只会保存在你的浏览器里。真正的私密相册需要之后加入登录和数据库。",
         saveBtn: "保存并查看墓碑"
-      },
-
-      "zh-TW": {
-        logo: "星眠寵物紀念園",
-        viewBtn: "查看墓碑",
-        eyebrow: "為想念建立一個安靜的地方",
-        title: "為牠建一座小小的墓碑。",
-        desc: "留下牠的名字、日期、墓誌銘、故事和照片。你可以選擇哪些公開，哪些私密，哪些只能邀請訪問。",
-        formTitle: "墓碑資訊",
-        formIntro: "這些資訊之後還可以繼續修改。",
-        visibilityTitle: "墓地可見範圍",
-        publicTitle: "公開",
-        publicDesc: "所有人都可以造訪這座墓地。",
-        privateTitle: "私密",
-        privateDesc: "只有你自己可以看到。",
-        inviteTitle: "邀請可見",
-        inviteDesc: "只有拿到連結的人可以造訪。",
-        visibilityTip: "隱私設定會在之後加入登入和資料庫後真正生效。",
-        basicTitle: "基本資訊",
-        nameLabel: "寵物名字",
-        namePlaceholder: "例如：小星星",
-        birthLabel: "出生日期",
-        leaveLabel: "離開日期",
-        wordsTitle: "墓碑文字",
-        epitaphLabel: "墓誌銘",
-        epitaphPlaceholder: "寫一句會顯示在墓碑上的短句。",
-        storyLabel: "寵物故事",
-        storyPlaceholder: "寫下牠的故事、回憶、習慣，以及你不想忘記的小事。",
-        photosTitle: "照片",
-        stonePhotoTitle: "墓碑照片",
-        stonePhotoDesc: "這張照片會顯示在墓碑正面。",
-        publicPhotosTitle: "公開回憶照片",
-        publicPhotosDesc: "這些照片訪客可以看到。",
-        privatePhotosTitle: "私密回憶照片",
-        privatePhotosDesc: "這些照片只給你自己看。",
-        photoTip: "第一版照片只會保存在你的瀏覽器裡。真正的私密相簿需要之後加入登入和資料庫。",
-        saveBtn: "保存並查看墓碑"
-      },
-
-      ja: {
-        logo: "星眠ペット記念園",
-        viewBtn: "記念碑を見る",
-        eyebrow: "想い出のための静かな場所を作る",
-        title: "あの子のために小さな記念碑を作りましょう。",
-        desc: "名前、日付、墓碑銘、物語、写真を残せます。公開、非公開、招待のみを選べます。",
-        formTitle: "記念碑の情報",
-        formIntro: "これらの内容は後で編集できます。",
-        visibilityTitle: "公開範囲",
-        publicTitle: "公開",
-        publicDesc: "誰でもこの記念碑を訪問できます。",
-        privateTitle: "非公開",
-        privateDesc: "自分だけが見ることができます。",
-        inviteTitle: "招待のみ",
-        inviteDesc: "リンクを持つ人だけが訪問できます。",
-        visibilityTip: "本当のプライバシー機能は、ログインとデータベース追加後に有効になります。",
-        basicTitle: "基本情報",
-        nameLabel: "ペットの名前",
-        namePlaceholder: "例：ルナ",
-        birthLabel: "生まれた日",
-        leaveLabel: "旅立った日",
-        wordsTitle: "墓碑に刻む言葉",
-        epitaphLabel: "墓碑銘",
-        epitaphPlaceholder: "記念碑に表示する短い言葉を書いてください。",
-        storyLabel: "ペットの物語",
-        storyPlaceholder: "思い出、性格、習慣、忘れたくない小さなことを書いてください。",
-        photosTitle: "写真",
-        stonePhotoTitle: "墓碑の写真",
-        stonePhotoDesc: "この写真は記念碑に表示されます。",
-        publicPhotosTitle: "公開写真",
-        publicPhotosDesc: "訪問者が見ることができる写真です。",
-        privatePhotosTitle: "非公開写真",
-        privatePhotosDesc: "自分だけのための写真です。",
-        photoTip: "最初のバージョンでは、写真はこのブラウザにのみ保存されます。本当の非公開アルバムにはログインとデータベースが必要です。",
-        saveBtn: "保存して記念碑を見る"
-      },
-
-      ko: {
-        logo: "별잠 반려동물 추모정원",
-        viewBtn: "추모비 보기",
-        eyebrow: "기억을 위한 조용한 장소 만들기",
-        title: "그 아이를 위한 작은 추모비를 만들어보세요.",
-        desc: "이름, 날짜, 묘비 문구, 이야기와 사진을 남기고 공개 범위를 선택할 수 있습니다.",
-        formTitle: "추모비 정보",
-        formIntro: "이 내용은 나중에 수정할 수 있습니다.",
-        visibilityTitle: "공개 범위",
-        publicTitle: "공개",
-        publicDesc: "누구나 이 추모 공간을 방문할 수 있습니다.",
-        privateTitle: "비공개",
-        privateDesc: "본인만 볼 수 있습니다.",
-        inviteTitle: "초대 전용",
-        inviteDesc: "링크를 가진 사람만 방문할 수 있습니다.",
-        visibilityTip: "실제 개인정보 보호 기능은 로그인과 데이터베이스 추가 후 적용됩니다.",
-        basicTitle: "기본 정보",
-        nameLabel: "반려동물 이름",
-        namePlaceholder: "예: 루나",
-        birthLabel: "태어난 날",
-        leaveLabel: "떠난 날",
-        wordsTitle: "묘비에 남길 말",
-        epitaphLabel: "묘비 문구",
-        epitaphPlaceholder: "추모비에 표시될 짧은 문장을 적어주세요.",
-        storyLabel: "반려동물 이야기",
-        storyPlaceholder: "추억, 성격, 습관, 잊고 싶지 않은 작은 것들을 적어주세요.",
-        photosTitle: "사진",
-        stonePhotoTitle: "묘비 사진",
-        stonePhotoDesc: "이 사진은 추모비에 표시됩니다.",
-        publicPhotosTitle: "공개 추억 사진",
-        publicPhotosDesc: "방문자가 볼 수 있는 사진입니다.",
-        privatePhotosTitle: "비공개 추억 사진",
-        privatePhotosDesc: "본인만 보기 위한 사진입니다.",
-        photoTip: "첫 버전에서는 사진이 이 브라우저에만 저장됩니다. 실제 비공개 앨범은 로그인과 데이터베이스가 필요합니다.",
-        saveBtn: "저장하고 추모비 보기"
-      },
-
-      es: {
-        logo: "Jardín Memorial de Mascotas",
-        viewBtn: "Ver memorial",
-        eyebrow: "Crea un lugar tranquilo para recordar",
-        title: "Construye un pequeño memorial para ellos.",
-        desc: "Guarda su nombre, fechas, epitafio, historia y fotos. Elige qué será público, privado o solo por invitación.",
-        formTitle: "Detalles del memorial",
-        formIntro: "Puedes editar estos detalles más tarde.",
-        visibilityTitle: "Visibilidad del memorial",
-        publicTitle: "Público",
-        publicDesc: "Todos pueden visitar este memorial.",
-        privateTitle: "Privado",
-        privateDesc: "Solo tú puedes verlo.",
-        inviteTitle: "Solo invitación",
-        inviteDesc: "Solo las personas con tu enlace pueden visitarlo.",
-        visibilityTip: "La privacidad real funcionará cuando añadamos inicio de sesión y base de datos.",
-        basicTitle: "Información básica",
-        nameLabel: "Nombre de la mascota",
-        namePlaceholder: "Por ejemplo: Luna",
-        birthLabel: "Fecha de nacimiento",
-        leaveLabel: "Fecha de partida",
-        wordsTitle: "Palabras en la lápida",
-        epitaphLabel: "Epitafio",
-        epitaphPlaceholder: "Una frase corta que aparecerá en la lápida.",
-        storyLabel: "Historia de la mascota",
-        storyPlaceholder: "Escribe su historia, recuerdos, hábitos y pequeños detalles que no quieres olvidar.",
-        photosTitle: "Fotos",
-        stonePhotoTitle: "Foto de la lápida",
-        stonePhotoDesc: "Esta foto aparecerá en la lápida.",
-        publicPhotosTitle: "Fotos públicas",
-        publicPhotosDesc: "Estas fotos pueden ser vistas por los visitantes.",
-        privatePhotosTitle: "Fotos privadas",
-        privatePhotosDesc: "Estas fotos son solo para ti.",
-        photoTip: "En esta primera versión, las fotos se guardan solo en tu navegador. Los álbumes privados reales requieren inicio de sesión y base de datos.",
-        saveBtn: "Guardar y ver memorial"
       }
     };
 
+    function showFileName(inputId, displayId) {
+      const input = document.getElementById(inputId);
+      const display = document.getElementById(displayId);
+
+      if (!input || !display) return;
+
+      if (!input.files || input.files.length === 0) {
+        display.textContent = translations[localStorage.getItem("siteLanguage") || "en"].noFile || "No file chosen";
+        return;
+      }
+
+      if (input.files.length === 1) {
+        display.textContent = input.files[0].name;
+      } else {
+        display.textContent = input.files.length + " files selected";
+      }
+    }
+
     function changeLanguage(lang) {
       const data = translations[lang] || translations.en;
-      document.documentElement.lang = lang;
+
       localStorage.setItem("siteLanguage", lang);
+      document.documentElement.lang = lang;
 
       const select = document.getElementById("languageSelect");
       if (select) select.value = lang;
 
       document.querySelectorAll("[data-key]").forEach(function(item) {
         const key = item.getAttribute("data-key");
-        if (data[key]) {
-          item.textContent = data[key];
-        }
+        if (data[key]) item.textContent = data[key];
       });
 
       document.querySelectorAll("[data-placeholder-key]").forEach(function(item) {
         const key = item.getAttribute("data-placeholder-key");
-        if (data[key]) {
-          item.placeholder = data[key];
-        }
+        if (data[key]) item.placeholder = data[key];
       });
     }
 
