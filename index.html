@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>星眠宠物纪念园</title>
+  <title>Starlit Pet Memorial Garden</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="home-body">
@@ -10,65 +10,126 @@
   <div class="home-page">
 
     <header class="home-header">
-      <div class="logo">星眠宠物纪念园</div>
-      <a href="create.html" class="nav-button">创建墓碑</a>
+      <div class="logo" data-en="Starlit Pet Memorial Garden" data-zh="星眠宠物纪念园">
+        Starlit Pet Memorial Garden
+      </div>
+
+      <button class="language-button" onclick="toggleLanguage()">
+        中文
+      </button>
     </header>
 
-    <main class="hero-section">
+    <main class="new-hero">
 
-      <div class="hero-text">
-        <p class="small-title">给逝去的宠物，一个温柔的归处</p>
+      <section class="hero-copy">
+        <p class="eyebrow" data-en="A quiet place for the love that remains" data-zh="给仍然存在的爱，一个安静的地方">
+          A quiet place for the love that remains
+        </p>
 
-        <h1>
-          把想念，安静地<br>
-          留在一座小小墓园里
+        <h1 data-en="They simply went to the stars first." data-zh="它只是先去了星星上。">
+          They simply went to the stars first.
         </h1>
 
-        <p class="hero-desc">
-          在这里，你可以为宠物创建专属纪念墓碑，上传照片，写下故事，
-          摆放它喜欢的小物件，也让来访的人留下一片花瓣、一句思念。
+        <p class="hero-description"
+           data-en="Place the words you never had time to say into a small, quiet memorial. Here, you can keep their name, photo, story, and every gentle memory that still stays with you."
+           data-zh="把那些没来得及说完的话，放进一座安静的小墓碑里。在这里，你可以为离开的宠物留下名字、照片、故事和想念。">
+          Place the words you never had time to say into a small, quiet memorial.
+          Here, you can keep their name, photo, story, and every gentle memory that still stays with you.
         </p>
 
         <div class="hero-actions">
-          <a href="create.html" class="main-button">创建宠物墓碑</a>
-          <a href="cemetery.html" class="second-button">查看示例墓碑</a>
-        </div>
-      </div>
+          <a href="create.html" class="primary-action"
+             data-en="Build a Memorial"
+             data-zh="为它建一座墓碑">
+            Build a Memorial
+          </a>
 
-      <div class="hero-card">
-        <div class="moon">☾</div>
-        <div class="mini-stone">
-          <div class="mini-photo">🐾</div>
-          <h2>小星星</h2>
-          <p>2016 - 2024</p>
-          <span>永远被爱记得</span>
+          <a href="cemetery.html" class="quiet-action"
+             data-en="Enter the Garden"
+             data-zh="进入纪念园">
+            Enter the Garden
+          </a>
+        </div>
+      </section>
+
+      <section class="memorial-illustration">
+        <div class="night-sky">
+          <div class="moon-shape"></div>
+          <div class="star star-a"></div>
+          <div class="star star-b"></div>
+          <div class="star star-c"></div>
         </div>
 
-        <div class="soft-flower flower-one">花瓣</div>
-        <div class="soft-flower flower-two">小球</div>
-        <div class="soft-flower flower-three">罐头</div>
-      </div>
+        <div class="garden-ground"></div>
+
+        <div class="illustration-stone">
+          <div class="stone-light"></div>
+          <div class="stone-name">Luna</div>
+          <div class="stone-date">2017 — 2024</div>
+        </div>
+
+        <div class="single-petal"></div>
+        <div class="small-flower"></div>
+      </section>
 
     </main>
 
-    <section class="home-features">
-      <div class="feature-card">
-        <h3>专属墓碑</h3>
-        <p>记录名字、照片、日期和你想对它说的话。</p>
+    <section class="home-notes">
+
+      <div class="note-card">
+        <span>01</span>
+        <h3 data-en="Create a memorial" data-zh="创建墓碑">
+          Create a memorial
+        </h3>
+        <p data-en="Keep their name, photo, dates, and story in one quiet place."
+           data-zh="留下它的名字、照片、日期和故事。">
+          Keep their name, photo, dates, and story in one quiet place.
+        </p>
       </div>
 
-      <div class="feature-card">
-        <h3>温柔互动</h3>
-        <p>访客来过，会留下一片花瓣，也可以留言祭奠。</p>
+      <div class="note-card">
+        <span>02</span>
+        <h3 data-en="Preserve what you miss" data-zh="记录想念">
+          Preserve what you miss
+        </h3>
+        <p data-en="Save the words you still want to say, slowly turning them into a place of memory."
+           data-zh="把想说的话保存下来，慢慢变成一座回忆之地。">
+          Save the words you still want to say, slowly turning them into a place of memory.
+        </p>
       </div>
 
-      <div class="feature-card">
-        <h3>小动物陪伴</h3>
-        <p>罐头、花和玩具，会吸引小动物安静靠近。</p>
+      <div class="note-card">
+        <span>03</span>
+        <h3 data-en="Leave gentle traces" data-zh="来访痕迹">
+          Leave gentle traces
+        </h3>
+        <p data-en="Every visit can become a quiet sign that they are still remembered."
+           data-zh="每一次看望，都会在墓碑旁留下轻轻的痕迹。">
+          Every visit can become a quiet sign that they are still remembered.
+        </p>
       </div>
+
     </section>
 
   </div>
+
+  <script>
+    let currentLanguage = "en";
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === "en" ? "zh" : "en";
+
+      document.documentElement.lang = currentLanguage === "en" ? "en" : "zh-CN";
+
+      const items = document.querySelectorAll("[data-en][data-zh]");
+      items.forEach(function(item) {
+        item.textContent = item.getAttribute("data-" + currentLanguage);
+      });
+
+      const button = document.querySelector(".language-button");
+      button.textContent = currentLanguage === "en" ? "中文" : "English";
+    }
+  </script>
 
 </body>
 </html>
