@@ -13,9 +13,9 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Microsoft YaHei", Arial, sans-serif;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
       color: #fffaf5;
-      background: #efe1d2;
+      background: #1f1c1a;
     }
 
     .create-page {
@@ -23,12 +23,11 @@
       background-image:
         linear-gradient(
           90deg,
-          rgba(36, 26, 22, 0.24) 0%,
-          rgba(82, 58, 44, 0.08) 46%,
-          rgba(255, 250, 244, 0.02) 100%
+          rgba(25, 20, 18, 0.58) 0%,
+          rgba(25, 20, 18, 0.32) 42%,
+          rgba(25, 20, 18, 0.08) 78%,
+          rgba(25, 20, 18, 0.12) 100%
         ),
-        radial-gradient(circle at 18% 16%, rgba(255, 246, 230, 0.22), transparent 32%),
-        radial-gradient(circle at 78% 14%, rgba(255, 255, 255, 0.16), transparent 30%),
         url("hero.png");
       background-size: cover;
       background-position: center;
@@ -45,10 +44,11 @@
     }
 
     .create-logo {
-      color: rgba(255, 250, 245, 0.98);
+      color: rgba(255, 250, 245, 0.9);
       font-size: 18px;
+      letter-spacing: 0.5px;
       text-decoration: none;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.22);
+      text-shadow: 0 2px 14px rgba(0,0,0,0.22);
     }
 
     .header-actions {
@@ -59,28 +59,21 @@
 
     .top-link,
     .language-select {
-      border: 1px solid rgba(255,255,255,0.46);
-      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.08);
       color: #fffaf5;
       padding: 10px 16px;
       border-radius: 999px;
       text-decoration: none;
-      backdrop-filter: blur(36px) saturate(210%) brightness(1.14);
-      -webkit-backdrop-filter: blur(36px) saturate(210%) brightness(1.14);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.55),
-        inset 0 -1px 0 rgba(255,255,255,0.08),
-        0 10px 26px rgba(0,0,0,0.06);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       font-size: 14px;
       outline: none;
-    }
-
-    .language-select {
       cursor: pointer;
     }
 
     .language-select option {
-      color: #3d332d;
+      color: #3f342e;
       background: #fffaf5;
     }
 
@@ -88,20 +81,20 @@
       max-width: 1220px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
+      grid-template-columns: 0.88fr 1.12fr;
       gap: 76px;
       align-items: start;
     }
 
     .create-copy {
-      max-width: 510px;
+      max-width: 520px;
       padding-top: 42px;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.22);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
     }
 
     .eyebrow {
       margin: 0 0 20px;
-      color: rgba(255, 238, 220, 0.92);
+      color: rgba(255, 238, 220, 0.78);
       font-size: 15px;
       letter-spacing: 0.6px;
     }
@@ -117,7 +110,7 @@
 
     .create-copy p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.92);
+      color: rgba(255, 244, 232, 0.84);
       font-size: 17px;
       line-height: 1.95;
     }
@@ -138,80 +131,31 @@
 
     .form-intro {
       margin: 0 0 20px;
-      color: rgba(255, 244, 232, 0.88);
+      color: rgba(255, 244, 232, 0.78);
       font-size: 14px;
       line-height: 1.7;
       text-shadow: 0 2px 12px rgba(0,0,0,0.16);
     }
 
-    /* 更透亮的 iOS 玻璃 */
-    .ios-glass {
-      position: relative;
+    /* 改成主页“进入纪念园”按钮那种轻透明质感 */
+    .soft-panel {
       margin-bottom: 18px;
       padding: 22px;
-      border-radius: 34px;
-      overflow: hidden;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255,255,255,0.18),
-          rgba(255,255,255,0.06) 42%,
-          rgba(255,255,255,0.12)
-        );
-
-      border: 1px solid rgba(255,255,255,0.42);
-
-      backdrop-filter: blur(46px) saturate(230%) brightness(1.2);
-      -webkit-backdrop-filter: blur(46px) saturate(230%) brightness(1.2);
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.68),
-        inset 0 -1px 0 rgba(255,255,255,0.08),
-        0 18px 36px rgba(0,0,0,0.06);
-    }
-
-    .ios-glass::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background:
-        radial-gradient(circle at 18% 0%, rgba(255,255,255,0.28), transparent 28%),
-        radial-gradient(circle at 100% 0%, rgba(255,255,255,0.14), transparent 30%);
-      pointer-events: none;
-    }
-
-    .ios-glass::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 20px;
-      right: 20px;
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,0.92),
-        transparent
-      );
-      opacity: 0.95;
-      pointer-events: none;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 250, 245, 0.28);
+      background: rgba(255, 250, 245, 0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .form-section-title {
-      position: relative;
-      z-index: 1;
       margin: 0 0 14px;
       font-size: 15px;
       font-weight: 500;
-      color: #fff8ef;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      color: rgba(255, 250, 245, 0.94);
     }
 
     .visibility-options {
-      position: relative;
-      z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
@@ -230,73 +174,55 @@
       min-height: 92px;
       padding: 14px;
       border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.34);
-      background: rgba(255,255,255,0.16);
-      backdrop-filter: blur(28px) saturate(190%) brightness(1.14);
-      -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.14);
+      border: 1px solid rgba(255, 250, 245, 0.24);
+      background: rgba(255, 250, 245, 0.08);
       transition: 0.2s;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.42),
-        0 8px 18px rgba(0,0,0,0.04);
     }
 
     .visibility-card input:checked + .visibility-content {
-      background: rgba(255,255,255,0.34);
-      border-color: rgba(255,255,255,0.82);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.72),
-        0 0 0 4px rgba(255,255,255,0.12);
+      border-color: rgba(255, 250, 245, 0.62);
+      background: rgba(255, 250, 245, 0.18);
     }
 
     .visibility-content strong {
       display: block;
       margin-bottom: 6px;
-      color: #473932;
+      color: rgba(255, 250, 245, 0.96);
       font-size: 14px;
       font-weight: 500;
     }
 
     .visibility-content span {
-      color: #6b554b;
+      color: rgba(255, 244, 232, 0.72);
       font-size: 12px;
       line-height: 1.5;
     }
 
     .form-label {
-      position: relative;
-      z-index: 1;
       display: block;
       margin: 15px 0 8px;
-      color: #fff8ef;
+      color: rgba(255, 250, 245, 0.9);
       font-size: 14px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
 
     .form-input,
     textarea {
-      position: relative;
-      z-index: 1;
       width: 100%;
-      border: 1px solid rgba(255,255,255,0.44);
-      background: rgba(255,255,255,0.30);
-      color: #40342e;
+      border: 1px solid rgba(255, 250, 245, 0.26);
+      background: rgba(255, 250, 245, 0.12);
+      color: #fffaf5;
       padding: 14px 16px;
-      border-radius: 24px;
+      border-radius: 22px;
       font-size: 15px;
       outline: none;
       font-family: inherit;
-
-      backdrop-filter: blur(32px) saturate(210%) brightness(1.18);
-      -webkit-backdrop-filter: blur(32px) saturate(210%) brightness(1.18);
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.62),
-        0 8px 20px rgba(0,0,0,0.04);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .form-input::placeholder,
     textarea::placeholder {
-      color: rgba(64, 52, 46, 0.46);
+      color: rgba(255, 244, 232, 0.45);
     }
 
     textarea {
@@ -314,11 +240,8 @@
 
     .form-input:focus,
     textarea:focus {
-      background: rgba(255,255,255,0.44);
-      border-color: rgba(255,255,255,0.88);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.78),
-        0 0 0 4px rgba(255,255,255,0.15);
+      border-color: rgba(255, 250, 245, 0.58);
+      background: rgba(255, 250, 245, 0.18);
     }
 
     .date-row {
@@ -328,8 +251,6 @@
     }
 
     .photo-grid {
-      position: relative;
-      z-index: 1;
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
@@ -338,29 +259,22 @@
     .photo-box {
       padding: 16px;
       border-radius: 26px;
-      border: 1px solid rgba(255,255,255,0.34);
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(30px) saturate(200%) brightness(1.16);
-      -webkit-backdrop-filter: blur(30px) saturate(200%) brightness(1.16);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.46),
-        0 8px 18px rgba(0,0,0,0.04);
+      border: 1px solid rgba(255, 250, 245, 0.22);
+      background: rgba(255, 250, 245, 0.07);
     }
 
     .photo-box-title {
       margin: 0 0 6px;
-      color: #fff8ef;
+      color: rgba(255, 250, 245, 0.94);
       font-size: 14px;
       font-weight: 500;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
 
     .photo-box-desc {
       margin: 0 0 12px;
-      color: rgba(255, 244, 232, 0.86);
+      color: rgba(255, 244, 232, 0.68);
       font-size: 12px;
       line-height: 1.6;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.14);
     }
 
     .hidden-file {
@@ -371,69 +285,49 @@
       display: block;
       padding: 14px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.54);
-      background: rgba(255,255,255,0.28);
-      color: #40342e;
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.08);
+      color: #fffaf5;
       cursor: pointer;
       text-align: center;
       transition: 0.2s;
       font-size: 14px;
-
-      backdrop-filter: blur(34px) saturate(220%) brightness(1.2);
-      -webkit-backdrop-filter: blur(34px) saturate(220%) brightness(1.2);
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.72),
-        0 10px 22px rgba(0,0,0,0.05);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .upload-label:hover {
-      background: rgba(255,255,255,0.46);
-      transform: translateY(-1px);
-    }
-
-    .file-name,
-    .form-tip {
-      position: relative;
-      z-index: 1;
-      color: rgba(255, 244, 232, 0.9);
-      font-size: 12px;
-      line-height: 1.5;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.14);
+      background: rgba(255, 250, 245, 0.16);
     }
 
     .file-name {
       margin-top: 8px;
+      color: rgba(255, 244, 232, 0.66);
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .form-tip {
       margin: 12px 0 0;
+      color: rgba(255, 244, 232, 0.66);
       font-size: 13px;
       line-height: 1.6;
     }
 
     .submit-button {
       width: 100%;
-      border: 1px solid rgba(255,255,255,0.62);
-      background: rgba(255,255,255,0.34);
-      color: #40342e;
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.9);
+      color: #4b3d35;
       padding: 15px 22px;
       border-radius: 999px;
       cursor: pointer;
       font-size: 15px;
       margin-top: 8px;
-
-      backdrop-filter: blur(38px) saturate(230%) brightness(1.22);
-      -webkit-backdrop-filter: blur(38px) saturate(230%) brightness(1.22);
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.78),
-        0 16px 30px rgba(0,0,0,0.06);
     }
 
     .submit-button:hover {
-      background: rgba(255,255,255,0.52);
-      transform: translateY(-1px);
+      background: #fffaf5;
     }
 
     @media (max-width: 900px) {
@@ -470,6 +364,15 @@
       .visibility-options,
       .date-row {
         grid-template-columns: 1fr;
+      }
+
+      .header-actions {
+        gap: 8px;
+      }
+
+      .top-link,
+      .language-select {
+        padding: 9px 12px;
       }
     }
   </style>
@@ -525,7 +428,7 @@
         <h2 class="form-title" data-key="formTitle">Memorial details</h2>
         <p class="form-intro" data-key="formIntro">You can edit these details later.</p>
 
-        <div class="ios-glass">
+        <div class="soft-panel">
           <h3 class="form-section-title" data-key="visibilityTitle">Memorial visibility</h3>
 
           <div class="visibility-options">
@@ -559,7 +462,7 @@
           </p>
         </div>
 
-        <div class="ios-glass">
+        <div class="soft-panel">
           <h3 class="form-section-title" data-key="basicTitle">Basic information</h3>
 
           <label class="form-label" data-key="nameLabel">Pet name</label>
@@ -578,7 +481,7 @@
           </div>
         </div>
 
-        <div class="ios-glass">
+        <div class="soft-panel">
           <h3 class="form-section-title" data-key="wordsTitle">Words on the stone</h3>
 
           <label class="form-label" data-key="epitaphLabel">Epitaph</label>
@@ -588,13 +491,14 @@
           <textarea id="petStory" data-placeholder-key="storyPlaceholder" placeholder="Write their story, memories, habits, and the little things you never want to forget."></textarea>
         </div>
 
-        <div class="ios-glass">
+        <div class="soft-panel">
           <h3 class="form-section-title" data-key="photosTitle">Photos</h3>
 
           <div class="photo-grid">
             <div class="photo-box">
               <p class="photo-box-title" data-key="stonePhotoTitle">Tombstone photo</p>
               <p class="photo-box-desc" data-key="stonePhotoDesc">This photo appears on the memorial stone.</p>
+
               <input id="petPhoto" type="file" accept="image/*" class="hidden-file" onchange="showFileName('petPhoto', 'stoneFileName')">
               <label for="petPhoto" class="upload-label" data-key="chooseStonePhoto">Choose tombstone photo</label>
               <div id="stoneFileName" class="file-name" data-key="noFile">No file chosen</div>
@@ -603,6 +507,7 @@
             <div class="photo-box">
               <p class="photo-box-title" data-key="publicPhotosTitle">Public memory photos</p>
               <p class="photo-box-desc" data-key="publicPhotosDesc">These photos can be seen by visitors.</p>
+
               <input id="publicPhotos" type="file" accept="image/*" multiple class="hidden-file" onchange="showFileName('publicPhotos', 'publicFileName')">
               <label for="publicPhotos" class="upload-label" data-key="choosePublicPhotos">Choose public photos</label>
               <div id="publicFileName" class="file-name" data-key="noFile">No file chosen</div>
@@ -611,6 +516,7 @@
             <div class="photo-box">
               <p class="photo-box-title" data-key="privatePhotosTitle">Private memory photos</p>
               <p class="photo-box-desc" data-key="privatePhotosDesc">These photos are meant only for you.</p>
+
               <input id="privatePhotos" type="file" accept="image/*" multiple class="hidden-file" onchange="showFileName('privatePhotos', 'privateFileName')">
               <label for="privatePhotos" class="upload-label" data-key="choosePrivatePhotos">Choose private photos</label>
               <div id="privateFileName" class="file-name" data-key="noFile">No file chosen</div>
@@ -763,6 +669,7 @@
     function showFileName(inputId, displayId) {
       const input = document.getElementById(inputId);
       const display = document.getElementById(displayId);
+
       if (!input || !display) return;
 
       const lang = localStorage.getItem("siteLanguage") || "en";
