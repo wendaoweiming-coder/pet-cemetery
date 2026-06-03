@@ -1,3 +1,67 @@
+// 保存创建的墓碑
+function saveMemorial() {
+  const name = document.getElementById("petName")?.value.trim();
+  const years = document.getElementById("petYears")?.value.trim();
+  const memory = document.getElementById("petMemory")?.value.trim();
+  const photoInput = document.getElementById("petPhoto");
+
+  if (!name) {
+    alert("请填写宠物名字");
+    return;
+  }
+
+  const memorial = {
+    name: name,
+    years: years || "永远被爱记得",
+    memory: memory || "谢谢你陪我们走过那么多温柔的日子。",
+    photo: ""
+  };
+
+  if (photoInput && photoInput.files && photoInput.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      memorial.photo = event.target.result;
+      localStorage.setItem("myPetMemorial", JSON.stringify(memorial));
+      window.location.href = "cemetery.html";
+    };
+
+    reader.readAsDataURL(photoInput.files[0]);
+  } else {
+    localStorage.setItem("myPetMemorial", JSON.stringify(memorial));
+    window.location.href = "cemetery.html";
+  }
+}
+
+// 读取墓碑资料
+function loadMemorial() {
+  const saved = localStorage.getItem("myPetMemorial");
+  if (!saved) return;
+
+  const memorial = JSON.parse(saved);
+
+  const nameDisplay = document.getElementById("petNameDisplay");
+  const yearsDisplay = document.getElementById("petYearsDisplay");
+  const memoryDisplay = document.getElementById("petMemoryDisplay");
+  const photoDisplay = document.getElementById("petPhotoDisplay");
+
+  if (nameDisplay) nameDisplay.textContent = memorial.name;
+  if (yearsDisplay) yearsDisplay.textContent = memorial.years;
+  if (memoryDisplay) memoryDisplay.textContent = memorial.memory;
+
+  if (photoDisplay && memorial.photo) {
+    photoDisplay.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = memorial.photo;
+    img.alt = memorial.name;
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "cover";
+    img.style.borderRadius = "50%";
+    photoDisplay.appendChild(img);
+  }
+}
+
 // 留言功能
 function addMessage() {
   const input = document.getElementById("messageInput");
@@ -69,12 +133,11 @@ function placeGift(type) {
   }
 }
 
-// 召唤小动物：不是突然出现，而是从边缘慢慢靠近
+// 召唤小动物
 function callAnimal(type) {
   const animals = document.getElementById("animals");
   if (!animals) return;
 
-  // 第一版先限制：同类动物只出现一只，避免画面太乱
   if (document.querySelector(`.animal[data-type="${type}"]`)) {
     setStatus(getAnimalName(type) + "已经在这里了，它安静地陪着墓碑。");
     return;
@@ -114,7 +177,6 @@ function callAnimal(type) {
 
   animals.appendChild(animal);
 
-  // 1. 探头
   setTimeout(() => {
     animal.style.transition = "left 1.8s ease-out, top 1.8s ease-out";
 
@@ -143,19 +205,8 @@ function callAnimal(type) {
     }
   }, 400);
 
-  // 2. 停一下观察
   setTimeout(() => {
-    animal.style.transition = "transform 0.8s ease";
-    animal.style.transform = "translateY(-4px)";
-  }, 2400);
-
-  setTimeout(() => {
-    animal.style.transform = "translateY(0)";
-  }, 3200);
-
-  // 3. 慢慢靠近
-  setTimeout(() => {
-    animal.style.transition = "left 5s ease-in-out, top 5s ease-in-out, transform 0.8s ease";
+    animal.style.transition = "left 5s ease-in-out, top 5s ease-in-out";
 
     if (type === "cat") {
       animal.style.left = "390px";
@@ -180,9 +231,8 @@ function callAnimal(type) {
       animal.style.top = "285px";
       setStatus("蝴蝶停在花旁边，轻轻扇动翅膀。");
     }
-  }, 3800);
+  }, 3200);
 
-  // 4. 吃/玩/停留
   setTimeout(() => {
     animal.classList.add("resting");
 
@@ -201,35 +251,22 @@ function callAnimal(type) {
     if (type === "butterfly") {
       setStatus("蝴蝶被花吸引，安静地停在这里。");
     }
-
-    saveAnimalVisit(type);
-  }, 9200);
+  }, 8500);
 }
 
-// 点击小动物后的互动
+// 点击小动物互动
 function touchAnimal(animal, type) {
   animal.classList.remove("touched");
   void animal.offsetWidth;
   animal.classList.add("touched");
 
-  if (type === "cat") {
-    setStatus("你轻轻摸了摸小猫，它蹭了蹭你。");
-  }
-
-  if (type === "dog") {
-    setStatus("你摸了摸小狗，它开心地靠近了一点。");
-  }
-
-  if (type === "bird") {
-    setStatus("小鸟歪着头看了看你，没有飞走。");
-  }
-
-  if (type === "butterfly") {
-    setStatus("蝴蝶轻轻扇了扇翅膀。");
-  }
+  if (type === "cat") setStatus("你轻轻摸了摸小猫，它蹭了蹭你。");
+  if (type === "dog") setStatus("你摸了摸小狗，它开心地靠近了一点。");
+  if (type === "bird") setStatus("小鸟歪着头看了看你，没有飞走。");
+  if (type === "butterfly") setStatus("蝴蝶轻轻扇了扇翅膀。");
 }
 
-// 模拟小动物去别人的墓碑闲逛
+// 模拟小动物去别人的墓碑
 function searchAnimal() {
   const places = [
     "小布丁的墓碑",
@@ -240,13 +277,12 @@ function searchAnimal() {
   ];
 
   const place = places[randomBetween(0, places.length - 1)];
-
   setStatus("你沿着小脚印找过去，发现小动物去了「" + place + "」。以后这里会连接到别人的墓碑故事。");
 
   leaveTrace();
 }
 
-// 留下脚印/痕迹
+// 留下脚印
 function leaveTrace() {
   const traces = document.getElementById("traces");
   if (!traces) return;
@@ -260,7 +296,7 @@ function leaveTrace() {
   traces.appendChild(trace);
 }
 
-// 每位访客进入墓碑页，只掉一片花瓣
+// 每位访客进入，只掉一片花瓣
 function dropOnePetal() {
   const petals = document.getElementById("petals");
   if (!petals) return;
@@ -301,14 +337,6 @@ function dropOnePetal() {
   }, 16);
 }
 
-// 记录动物来过，第一版先存在当前浏览器
-function saveAnimalVisit(type) {
-  const key = "animal_" + type + "_visits";
-  const oldValue = Number(localStorage.getItem(key) || "0");
-  localStorage.setItem(key, String(oldValue + 1));
-}
-
-// 设置提示文字
 function setStatus(text) {
   const status = document.getElementById("animalStatus");
   if (!status) return;
@@ -327,7 +355,8 @@ function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// 页面打开 = 一位访客来过，只落一片花瓣
+// 页面打开后运行
 window.addEventListener("load", () => {
+  loadMemorial();
   dropOnePetal();
 });
