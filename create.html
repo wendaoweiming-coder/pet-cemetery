@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>创建宠物墓碑</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="cemetery-page">
+
+    <a href="index.html" class="back-link">← 返回首页</a>
+
+    <section class="message-area">
+      <h2 style="text-align:center;">创建宠物墓碑</h2>
+
+      <div class="message-box">
+        <input id="petName" placeholder="宠物名字，例如：小星星" class="form-input">
+
+        <input id="petYears" placeholder="年份，例如：2016 - 2024" class="form-input">
+
+        <textarea id="petMemory" placeholder="写一段想对它说的话..."></textarea>
+
+        <input id="petPhoto" type="file" accept="image/*" class="form-input">
+
+        <button onclick="saveMemorial()">保存并查看墓碑</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
