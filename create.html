@@ -9,9 +9,10 @@
   <div class="cemetery-page">
 
     <a href="index.html" class="back-link">← 返回首页</a>
+    <a href="cemetery.html" class="back-link">查看墓碑</a>
 
     <section class="message-area">
-      <h2 style="text-align:center;">创建宠物墓碑</h2>
+      <h2 style="text-align:center;">创建 / 编辑宠物墓碑</h2>
 
       <div class="message-box">
         <input id="petName" placeholder="宠物名字，例如：小星星" class="form-input">
@@ -26,6 +27,8 @@
 
         <label class="form-label">上传宠物照片</label>
         <input id="petPhoto" type="file" accept="image/*" class="form-input">
+
+        <p class="form-tip">如果不重新上传照片，会保留原来的照片。</p>
 
         <button onclick="saveMemorial()">保存并查看墓碑</button>
       </div>
