@@ -5,7 +5,7 @@ body {
   color: #51443d;
 }
 
-/* 首页整体 */
+/* 首页 */
 .home-body {
   min-height: 100vh;
   background:
@@ -21,8 +21,8 @@ body {
 }
 
 .home-header {
-  max-width: 1120px;
-  margin: 0 auto 74px;
+  max-width: 1180px;
+  margin: 0 auto 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,11 +45,11 @@ body {
 }
 
 .new-hero {
-  max-width: 1120px;
+  max-width: 1180px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.02fr 0.98fr;
-  gap: 70px;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 72px;
   align-items: center;
 }
 
@@ -105,156 +105,37 @@ body {
   border: 1px solid rgba(120, 96, 80, 0.14);
 }
 
-/* 右侧插画 */
-.memorial-illustration {
+/* 首页右侧图片 */
+.hero-image-card {
   position: relative;
-  height: 500px;
-  border-radius: 42px;
+  height: 540px;
+  border-radius: 38px;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, #e8dfd5 0%, #f5ede3 45%, #d5bea0 100%);
-  box-shadow: 0 30px 80px rgba(91, 65, 47, 0.16);
+  box-shadow: 0 30px 80px rgba(91, 65, 47, 0.18);
+  background: #e8ded2;
 }
 
-.night-sky {
+.hero-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 给图片加柔和暗角，更高级 */
+.hero-image-card::after {
+  content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 70% 22%, rgba(255, 250, 232, 0.9), transparent 8%),
-    linear-gradient(180deg, #d9d2cb 0%, #eee3d7 65%, transparent 100%);
-}
-
-.moon-shape {
-  position: absolute;
-  right: 82px;
-  top: 60px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: #fff8dc;
-  box-shadow: 0 0 36px rgba(255, 243, 204, 0.78);
-}
-
-.moon-shape::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  top: -4px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: #ded6cd;
-}
-
-.star {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255, 250, 235, 0.9);
-}
-
-.star-a {
-  left: 90px;
-  top: 88px;
-}
-
-.star-b {
-  left: 170px;
-  top: 145px;
-}
-
-.star-c {
-  right: 170px;
-  top: 160px;
-}
-
-.garden-ground {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 155px;
-  background:
-    radial-gradient(circle at 35% 20%, rgba(255,255,255,0.16), transparent 20%),
-    linear-gradient(180deg, #cbb08d, #a98463);
-  z-index: 2;
-}
-
-.illustration-stone {
-  position: absolute;
-  left: 50%;
-  bottom: 88px;
-  transform: translateX(-50%);
-  width: 205px;
-  height: 245px;
-  border-radius: 110px 110px 22px 22px;
-  background: linear-gradient(180deg, #d6d0c8, #aca298);
-  z-index: 4;
-  box-shadow:
-    inset 0 8px 18px rgba(255,255,255,0.38),
-    0 18px 38px rgba(72, 54, 42, 0.22);
-  text-align: center;
-  color: #5a514a;
-}
-
-.stone-light {
-  width: 66px;
-  height: 66px;
-  margin: 34px auto 16px;
-  border-radius: 50%;
-  background: rgba(255, 248, 238, 0.82);
-  box-shadow: inset 0 0 0 4px rgba(255,255,255,0.45);
-}
-
-.stone-name {
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-
-.stone-date {
-  font-size: 13px;
-  color: #746a63;
-}
-
-.single-petal {
-  position: absolute;
-  left: 245px;
-  bottom: 92px;
-  width: 14px;
-  height: 22px;
-  border-radius: 80% 0 80% 0;
-  background: linear-gradient(180deg, #eec6ce, #c98796);
-  transform: rotate(28deg);
-  z-index: 5;
-}
-
-.small-flower {
-  position: absolute;
-  right: 150px;
-  bottom: 92px;
-  width: 10px;
-  height: 44px;
-  background: #6f8a67;
-  border-radius: 999px;
-  z-index: 5;
-}
-
-.small-flower::before {
-  content: "";
-  position: absolute;
-  left: -13px;
-  top: -18px;
-  width: 36px;
-  height: 36px;
-  background: #d9a9b2;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-20deg);
+    linear-gradient(90deg, rgba(50, 38, 31, 0.08), transparent 35%),
+    linear-gradient(180deg, transparent 55%, rgba(60, 42, 32, 0.18));
+  pointer-events: none;
 }
 
 /* 首页底部说明 */
 .home-notes {
-  max-width: 1120px;
+  max-width: 1180px;
   margin: 78px auto 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -585,7 +466,7 @@ textarea {
     font-size: 15px;
   }
 
-  .memorial-illustration {
+  .hero-image-card {
     height: 430px;
   }
 
