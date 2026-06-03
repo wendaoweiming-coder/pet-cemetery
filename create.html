@@ -19,21 +19,21 @@
       background-image:
         linear-gradient(
           90deg,
-          rgba(25, 20, 18, 0.76) 0%,
-          rgba(25, 20, 18, 0.58) 42%,
-          rgba(25, 20, 18, 0.26) 100%
+          rgba(10, 13, 18, 0.78) 0%,
+          rgba(10, 13, 18, 0.58) 42%,
+          rgba(10, 13, 18, 0.2) 100%
         ),
         url("hero.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       box-sizing: border-box;
-      padding: 34px 42px 60px;
+      padding: 34px 42px 70px;
     }
 
     .create-header {
-      max-width: 1180px;
-      margin: 0 auto 70px;
+      max-width: 1220px;
+      margin: 0 auto 62px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -54,13 +54,13 @@
 
     .top-link,
     .language-select {
-      border: 1px solid rgba(255, 250, 245, 0.28);
-      background: rgba(255, 250, 245, 0.14);
+      border: 1px solid rgba(255, 250, 245, 0.22);
+      background: rgba(255, 250, 245, 0.1);
       color: #fffaf5;
       padding: 10px 16px;
       border-radius: 999px;
       text-decoration: none;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       font-size: 14px;
       outline: none;
     }
@@ -75,21 +75,22 @@
     }
 
     .create-layout {
-      max-width: 1180px;
+      max-width: 1220px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 64px;
-      align-items: center;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 70px;
+      align-items: start;
     }
 
     .create-copy {
       max-width: 500px;
+      padding-top: 42px;
     }
 
     .eyebrow {
       margin: 0 0 20px;
-      color: rgba(255, 238, 220, 0.78);
+      color: rgba(255, 238, 220, 0.76);
       font-size: 15px;
       letter-spacing: 0.6px;
     }
@@ -105,43 +106,106 @@
 
     .create-copy p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.84);
+      color: rgba(255, 244, 232, 0.82);
       font-size: 17px;
       line-height: 1.95;
     }
 
     .create-form-card {
       width: 100%;
-      max-width: 560px;
+      max-width: 640px;
       justify-self: end;
-      padding: 34px;
+      padding: 30px;
       box-sizing: border-box;
       border-radius: 34px;
-      background: rgba(255, 250, 245, 0.86);
-      color: #51443d;
-      box-shadow: 0 30px 90px rgba(25, 18, 14, 0.36);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(31, 34, 38, 0.72),
+          rgba(18, 20, 24, 0.82)
+        );
+      color: #fffaf5;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(22px);
+      border: 1px solid rgba(255, 250, 245, 0.16);
     }
 
-    .create-form-card h2 {
+    .form-title {
       margin: 0 0 8px;
       font-size: 26px;
       font-weight: 500;
-      color: #463a34;
+      color: #fff8ef;
     }
 
     .form-intro {
       margin: 0 0 24px;
-      color: #7c675b;
+      color: rgba(255, 244, 232, 0.68);
       font-size: 14px;
       line-height: 1.7;
+    }
+
+    .form-section {
+      padding: 22px 0;
+      border-top: 1px solid rgba(255, 250, 245, 0.12);
+    }
+
+    .form-section-title {
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255, 248, 239, 0.92);
+      letter-spacing: 0.2px;
+    }
+
+    .visibility-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .visibility-card {
+      display: block;
+      cursor: pointer;
+    }
+
+    .visibility-card input {
+      display: none;
+    }
+
+    .visibility-content {
+      min-height: 86px;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 250, 245, 0.14);
+      background: rgba(255, 250, 245, 0.08);
+      box-sizing: border-box;
+      transition: 0.2s;
+    }
+
+    .visibility-card input:checked + .visibility-content {
+      border-color: rgba(255, 238, 220, 0.54);
+      background: rgba(255, 250, 245, 0.16);
+      box-shadow: 0 0 0 4px rgba(255, 238, 220, 0.08);
+    }
+
+    .visibility-content strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff8ef;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .visibility-content span {
+      color: rgba(255, 244, 232, 0.62);
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .form-label {
       display: block;
       margin: 15px 0 8px;
-      color: #665349;
+      color: rgba(255, 244, 232, 0.78);
       font-size: 14px;
     }
 
@@ -149,9 +213,9 @@
     textarea {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid rgba(117, 92, 75, 0.2);
-      background: rgba(255, 255, 255, 0.76);
-      color: #4f413a;
+      border: 1px solid rgba(255, 250, 245, 0.16);
+      background: rgba(255, 250, 245, 0.1);
+      color: #fffaf5;
       padding: 14px 16px;
       border-radius: 18px;
       font-size: 15px;
@@ -159,16 +223,29 @@
       font-family: inherit;
     }
 
+    .form-input::placeholder,
+    textarea::placeholder {
+      color: rgba(255, 244, 232, 0.42);
+    }
+
     textarea {
-      height: 110px;
       resize: none;
       line-height: 1.7;
     }
 
+    #petMemory {
+      height: 82px;
+    }
+
+    #petStory {
+      height: 130px;
+    }
+
     .form-input:focus,
     textarea:focus {
-      border-color: rgba(143, 109, 88, 0.56);
-      box-shadow: 0 0 0 4px rgba(143, 109, 88, 0.08);
+      border-color: rgba(255, 238, 220, 0.5);
+      box-shadow: 0 0 0 4px rgba(255, 238, 220, 0.08);
+      background: rgba(255, 250, 245, 0.14);
     }
 
     .date-row {
@@ -177,42 +254,72 @@
       gap: 14px;
     }
 
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .photo-box {
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 250, 245, 0.14);
+      background: rgba(255, 250, 245, 0.07);
+    }
+
+    .photo-box-title {
+      margin: 0 0 6px;
+      color: #fff8ef;
+      font-size: 14px;
+    }
+
+    .photo-box-desc {
+      margin: 0 0 12px;
+      color: rgba(255, 244, 232, 0.56);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
     .form-tip {
-      color: #92796a;
+      color: rgba(255, 244, 232, 0.56);
       font-size: 13px;
       line-height: 1.6;
-      margin: 10px 0 22px;
+      margin: 12px 0 0;
     }
 
     .submit-button {
       width: 100%;
       border: none;
-      background: #8f6d58;
-      color: #fffaf5;
+      background: #fff3e7;
+      color: #40342e;
       padding: 15px 22px;
       border-radius: 999px;
       cursor: pointer;
       font-size: 15px;
       margin-top: 8px;
-      box-shadow: 0 16px 34px rgba(112, 78, 55, 0.24);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
     }
 
     .submit-button:hover {
-      background: #7f5f4b;
+      background: #ffffff;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 900px) {
       .create-page {
         padding: 24px;
       }
 
       .create-header {
-        margin-bottom: 48px;
+        margin-bottom: 42px;
       }
 
       .create-layout {
         grid-template-columns: 1fr;
         gap: 34px;
+      }
+
+      .create-copy {
+        padding-top: 0;
       }
 
       .create-copy h1 {
@@ -225,7 +332,12 @@
 
       .create-form-card {
         justify-self: stretch;
-        padding: 26px;
+        max-width: none;
+        padding: 24px;
+      }
+
+      .visibility-options {
+        grid-template-columns: 1fr;
       }
 
       .date-row {
@@ -258,7 +370,7 @@
           View Memorial
         </a>
 
-        <select class="language-select" onchange="changeLanguage(this.value)">
+        <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
           <option value="en">English</option>
           <option value="zh">简体中文</option>
           <option value="zh-TW">繁體中文</option>
@@ -291,45 +403,121 @@
         </h1>
 
         <p data-key="desc">
-          Leave their name, dates, photo, and the words you still want to say. This will become the first corner of their memorial garden.
+          Leave their name, dates, epitaph, story, and photos. Choose what should be public, private, or shared only by invitation.
         </p>
       </div>
 
       <div class="create-form-card">
-        <h2 data-key="formTitle">Memorial details</h2>
+        <h2 class="form-title" data-key="formTitle">Memorial details</h2>
 
         <p class="form-intro" data-key="formIntro">
           You can edit these details later.
         </p>
 
-        <label class="form-label" data-key="nameLabel">Pet name</label>
-        <input id="petName" class="form-input"
-               data-placeholder-key="namePlaceholder"
-               placeholder="For example: Luna">
+        <div class="form-section">
+          <h3 class="form-section-title" data-key="visibilityTitle">Memorial visibility</h3>
 
-        <div class="date-row">
-          <div>
-            <label class="form-label" data-key="birthLabel">Birth date</label>
-            <input id="petBirthDate" type="date" class="form-input">
+          <div class="visibility-options">
+            <label class="visibility-card">
+              <input type="radio" name="memorialVisibility" value="public" checked>
+              <div class="visibility-content">
+                <strong data-key="publicTitle">Public</strong>
+                <span data-key="publicDesc">Everyone can visit this memorial.</span>
+              </div>
+            </label>
+
+            <label class="visibility-card">
+              <input type="radio" name="memorialVisibility" value="private">
+              <div class="visibility-content">
+                <strong data-key="privateTitle">Private</strong>
+                <span data-key="privateDesc">Only you can see it.</span>
+              </div>
+            </label>
+
+            <label class="visibility-card">
+              <input type="radio" name="memorialVisibility" value="invite">
+              <div class="visibility-content">
+                <strong data-key="inviteTitle">Invite only</strong>
+                <span data-key="inviteDesc">Only people with your link can visit.</span>
+              </div>
+            </label>
           </div>
 
-          <div>
-            <label class="form-label" data-key="leaveLabel">Leaving date</label>
-            <input id="petLeaveDate" type="date" class="form-input">
+          <p class="form-tip" data-key="visibilityTip">
+            Privacy settings will become fully effective after login and database are added.
+          </p>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title" data-key="basicTitle">Basic information</h3>
+
+          <label class="form-label" data-key="nameLabel">Pet name</label>
+          <input id="petName" class="form-input"
+                 data-placeholder-key="namePlaceholder"
+                 placeholder="For example: Luna">
+
+          <div class="date-row">
+            <div>
+              <label class="form-label" data-key="birthLabel">Birth date</label>
+              <input id="petBirthDate" type="date" class="form-input">
+            </div>
+
+            <div>
+              <label class="form-label" data-key="leaveLabel">Leaving date</label>
+              <input id="petLeaveDate" type="date" class="form-input">
+            </div>
           </div>
         </div>
 
-        <label class="form-label" data-key="memoryLabel">Words for them</label>
-        <textarea id="petMemory"
-          data-placeholder-key="memoryPlaceholder"
-          placeholder="Write something you still want to tell them..."></textarea>
+        <div class="form-section">
+          <h3 class="form-section-title" data-key="wordsTitle">Words on the stone</h3>
 
-        <label class="form-label" data-key="photoLabel">Pet photo</label>
-        <input id="petPhoto" type="file" accept="image/*" class="form-input">
+          <label class="form-label" data-key="epitaphLabel">Epitaph</label>
+          <textarea id="petMemory"
+            data-placeholder-key="epitaphPlaceholder"
+            placeholder="A short sentence that will appear on the memorial stone."></textarea>
 
-        <p class="form-tip" data-key="photoTip">
-          If you are editing and do not upload a new photo, the original photo will be kept.
-        </p>
+          <label class="form-label" data-key="storyLabel">Pet story</label>
+          <textarea id="petStory"
+            data-placeholder-key="storyPlaceholder"
+            placeholder="Write their story, memories, habits, and the little things you never want to forget."></textarea>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title" data-key="photosTitle">Photos</h3>
+
+          <div class="photo-grid">
+
+            <div class="photo-box">
+              <p class="photo-box-title" data-key="stonePhotoTitle">Tombstone photo</p>
+              <p class="photo-box-desc" data-key="stonePhotoDesc">
+                This photo appears on the memorial stone.
+              </p>
+              <input id="petPhoto" type="file" accept="image/*" class="form-input">
+            </div>
+
+            <div class="photo-box">
+              <p class="photo-box-title" data-key="publicPhotosTitle">Public memory photos</p>
+              <p class="photo-box-desc" data-key="publicPhotosDesc">
+                These photos can be seen by visitors.
+              </p>
+              <input id="publicPhotos" type="file" accept="image/*" multiple class="form-input">
+            </div>
+
+            <div class="photo-box">
+              <p class="photo-box-title" data-key="privatePhotosTitle">Private memory photos</p>
+              <p class="photo-box-desc" data-key="privatePhotosDesc">
+                These photos are meant only for you.
+              </p>
+              <input id="privatePhotos" type="file" accept="image/*" multiple class="form-input">
+            </div>
+
+          </div>
+
+          <p class="form-tip" data-key="photoTip">
+            In this first version, photos are saved only in your browser. Real private albums require login and database later.
+          </p>
+        </div>
 
         <button class="submit-button" onclick="saveMemorial()" data-key="saveBtn">
           Save and View Memorial
@@ -349,17 +537,35 @@
         viewBtn: "View Memorial",
         eyebrow: "Create a quiet place for remembrance",
         title: "Build a small memorial for them.",
-        desc: "Leave their name, dates, photo, and the words you still want to say. This will become the first corner of their memorial garden.",
+        desc: "Leave their name, dates, epitaph, story, and photos. Choose what should be public, private, or shared only by invitation.",
         formTitle: "Memorial details",
         formIntro: "You can edit these details later.",
+        visibilityTitle: "Memorial visibility",
+        publicTitle: "Public",
+        publicDesc: "Everyone can visit this memorial.",
+        privateTitle: "Private",
+        privateDesc: "Only you can see it.",
+        inviteTitle: "Invite only",
+        inviteDesc: "Only people with your link can visit.",
+        visibilityTip: "Privacy settings will become fully effective after login and database are added.",
+        basicTitle: "Basic information",
         nameLabel: "Pet name",
         namePlaceholder: "For example: Luna",
         birthLabel: "Birth date",
         leaveLabel: "Leaving date",
-        memoryLabel: "Words for them",
-        memoryPlaceholder: "Write something you still want to tell them...",
-        photoLabel: "Pet photo",
-        photoTip: "If you are editing and do not upload a new photo, the original photo will be kept.",
+        wordsTitle: "Words on the stone",
+        epitaphLabel: "Epitaph",
+        epitaphPlaceholder: "A short sentence that will appear on the memorial stone.",
+        storyLabel: "Pet story",
+        storyPlaceholder: "Write their story, memories, habits, and the little things you never want to forget.",
+        photosTitle: "Photos",
+        stonePhotoTitle: "Tombstone photo",
+        stonePhotoDesc: "This photo appears on the memorial stone.",
+        publicPhotosTitle: "Public memory photos",
+        publicPhotosDesc: "These photos can be seen by visitors.",
+        privatePhotosTitle: "Private memory photos",
+        privatePhotosDesc: "These photos are meant only for you.",
+        photoTip: "In this first version, photos are saved only in your browser. Real private albums require login and database later.",
         saveBtn: "Save and View Memorial"
       },
 
@@ -368,17 +574,35 @@
         viewBtn: "查看墓碑",
         eyebrow: "为想念创建一个安静的地方",
         title: "为它建一座小小的墓碑。",
-        desc: "留下它的名字、日期、照片，还有你仍然想说的话。这里会成为它纪念花园的第一个角落。",
+        desc: "留下它的名字、日期、墓志铭、故事和照片。你可以选择哪些公开，哪些私密，哪些只能邀请访问。",
         formTitle: "墓碑信息",
         formIntro: "这些信息之后还可以继续修改。",
+        visibilityTitle: "墓地可见范围",
+        publicTitle: "公开",
+        publicDesc: "所有人都可以访问这座墓地。",
+        privateTitle: "私密",
+        privateDesc: "只有你自己可以看到。",
+        inviteTitle: "邀请可见",
+        inviteDesc: "只有拿到链接的人可以访问。",
+        visibilityTip: "隐私设置会在之后加入登录和数据库后真正生效。",
+        basicTitle: "基础信息",
         nameLabel: "宠物名字",
         namePlaceholder: "例如：小星星",
         birthLabel: "出生日期",
         leaveLabel: "离开日期",
-        memoryLabel: "想对它说的话",
-        memoryPlaceholder: "写一段你仍然想对它说的话...",
-        photoLabel: "宠物照片",
-        photoTip: "如果你是在编辑墓碑，并且不重新上传照片，会保留原来的照片。",
+        wordsTitle: "墓碑文字",
+        epitaphLabel: "墓志铭",
+        epitaphPlaceholder: "写一句会显示在墓碑上的短句。",
+        storyLabel: "宠物故事",
+        storyPlaceholder: "写下它的故事、回忆、习惯，以及你不想忘记的小事。",
+        photosTitle: "照片",
+        stonePhotoTitle: "墓碑照片",
+        stonePhotoDesc: "这张照片会显示在墓碑正面。",
+        publicPhotosTitle: "公开回忆照片",
+        publicPhotosDesc: "这些照片访客可以看到。",
+        privatePhotosTitle: "私密回忆照片",
+        privatePhotosDesc: "这些照片只给你自己看。",
+        photoTip: "第一版照片只会保存在你的浏览器里。真正的私密相册需要之后加入登录和数据库。",
         saveBtn: "保存并查看墓碑"
       },
 
@@ -387,17 +611,35 @@
         viewBtn: "查看墓碑",
         eyebrow: "為想念建立一個安靜的地方",
         title: "為牠建一座小小的墓碑。",
-        desc: "留下牠的名字、日期、照片，還有你仍然想說的話。這裡會成為牠紀念花園的第一個角落。",
+        desc: "留下牠的名字、日期、墓誌銘、故事和照片。你可以選擇哪些公開，哪些私密，哪些只能邀請訪問。",
         formTitle: "墓碑資訊",
         formIntro: "這些資訊之後還可以繼續修改。",
+        visibilityTitle: "墓地可見範圍",
+        publicTitle: "公開",
+        publicDesc: "所有人都可以造訪這座墓地。",
+        privateTitle: "私密",
+        privateDesc: "只有你自己可以看到。",
+        inviteTitle: "邀請可見",
+        inviteDesc: "只有拿到連結的人可以造訪。",
+        visibilityTip: "隱私設定會在之後加入登入和資料庫後真正生效。",
+        basicTitle: "基本資訊",
         nameLabel: "寵物名字",
         namePlaceholder: "例如：小星星",
         birthLabel: "出生日期",
         leaveLabel: "離開日期",
-        memoryLabel: "想對牠說的話",
-        memoryPlaceholder: "寫一段你仍然想對牠說的話...",
-        photoLabel: "寵物照片",
-        photoTip: "如果你是在編輯墓碑，並且不重新上傳照片，會保留原本的照片。",
+        wordsTitle: "墓碑文字",
+        epitaphLabel: "墓誌銘",
+        epitaphPlaceholder: "寫一句會顯示在墓碑上的短句。",
+        storyLabel: "寵物故事",
+        storyPlaceholder: "寫下牠的故事、回憶、習慣，以及你不想忘記的小事。",
+        photosTitle: "照片",
+        stonePhotoTitle: "墓碑照片",
+        stonePhotoDesc: "這張照片會顯示在墓碑正面。",
+        publicPhotosTitle: "公開回憶照片",
+        publicPhotosDesc: "這些照片訪客可以看到。",
+        privatePhotosTitle: "私密回憶照片",
+        privatePhotosDesc: "這些照片只給你自己看。",
+        photoTip: "第一版照片只會保存在你的瀏覽器裡。真正的私密相簿需要之後加入登入和資料庫。",
         saveBtn: "保存並查看墓碑"
       },
 
@@ -406,17 +648,35 @@
         viewBtn: "記念碑を見る",
         eyebrow: "想い出のための静かな場所を作る",
         title: "あの子のために小さな記念碑を作りましょう。",
-        desc: "名前、日付、写真、そしてまだ伝えたい言葉を残せます。ここが記念の庭の最初の場所になります。",
+        desc: "名前、日付、墓碑銘、物語、写真を残せます。公開、非公開、招待のみを選べます。",
         formTitle: "記念碑の情報",
         formIntro: "これらの内容は後で編集できます。",
+        visibilityTitle: "公開範囲",
+        publicTitle: "公開",
+        publicDesc: "誰でもこの記念碑を訪問できます。",
+        privateTitle: "非公開",
+        privateDesc: "自分だけが見ることができます。",
+        inviteTitle: "招待のみ",
+        inviteDesc: "リンクを持つ人だけが訪問できます。",
+        visibilityTip: "本当のプライバシー機能は、ログインとデータベース追加後に有効になります。",
+        basicTitle: "基本情報",
         nameLabel: "ペットの名前",
         namePlaceholder: "例：ルナ",
         birthLabel: "生まれた日",
         leaveLabel: "旅立った日",
-        memoryLabel: "伝えたい言葉",
-        memoryPlaceholder: "まだ伝えたいことを書いてください...",
-        photoLabel: "ペットの写真",
-        photoTip: "編集時に新しい写真をアップロードしない場合、元の写真が保存されます。",
+        wordsTitle: "墓碑に刻む言葉",
+        epitaphLabel: "墓碑銘",
+        epitaphPlaceholder: "記念碑に表示する短い言葉を書いてください。",
+        storyLabel: "ペットの物語",
+        storyPlaceholder: "思い出、性格、習慣、忘れたくない小さなことを書いてください。",
+        photosTitle: "写真",
+        stonePhotoTitle: "墓碑の写真",
+        stonePhotoDesc: "この写真は記念碑に表示されます。",
+        publicPhotosTitle: "公開写真",
+        publicPhotosDesc: "訪問者が見ることができる写真です。",
+        privatePhotosTitle: "非公開写真",
+        privatePhotosDesc: "自分だけのための写真です。",
+        photoTip: "最初のバージョンでは、写真はこのブラウザにのみ保存されます。本当の非公開アルバムにはログインとデータベースが必要です。",
         saveBtn: "保存して記念碑を見る"
       },
 
@@ -425,17 +685,35 @@
         viewBtn: "추모비 보기",
         eyebrow: "기억을 위한 조용한 장소 만들기",
         title: "그 아이를 위한 작은 추모비를 만들어보세요.",
-        desc: "이름, 날짜, 사진, 그리고 아직 전하고 싶은 말을 남겨보세요. 이곳이 추모정원의 첫 공간이 됩니다.",
+        desc: "이름, 날짜, 묘비 문구, 이야기와 사진을 남기고 공개 범위를 선택할 수 있습니다.",
         formTitle: "추모비 정보",
         formIntro: "이 내용은 나중에 수정할 수 있습니다.",
+        visibilityTitle: "공개 범위",
+        publicTitle: "공개",
+        publicDesc: "누구나 이 추모 공간을 방문할 수 있습니다.",
+        privateTitle: "비공개",
+        privateDesc: "본인만 볼 수 있습니다.",
+        inviteTitle: "초대 전용",
+        inviteDesc: "링크를 가진 사람만 방문할 수 있습니다.",
+        visibilityTip: "실제 개인정보 보호 기능은 로그인과 데이터베이스 추가 후 적용됩니다.",
+        basicTitle: "기본 정보",
         nameLabel: "반려동물 이름",
         namePlaceholder: "예: 루나",
         birthLabel: "태어난 날",
         leaveLabel: "떠난 날",
-        memoryLabel: "전하고 싶은 말",
-        memoryPlaceholder: "아직 전하고 싶은 말을 적어보세요...",
-        photoLabel: "반려동물 사진",
-        photoTip: "수정할 때 새 사진을 올리지 않으면 기존 사진이 유지됩니다.",
+        wordsTitle: "묘비에 남길 말",
+        epitaphLabel: "묘비 문구",
+        epitaphPlaceholder: "추모비에 표시될 짧은 문장을 적어주세요.",
+        storyLabel: "반려동물 이야기",
+        storyPlaceholder: "추억, 성격, 습관, 잊고 싶지 않은 작은 것들을 적어주세요.",
+        photosTitle: "사진",
+        stonePhotoTitle: "묘비 사진",
+        stonePhotoDesc: "이 사진은 추모비에 표시됩니다.",
+        publicPhotosTitle: "공개 추억 사진",
+        publicPhotosDesc: "방문자가 볼 수 있는 사진입니다.",
+        privatePhotosTitle: "비공개 추억 사진",
+        privatePhotosDesc: "본인만 보기 위한 사진입니다.",
+        photoTip: "첫 버전에서는 사진이 이 브라우저에만 저장됩니다. 실제 비공개 앨범은 로그인과 데이터베이스가 필요합니다.",
         saveBtn: "저장하고 추모비 보기"
       },
 
@@ -444,17 +722,35 @@
         viewBtn: "Ver memorial",
         eyebrow: "Crea un lugar tranquilo para recordar",
         title: "Construye un pequeño memorial para ellos.",
-        desc: "Deja su nombre, fechas, foto y las palabras que aún quieres decir. Este será el primer rincón de su jardín memorial.",
+        desc: "Guarda su nombre, fechas, epitafio, historia y fotos. Elige qué será público, privado o solo por invitación.",
         formTitle: "Detalles del memorial",
         formIntro: "Puedes editar estos detalles más tarde.",
+        visibilityTitle: "Visibilidad del memorial",
+        publicTitle: "Público",
+        publicDesc: "Todos pueden visitar este memorial.",
+        privateTitle: "Privado",
+        privateDesc: "Solo tú puedes verlo.",
+        inviteTitle: "Solo invitación",
+        inviteDesc: "Solo las personas con tu enlace pueden visitarlo.",
+        visibilityTip: "La privacidad real funcionará cuando añadamos inicio de sesión y base de datos.",
+        basicTitle: "Información básica",
         nameLabel: "Nombre de la mascota",
         namePlaceholder: "Por ejemplo: Luna",
         birthLabel: "Fecha de nacimiento",
         leaveLabel: "Fecha de partida",
-        memoryLabel: "Palabras para ellos",
-        memoryPlaceholder: "Escribe algo que aún quieras decirles...",
-        photoLabel: "Foto de la mascota",
-        photoTip: "Si estás editando y no subes una nueva foto, se conservará la foto original.",
+        wordsTitle: "Palabras en la lápida",
+        epitaphLabel: "Epitafio",
+        epitaphPlaceholder: "Una frase corta que aparecerá en la lápida.",
+        storyLabel: "Historia de la mascota",
+        storyPlaceholder: "Escribe su historia, recuerdos, hábitos y pequeños detalles que no quieres olvidar.",
+        photosTitle: "Fotos",
+        stonePhotoTitle: "Foto de la lápida",
+        stonePhotoDesc: "Esta foto aparecerá en la lápida.",
+        publicPhotosTitle: "Fotos públicas",
+        publicPhotosDesc: "Estas fotos pueden ser vistas por los visitantes.",
+        privatePhotosTitle: "Fotos privadas",
+        privatePhotosDesc: "Estas fotos son solo para ti.",
+        photoTip: "En esta primera versión, las fotos se guardan solo en tu navegador. Los álbumes privados reales requieren inicio de sesión y base de datos.",
         saveBtn: "Guardar y ver memorial"
       }
     };
@@ -462,6 +758,10 @@
     function changeLanguage(lang) {
       const data = translations[lang] || translations.en;
       document.documentElement.lang = lang;
+      localStorage.setItem("siteLanguage", lang);
+
+      const select = document.getElementById("languageSelect");
+      if (select) select.value = lang;
 
       document.querySelectorAll("[data-key]").forEach(function(item) {
         const key = item.getAttribute("data-key");
@@ -477,6 +777,11 @@
         }
       });
     }
+
+    window.addEventListener("load", function() {
+      const savedLanguage = localStorage.getItem("siteLanguage") || "en";
+      changeLanguage(savedLanguage);
+    });
   </script>
 
 </body>
