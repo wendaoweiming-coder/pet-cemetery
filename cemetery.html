@@ -13,12 +13,13 @@
     <section class="memorial-scene">
 
       <div class="sky-note">
-        愿每一次想念，都像一片花瓣，轻轻落在它身边。
+        愿每一次想念，都轻轻落在它身边。
       </div>
 
       <div class="grave-area">
 
         <div id="petals"></div>
+        <div id="traces"></div>
 
         <div class="stone">
           <div class="photo-frame">🐾</div>
@@ -28,17 +29,24 @@
         </div>
 
         <div id="placedItems" class="placed-items"></div>
-
         <div id="animals" class="animals"></div>
 
       </div>
 
-      <div class="gift-buttons">
-        <button onclick="placeGift('flower')">献一束花</button>
-        <button onclick="placeGift('can')">送一罐猫罐头</button>
-        <button onclick="placeGift('ball')">放一个小球</button>
-        <button onclick="placeGift('catstick')">放一根逗猫棒</button>
+      <div id="animalStatus" class="animal-status">
+        这里很安静，还没有小动物来。
       </div>
+
+      <div class="gift-buttons">
+        <button onclick="placeGift('can')">摆一罐猫罐头</button>
+        <button onclick="placeGift('ball')">放一个小球</button>
+        <button onclick="placeGift('seed')">撒一点鸟食</button>
+        <button onclick="placeGift('flower')">献一束花</button>
+      </div>
+
+      <button class="search-btn" onclick="searchAnimal()">
+        寻找去别处闲逛的小动物
+      </button>
 
       <div class="message-box">
         <textarea id="messageInput" placeholder="写下一句想对它说的话..."></textarea>
