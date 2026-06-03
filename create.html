@@ -19,11 +19,11 @@
       background-image:
         linear-gradient(
           90deg,
-          rgba(52, 40, 34, 0.46) 0%,
-          rgba(92, 70, 56, 0.26) 45%,
-          rgba(255, 236, 215, 0.18) 100%
+          rgba(60, 45, 35, 0.42) 0%,
+          rgba(88, 64, 48, 0.22) 45%,
+          rgba(255, 238, 220, 0.14) 100%
         ),
-        radial-gradient(circle at 20% 20%, rgba(255, 238, 213, 0.26), transparent 32%),
+        radial-gradient(circle at 20% 20%, rgba(255, 238, 213, 0.28), transparent 34%),
         url("hero.png");
       background-size: cover;
       background-position: center;
@@ -41,11 +41,11 @@
     }
 
     .create-logo {
-      color: rgba(255, 250, 245, 0.94);
+      color: rgba(255, 250, 245, 0.95);
       font-size: 18px;
       letter-spacing: 0.5px;
       text-decoration: none;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
+      text-shadow: 0 2px 14px rgba(0,0,0,0.28);
     }
 
     .header-actions {
@@ -56,8 +56,8 @@
 
     .top-link,
     .language-select {
-      border: 1px solid rgba(255, 250, 245, 0.36);
-      background: rgba(255, 250, 245, 0.22);
+      border: 1px solid rgba(255, 250, 245, 0.4);
+      background: rgba(255, 250, 245, 0.24);
       color: #fffaf5;
       padding: 10px 16px;
       border-radius: 999px;
@@ -89,12 +89,12 @@
     .create-copy {
       max-width: 500px;
       padding-top: 42px;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.25);
     }
 
     .eyebrow {
       margin: 0 0 20px;
-      color: rgba(255, 238, 220, 0.86);
+      color: rgba(255, 238, 220, 0.9);
       font-size: 15px;
       letter-spacing: 0.6px;
     }
@@ -110,55 +110,52 @@
 
     .create-copy p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.88);
+      color: rgba(255, 244, 232, 0.9);
       font-size: 17px;
       line-height: 1.95;
     }
 
-    .create-form-card {
+    /* 右边不再是大方框 */
+    .create-form-area {
       width: 100%;
       max-width: 650px;
       justify-self: end;
-      padding: 32px;
-      box-sizing: border-box;
-      border-radius: 34px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255, 248, 239, 0.72),
-          rgba(244, 226, 207, 0.58)
-        );
-      color: #51443d;
-      box-shadow: 0 30px 90px rgba(72, 48, 33, 0.28);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.42);
     }
 
     .form-title {
       margin: 0 0 8px;
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 500;
-      color: #443730;
+      color: #fff8ef;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
     }
 
     .form-intro {
-      margin: 0 0 24px;
-      color: #7b665a;
+      margin: 0 0 20px;
+      color: rgba(255, 244, 232, 0.86);
       font-size: 14px;
       line-height: 1.7;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.18);
     }
 
+    /* 每一组变成柔和的漂浮区域 */
     .form-section {
-      padding: 22px 0;
-      border-top: 1px solid rgba(108, 82, 62, 0.14);
+      margin-bottom: 18px;
+      padding: 22px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.34);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 18px 46px rgba(70, 45, 30, 0.14);
     }
 
     .form-section-title {
       margin: 0 0 14px;
       font-size: 15px;
       font-weight: 500;
-      color: #4d3f37;
+      color: #fff8ef;
       letter-spacing: 0.2px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.16);
     }
 
     .visibility-options {
@@ -179,29 +176,29 @@
     .visibility-content {
       min-height: 90px;
       padding: 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(100, 74, 56, 0.16);
-      background: rgba(255, 250, 245, 0.54);
+      border-radius: 22px;
+      border: 1px solid rgba(255, 250, 245, 0.32);
+      background: rgba(255, 250, 245, 0.42);
       box-sizing: border-box;
       transition: 0.2s;
     }
 
     .visibility-card input:checked + .visibility-content {
-      border-color: rgba(132, 95, 68, 0.46);
-      background: rgba(255, 250, 245, 0.86);
-      box-shadow: 0 0 0 4px rgba(132, 95, 68, 0.08);
+      border-color: rgba(255, 250, 245, 0.72);
+      background: rgba(255, 250, 245, 0.72);
+      box-shadow: 0 0 0 4px rgba(255, 250, 245, 0.12);
     }
 
     .visibility-content strong {
       display: block;
       margin-bottom: 6px;
-      color: #463830;
+      color: #4b3d35;
       font-size: 14px;
       font-weight: 500;
     }
 
     .visibility-content span {
-      color: #806b5f;
+      color: #7a6254;
       font-size: 12px;
       line-height: 1.5;
     }
@@ -209,19 +206,20 @@
     .form-label {
       display: block;
       margin: 15px 0 8px;
-      color: #665349;
+      color: #fff8ef;
       font-size: 14px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
 
     .form-input,
     textarea {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid rgba(117, 92, 75, 0.18);
-      background: rgba(255, 250, 245, 0.72);
+      border: 1px solid rgba(255, 250, 245, 0.38);
+      background: rgba(255, 250, 245, 0.7);
       color: #4f413a;
       padding: 14px 16px;
-      border-radius: 18px;
+      border-radius: 22px;
       font-size: 15px;
       outline: none;
       font-family: inherit;
@@ -247,8 +245,8 @@
 
     .form-input:focus,
     textarea:focus {
-      border-color: rgba(143, 109, 88, 0.5);
-      box-shadow: 0 0 0 4px rgba(143, 109, 88, 0.08);
+      border-color: rgba(255, 250, 245, 0.86);
+      box-shadow: 0 0 0 4px rgba(255, 250, 245, 0.16);
       background: rgba(255, 250, 245, 0.94);
     }
 
@@ -266,23 +264,25 @@
 
     .photo-box {
       padding: 16px;
-      border-radius: 22px;
-      border: 1px solid rgba(100, 74, 56, 0.15);
-      background: rgba(255, 250, 245, 0.48);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.38);
     }
 
     .photo-box-title {
       margin: 0 0 6px;
-      color: #4c3e36;
+      color: #fff8ef;
       font-size: 14px;
       font-weight: 500;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
 
     .photo-box-desc {
       margin: 0 0 12px;
-      color: #806b5f;
+      color: rgba(255, 244, 232, 0.82);
       font-size: 12px;
       line-height: 1.6;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.16);
     }
 
     .hidden-file {
@@ -292,10 +292,10 @@
     .upload-label {
       display: block;
       padding: 14px 16px;
-      border-radius: 18px;
-      border: 1px dashed rgba(120, 88, 65, 0.34);
-      background: rgba(255, 250, 245, 0.64);
-      color: #6a5549;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 250, 245, 0.52);
+      background: rgba(255, 250, 245, 0.78);
+      color: #5f4a3f;
       cursor: pointer;
       text-align: center;
       transition: 0.2s;
@@ -303,39 +303,42 @@
     }
 
     .upload-label:hover {
-      background: rgba(255, 250, 245, 0.92);
-      border-color: rgba(120, 88, 65, 0.58);
+      background: rgba(255, 250, 245, 0.96);
+      transform: translateY(-1px);
     }
 
     .file-name {
       margin-top: 8px;
-      color: #92796a;
+      color: rgba(255, 244, 232, 0.86);
       font-size: 12px;
       line-height: 1.5;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.16);
     }
 
     .form-tip {
-      color: #8d7466;
+      color: rgba(255, 244, 232, 0.86);
       font-size: 13px;
       line-height: 1.6;
       margin: 12px 0 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.16);
     }
 
     .submit-button {
       width: 100%;
       border: none;
-      background: #8f6d58;
-      color: #fffaf5;
+      background: #fff3e7;
+      color: #40342e;
       padding: 15px 22px;
       border-radius: 999px;
       cursor: pointer;
       font-size: 15px;
       margin-top: 8px;
-      box-shadow: 0 16px 34px rgba(112, 78, 55, 0.22);
+      box-shadow: 0 16px 34px rgba(70, 45, 30, 0.18);
     }
 
     .submit-button:hover {
-      background: #7f5f4b;
+      background: #ffffff;
+      transform: translateY(-1px);
     }
 
     @media (max-width: 900px) {
@@ -364,10 +367,9 @@
         font-size: 15px;
       }
 
-      .create-form-card {
+      .create-form-area {
         justify-self: stretch;
         max-width: none;
-        padding: 24px;
       }
 
       .visibility-options {
@@ -376,6 +378,15 @@
 
       .date-row {
         grid-template-columns: 1fr;
+      }
+
+      .header-actions {
+        gap: 8px;
+      }
+
+      .top-link,
+      .language-select {
+        padding: 9px 12px;
       }
     }
   </style>
@@ -432,7 +443,8 @@
         </p>
       </div>
 
-      <div class="create-form-card">
+      <div class="create-form-area">
+
         <h2 class="form-title" data-key="formTitle">Memorial details</h2>
 
         <p class="form-intro" data-key="formIntro">
@@ -556,6 +568,7 @@
         <button class="submit-button" onclick="saveMemorial()" data-key="saveBtn">
           Save and View Memorial
         </button>
+
       </div>
 
     </section>
@@ -646,6 +659,47 @@
         noFile: "还没有选择文件",
         photoTip: "第一版照片只会保存在你的浏览器里。真正的私密相册需要之后加入登录和数据库。",
         saveBtn: "保存并查看墓碑"
+      },
+
+      "zh-TW": {
+        logo: "星眠寵物紀念園",
+        viewBtn: "查看墓碑",
+        eyebrow: "為想念建立一個安靜的地方",
+        title: "為牠建一座小小的墓碑。",
+        desc: "留下牠的名字、日期、墓誌銘、故事和照片。你可以選擇哪些公開，哪些私密，哪些只能邀請訪問。",
+        formTitle: "墓碑資訊",
+        formIntro: "這些資訊之後還可以繼續修改。",
+        visibilityTitle: "墓地可見範圍",
+        publicTitle: "公開",
+        publicDesc: "所有人都可以造訪這座墓地。",
+        privateTitle: "私密",
+        privateDesc: "只有你自己可以看到。",
+        inviteTitle: "邀請可見",
+        inviteDesc: "只有拿到連結的人可以造訪。",
+        visibilityTip: "隱私設定會在之後加入登入和資料庫後真正生效。",
+        basicTitle: "基本資訊",
+        nameLabel: "寵物名字",
+        namePlaceholder: "例如：小星星",
+        birthLabel: "出生日期",
+        leaveLabel: "離開日期",
+        wordsTitle: "墓碑文字",
+        epitaphLabel: "墓誌銘",
+        epitaphPlaceholder: "寫一句會顯示在墓碑上的短句。",
+        storyLabel: "寵物故事",
+        storyPlaceholder: "寫下牠的故事、回憶、習慣，以及你不想忘記的小事。",
+        photosTitle: "照片",
+        stonePhotoTitle: "墓碑照片",
+        stonePhotoDesc: "這張照片會顯示在墓碑正面。",
+        publicPhotosTitle: "公開回憶照片",
+        publicPhotosDesc: "這些照片訪客可以看到。",
+        privatePhotosTitle: "私密回憶照片",
+        privatePhotosDesc: "這些照片只給你自己看。",
+        chooseStonePhoto: "選擇墓碑照片",
+        choosePublicPhotos: "選擇公開照片",
+        choosePrivatePhotos: "選擇私密照片",
+        noFile: "尚未選擇檔案",
+        photoTip: "第一版照片只會保存在你的瀏覽器裡。真正的私密相簿需要之後加入登入和資料庫。",
+        saveBtn: "保存並查看墓碑"
       }
     };
 
@@ -655,8 +709,11 @@
 
       if (!input || !display) return;
 
+      const lang = localStorage.getItem("siteLanguage") || "en";
+      const data = translations[lang] || translations.en;
+
       if (!input.files || input.files.length === 0) {
-        display.textContent = translations[localStorage.getItem("siteLanguage") || "en"].noFile || "No file chosen";
+        display.textContent = data.noFile || "No file chosen";
         return;
       }
 
