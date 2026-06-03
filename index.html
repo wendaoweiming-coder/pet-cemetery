@@ -49,14 +49,20 @@
       color: rgba(255, 250, 245, 0.88);
     }
 
-    .language-button {
+    .language-select {
       border: 1px solid rgba(255, 250, 245, 0.28);
-      background: rgba(255, 250, 245, 0.12);
+      background: rgba(255, 250, 245, 0.14);
       color: #fffaf5;
-      padding: 10px 18px;
+      padding: 10px 16px;
       border-radius: 999px;
       cursor: pointer;
       backdrop-filter: blur(10px);
+      outline: none;
+    }
+
+    .language-select option {
+      color: #3f342e;
+      background: #fffaf5;
     }
 
     .home-content {
@@ -149,10 +155,6 @@
     }
 
     @media (max-width: 800px) {
-      .home-fullscreen {
-        background-position: center;
-      }
-
       .home-top {
         padding: 24px;
       }
@@ -183,44 +185,48 @@
   <main class="home-fullscreen">
 
     <header class="home-top">
-      <div class="home-logo" data-en="Starlit Pet Memorial Garden" data-zh="星眠宠物纪念园">
-        Starlit Pet Memorial Garden
-      </div>
+      <div class="home-logo" data-key="logo">Starlit Pet Memorial Garden</div>
 
-      <button class="language-button" onclick="toggleLanguage()">中文</button>
+      <select class="language-select" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+        <option value="it">Italiano</option>
+        <option value="th">ไทย</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="id">Bahasa Indonesia</option>
+        <option value="ms">Bahasa Melayu</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ar">العربية</option>
+      </select>
     </header>
 
     <section class="home-content">
       <div class="home-copy">
 
-        <p class="eyebrow"
-           data-en="A quiet place for the love that remains"
-           data-zh="给仍然存在的爱，一个安静的地方">
+        <p class="eyebrow" data-key="eyebrow">
           A quiet place for the love that remains
         </p>
 
-        <h1
-          data-en="They simply went to the stars first."
-          data-zh="它只是先去了星星上。">
+        <h1 data-key="title">
           They simply went to the stars first.
         </h1>
 
-        <p class="home-desc"
-           data-en="Place the words you never had time to say into a small, quiet memorial. Here, you can keep their name, photo, story, and every gentle memory that still stays with you."
-           data-zh="把那些没来得及说完的话，放进一座安静的小墓碑里。在这里，你可以为离开的宠物留下名字、照片、故事和想念。">
+        <p class="home-desc" data-key="desc">
           Place the words you never had time to say into a small, quiet memorial. Here, you can keep their name, photo, story, and every gentle memory that still stays with you.
         </p>
 
         <div class="home-actions">
-          <a href="create.html" class="primary-action"
-             data-en="Build a Memorial"
-             data-zh="为它建一座墓碑">
+          <a href="create.html" class="primary-action" data-key="buildBtn">
             Build a Memorial
           </a>
 
-          <a href="cemetery.html" class="quiet-action"
-             data-en="Enter the Garden"
-             data-zh="进入纪念园">
+          <a href="cemetery.html" class="quiet-action" data-key="enterBtn">
             Enter the Garden
           </a>
         </div>
@@ -230,45 +236,105 @@
 
     <section class="home-bottom-notes">
       <div class="home-note">
-        <strong data-en="Create a memorial" data-zh="创建墓碑">Create a memorial</strong>
-        <span data-en="Keep their name, photo, dates, and story."
-              data-zh="留下它的名字、照片、日期和故事。">
-          Keep their name, photo, dates, and story.
-        </span>
+        <strong data-key="note1Title">Create a memorial</strong>
+        <span data-key="note1Text">Keep their name, photo, dates, and story.</span>
       </div>
 
       <div class="home-note">
-        <strong data-en="Preserve what you miss" data-zh="记录想念">Preserve what you miss</strong>
-        <span data-en="Save the words you still want to say."
-              data-zh="把想说的话保存下来。">
-          Save the words you still want to say.
-        </span>
+        <strong data-key="note2Title">Preserve what you miss</strong>
+        <span data-key="note2Text">Save the words you still want to say.</span>
       </div>
 
       <div class="home-note">
-        <strong data-en="Leave gentle traces" data-zh="来访痕迹">Leave gentle traces</strong>
-        <span data-en="Every visit can become a quiet sign of remembrance."
-              data-zh="每一次看望，都会留下轻轻的痕迹。">
-          Every visit can become a quiet sign of remembrance.
-        </span>
+        <strong data-key="note3Title">Leave gentle traces</strong>
+        <span data-key="note3Text">Every visit can become a quiet sign of remembrance.</span>
       </div>
     </section>
 
   </main>
 
   <script>
-    let currentLanguage = "en";
+    const translations = {
+      en: {
+        logo: "Starlit Pet Memorial Garden",
+        eyebrow: "A quiet place for the love that remains",
+        title: "They simply went to the stars first.",
+        desc: "Place the words you never had time to say into a small, quiet memorial. Here, you can keep their name, photo, story, and every gentle memory that still stays with you.",
+        buildBtn: "Build a Memorial",
+        enterBtn: "Enter the Garden",
+        note1Title: "Create a memorial",
+        note1Text: "Keep their name, photo, dates, and story.",
+        note2Title: "Preserve what you miss",
+        note2Text: "Save the words you still want to say.",
+        note3Title: "Leave gentle traces",
+        note3Text: "Every visit can become a quiet sign of remembrance."
+      },
+      zh: {
+        logo: "星眠宠物纪念园",
+        eyebrow: "给仍然存在的爱，一个安静的地方",
+        title: "它只是先去了星星上。",
+        desc: "把那些没来得及说完的话，放进一座安静的小墓碑里。在这里，你可以为离开的宠物留下名字、照片、故事和想念。",
+        buildBtn: "为它建一座墓碑",
+        enterBtn: "进入纪念园",
+        note1Title: "创建墓碑",
+        note1Text: "留下它的名字、照片、日期和故事。",
+        note2Title: "记录想念",
+        note2Text: "把想说的话保存下来。",
+        note3Title: "来访痕迹",
+        note3Text: "每一次看望，都会留下轻轻的痕迹。"
+      },
+      ja: {
+        logo: "星眠ペット記念園",
+        eyebrow: "残された愛のための静かな場所",
+        title: "あの子は、少し先に星へ行っただけ。",
+        desc: "伝えきれなかった言葉を、小さな静かな記念碑に残しましょう。名前、写真、物語、そして大切な思い出をここに保管できます。",
+        buildBtn: "記念碑を作る",
+        enterBtn: "記念園へ入る",
+        note1Title: "記念碑を作成",
+        note1Text: "名前、写真、日付、物語を残します。",
+        note2Title: "想いを残す",
+        note2Text: "まだ伝えたい言葉を保存します。",
+        note3Title: "訪問のしるし",
+        note3Text: "訪れるたび、静かな記憶の跡が残ります。"
+      },
+      ko: {
+        logo: "별잠 반려동물 추모정원",
+        eyebrow: "남아 있는 사랑을 위한 조용한 곳",
+        title: "그 아이는 먼저 별로 갔을 뿐이에요.",
+        desc: "미처 전하지 못한 말을 작은 추모비에 담아보세요. 이름, 사진, 이야기와 아직 남아 있는 따뜻한 기억을 보관할 수 있습니다.",
+        buildBtn: "추모비 만들기",
+        enterBtn: "정원 들어가기",
+        note1Title: "추모비 만들기",
+        note1Text: "이름, 사진, 날짜와 이야기를 남깁니다.",
+        note2Title: "그리움 보관",
+        note2Text: "아직 하고 싶은 말을 저장합니다.",
+        note3Title: "방문의 흔적",
+        note3Text: "방문할 때마다 조용한 기억의 흔적이 남습니다."
+      },
+      es: {
+        logo: "Jardín Memorial de Mascotas",
+        eyebrow: "Un lugar tranquilo para el amor que permanece",
+        title: "Solo se adelantaron a las estrellas.",
+        desc: "Guarda las palabras que no alcanzaste a decir en un pequeño memorial. Aquí puedes conservar su nombre, foto, historia y cada recuerdo que sigue contigo.",
+        buildBtn: "Crear memorial",
+        enterBtn: "Entrar al jardín",
+        note1Title: "Crear un memorial",
+        note1Text: "Guarda su nombre, foto, fechas e historia.",
+        note2Title: "Preservar lo que extrañas",
+        note2Text: "Conserva las palabras que aún quieres decir.",
+        note3Title: "Dejar huellas suaves",
+        note3Text: "Cada visita puede ser una señal tranquila de recuerdo."
+      }
+    };
 
-    function toggleLanguage() {
-      currentLanguage = currentLanguage === "en" ? "zh" : "en";
-      document.documentElement.lang = currentLanguage === "en" ? "en" : "zh-CN";
+    function changeLanguage(lang) {
+      const data = translations[lang] || translations.en;
+      document.documentElement.lang = lang;
 
-      document.querySelectorAll("[data-en][data-zh]").forEach(function(item) {
-        item.textContent = item.getAttribute("data-" + currentLanguage);
+      document.querySelectorAll("[data-key]").forEach(function(item) {
+        const key = item.getAttribute("data-key");
+        if (data[key]) item.textContent = data[key];
       });
-
-      document.querySelector(".language-button").textContent =
-        currentLanguage === "en" ? "中文" : "English";
     }
   </script>
 
