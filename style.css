@@ -1,77 +1,81 @@
 body {
   margin: 0;
-  font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
-  background: #f8f1e8;
-  color: #5b4a42;
+  font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  background: #f6efe6;
+  color: #51443d;
 }
 
-/* 首页 */
+/* 首页整体 */
 .home-body {
+  min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(255, 231, 213, 0.9), transparent 35%),
-    radial-gradient(circle at bottom right, rgba(214, 196, 174, 0.8), transparent 35%),
-    #f8f1e8;
+    radial-gradient(circle at 18% 12%, rgba(255, 244, 232, 0.95), transparent 28%),
+    radial-gradient(circle at 85% 75%, rgba(210, 190, 168, 0.55), transparent 34%),
+    linear-gradient(180deg, #f8f1e8 0%, #eee0d0 100%);
 }
 
 .home-page {
   min-height: 100vh;
-  padding: 28px;
+  padding: 30px;
   box-sizing: border-box;
 }
 
 .home-header {
-  max-width: 1080px;
-  margin: 0 auto 50px;
+  max-width: 1120px;
+  margin: 0 auto 74px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: 700;
-  color: #6a5649;
-  letter-spacing: 1px;
+  color: #66564c;
+  font-size: 18px;
+  letter-spacing: 0.5px;
 }
 
-.nav-button {
-  text-decoration: none;
-  color: #6a5649;
-  background: rgba(255, 250, 245, 0.75);
+.language-button {
+  border: 1px solid rgba(120, 96, 80, 0.18);
+  background: rgba(255, 250, 245, 0.72);
+  color: #6d5a4f;
   padding: 10px 18px;
   border-radius: 999px;
-  box-shadow: 0 8px 24px rgba(107, 82, 62, 0.08);
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(92, 68, 50, 0.06);
 }
 
-.hero-section {
-  max-width: 1080px;
+.new-hero {
+  max-width: 1120px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 48px;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 70px;
   align-items: center;
 }
 
-.small-title {
-  color: #9b7d68;
+.eyebrow {
+  margin: 0 0 20px;
+  color: #9a7d69;
   font-size: 15px;
-  margin-bottom: 16px;
+  letter-spacing: 0.4px;
 }
 
-.hero-text h1 {
-  font-size: 52px;
-  line-height: 1.18;
-  color: #4f413a;
-  margin: 0 0 22px;
-  letter-spacing: 1px;
+.hero-copy h1 {
+  margin: 0 0 26px;
+  max-width: 560px;
+  font-size: 58px;
+  line-height: 1.08;
+  font-weight: 500;
+  color: #403731;
+  letter-spacing: -1.5px;
 }
 
-.hero-desc {
-  max-width: 580px;
-  color: #7a6659;
+.hero-description {
+  max-width: 560px;
+  margin: 0 0 34px;
+  color: #766459;
   font-size: 17px;
-  line-height: 1.9;
-  margin-bottom: 30px;
+  line-height: 1.95;
 }
 
 .hero-actions {
@@ -80,143 +84,207 @@ body {
   flex-wrap: wrap;
 }
 
-.main-button,
-.second-button {
+.primary-action,
+.quiet-action {
   display: inline-block;
   text-decoration: none;
   padding: 14px 24px;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-.main-button {
-  background: #b98f6d;
+.primary-action {
+  background: #8f6d58;
   color: #fffaf5;
-  box-shadow: 0 12px 28px rgba(126, 86, 59, 0.22);
+  box-shadow: 0 16px 34px rgba(112, 78, 55, 0.22);
 }
 
-.second-button {
-  background: rgba(255, 250, 245, 0.82);
-  color: #6a5649;
-  box-shadow: 0 10px 24px rgba(107, 82, 62, 0.08);
+.quiet-action {
+  background: rgba(255, 250, 245, 0.78);
+  color: #6b574d;
+  border: 1px solid rgba(120, 96, 80, 0.14);
 }
 
-.hero-card {
+/* 右侧插画 */
+.memorial-illustration {
   position: relative;
-  height: 480px;
-  border-radius: 36px;
-  background:
-    linear-gradient(180deg, rgba(255,250,245,0.88), rgba(239,222,204,0.95));
-  box-shadow: 0 22px 60px rgba(105, 77, 55, 0.18);
+  height: 500px;
+  border-radius: 42px;
   overflow: hidden;
+  background:
+    linear-gradient(180deg, #e8dfd5 0%, #f5ede3 45%, #d5bea0 100%);
+  box-shadow: 0 30px 80px rgba(91, 65, 47, 0.16);
 }
 
-.hero-card::after {
+.night-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 22%, rgba(255, 250, 232, 0.9), transparent 8%),
+    linear-gradient(180deg, #d9d2cb 0%, #eee3d7 65%, transparent 100%);
+}
+
+.moon-shape {
+  position: absolute;
+  right: 82px;
+  top: 60px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #fff8dc;
+  box-shadow: 0 0 36px rgba(255, 243, 204, 0.78);
+}
+
+.moon-shape::after {
   content: "";
+  position: absolute;
+  left: 18px;
+  top: -4px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #ded6cd;
+}
+
+.star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 250, 235, 0.9);
+}
+
+.star-a {
+  left: 90px;
+  top: 88px;
+}
+
+.star-b {
+  left: 170px;
+  top: 145px;
+}
+
+.star-c {
+  right: 170px;
+  top: 160px;
+}
+
+.garden-ground {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 145px;
-  background: linear-gradient(#d9c2a4, #b9956f);
+  height: 155px;
+  background:
+    radial-gradient(circle at 35% 20%, rgba(255,255,255,0.16), transparent 20%),
+    linear-gradient(180deg, #cbb08d, #a98463);
+  z-index: 2;
 }
 
-.moon {
-  position: absolute;
-  top: 32px;
-  right: 42px;
-  font-size: 46px;
-  color: #b99d84;
-}
-
-.mini-stone {
+.illustration-stone {
   position: absolute;
   left: 50%;
-  bottom: 86px;
+  bottom: 88px;
   transform: translateX(-50%);
-  width: 210px;
-  min-height: 230px;
-  padding: 28px 20px;
-  text-align: center;
-  background: linear-gradient(#ded8cf, #bfb5aa);
+  width: 205px;
+  height: 245px;
   border-radius: 110px 110px 22px 22px;
-  box-shadow: inset 0 4px 12px rgba(255,255,255,0.6), 0 14px 32px rgba(78,60,48,0.22);
-  z-index: 3;
-}
-
-.mini-photo {
-  width: 68px;
-  height: 68px;
-  margin: 0 auto 10px;
-  border-radius: 50%;
-  background: #f8efe5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-}
-
-.mini-stone h2 {
-  margin: 8px 0 4px;
-  color: #5c524b;
-}
-
-.mini-stone p,
-.mini-stone span {
-  color: #766a62;
-  font-size: 14px;
-}
-
-.soft-flower {
-  position: absolute;
+  background: linear-gradient(180deg, #d6d0c8, #aca298);
   z-index: 4;
-  background: rgba(255, 250, 245, 0.82);
-  color: #8a6c5b;
-  padding: 8px 14px;
-  border-radius: 999px;
+  box-shadow:
+    inset 0 8px 18px rgba(255,255,255,0.38),
+    0 18px 38px rgba(72, 54, 42, 0.22);
+  text-align: center;
+  color: #5a514a;
+}
+
+.stone-light {
+  width: 66px;
+  height: 66px;
+  margin: 34px auto 16px;
+  border-radius: 50%;
+  background: rgba(255, 248, 238, 0.82);
+  box-shadow: inset 0 0 0 4px rgba(255,255,255,0.45);
+}
+
+.stone-name {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.stone-date {
   font-size: 13px;
-  box-shadow: 0 10px 22px rgba(92, 68, 50, 0.12);
+  color: #746a63;
 }
 
-.flower-one {
-  left: 92px;
+.single-petal {
+  position: absolute;
+  left: 245px;
   bottom: 92px;
+  width: 14px;
+  height: 22px;
+  border-radius: 80% 0 80% 0;
+  background: linear-gradient(180deg, #eec6ce, #c98796);
+  transform: rotate(28deg);
+  z-index: 5;
 }
 
-.flower-two {
-  right: 86px;
-  bottom: 78px;
+.small-flower {
+  position: absolute;
+  right: 150px;
+  bottom: 92px;
+  width: 10px;
+  height: 44px;
+  background: #6f8a67;
+  border-radius: 999px;
+  z-index: 5;
 }
 
-.flower-three {
-  right: 120px;
-  bottom: 145px;
+.small-flower::before {
+  content: "";
+  position: absolute;
+  left: -13px;
+  top: -18px;
+  width: 36px;
+  height: 36px;
+  background: #d9a9b2;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-20deg);
 }
 
-.home-features {
-  max-width: 1080px;
-  margin: 58px auto 0;
+/* 首页底部说明 */
+.home-notes {
+  max-width: 1120px;
+  margin: 78px auto 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
-.feature-card {
-  background: rgba(255, 250, 245, 0.72);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 12px 30px rgba(105, 77, 55, 0.08);
+.note-card {
+  padding: 26px;
+  border-radius: 28px;
+  background: rgba(255, 250, 245, 0.58);
+  border: 1px solid rgba(120, 96, 80, 0.08);
+  box-shadow: 0 18px 44px rgba(91, 65, 47, 0.07);
 }
 
-.feature-card h3 {
-  margin: 0 0 10px;
-  color: #5c4b42;
+.note-card span {
+  color: #b69a84;
+  font-size: 13px;
 }
 
-.feature-card p {
+.note-card h3 {
+  margin: 14px 0 10px;
+  color: #50443d;
+  font-weight: 500;
+}
+
+.note-card p {
   margin: 0;
-  color: #826d60;
-  line-height: 1.7;
+  color: #7a665a;
+  line-height: 1.75;
+  font-size: 14px;
 }
 
 /* 墓碑页和创建页 */
@@ -224,6 +292,7 @@ body {
   min-height: 100vh;
   padding: 24px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .back-link {
@@ -494,33 +563,34 @@ textarea {
 }
 
 /* 手机适配 */
-@media (max-width: 760px) {
+@media (max-width: 780px) {
   .home-page {
-    padding: 20px;
+    padding: 22px;
   }
 
   .home-header {
-    margin-bottom: 32px;
+    margin-bottom: 42px;
   }
 
-  .hero-section {
+  .new-hero {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 42px;
   }
 
-  .hero-text h1 {
-    font-size: 36px;
+  .hero-copy h1 {
+    font-size: 40px;
   }
 
-  .hero-desc {
+  .hero-description {
     font-size: 15px;
   }
 
-  .hero-card {
-    height: 420px;
+  .memorial-illustration {
+    height: 430px;
   }
 
-  .home-features {
+  .home-notes {
     grid-template-columns: 1fr;
+    margin-top: 48px;
   }
 }
