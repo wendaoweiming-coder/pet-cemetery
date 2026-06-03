@@ -1,4 +1,4 @@
-function readFileAsDataURL(file) {
+function compressImage(file, maxSize = 1000, quality = 0.72) {
   return new Promise(function(resolve) {
     if (!file) {
       resolve(null);
@@ -8,15 +8,39 @@ function readFileAsDataURL(file) {
     const reader = new FileReader();
 
     reader.onload = function(event) {
-      resolve(event.target.result);
+      const img = new Image();
+
+      img.onload = function() {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height && width > maxSize) {
+          height = Math.round(height * maxSize / width);
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = Math.round(width * maxSize / height);
+          height = maxSize;
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+
+      img.src = event.target.result;
     };
 
     reader.readAsDataURL(file);
   });
 }
 
-function readMultipleFilesAsDataURL(files) {
-  return new Promise(function(resolve) {
+function compressMultipleImages(files) {
+  return new Promise(async function(resolve) {
     if (!files || files.length === 0) {
       resolve([]);
       return;
@@ -24,91 +48,91 @@ function readMultipleFilesAsDataURL(files) {
 
     const fileArray = Array.from(files);
 
-    Promise.all(fileArray.map(function(file) {
-      return readFileAsDataURL(file);
-    })).then(function(results) {
-      resolve(results.filter(Boolean));
-    });
+    const results = [];
+
+    for (let i = 0; i < fileArray.length; i++) {
+      const compressed = await compressImage(fileArray[i]);
+      if (compressed) {
+        results.push(compressed);
+      }
+    }
+
+    resolve(results);
   });
 }
 
 async function saveMemorial() {
-  const nameInput = document.getElementById("petName");
-  const birthInput = document.getElementById("petBirthDate");
-  const leaveInput = document.getElementById("petLeaveDate");
-  const epitaphInput = document.getElementById("petMemory");
-  const storyInput = document.getElementById("petStory");
-  const stonePhotoInput = document.getElementById("petPhoto");
-  const publicPhotosInput = document.getElementById("publicPhotos");
-  const privatePhotosInput = document.getElementById("privatePhotos");
+  try {
+    const nameInput = document.getElementById("petName");
+    const birthInput = document.getElementById("petBirthDate");
+    const leaveInput = document.getElementById("petLeaveDate");
+    const epitaphInput = document.getElementById("petMemory");
+    const storyInput = document.getElementById("petStory");
+    const stonePhotoInput = document.getElementById("petPhoto");
+    const publicPhotosInput = document.getElementById("publicPhotos");
+    const privatePhotosInput = document.getElementById("privatePhotos");
 
-  const name = nameInput ? nameInput.value.trim() : "";
-  const birthDate = birthInput ? birthInput.value : "";
-  const leaveDate = leaveInput ? leaveInput.value : "";
-  const epitaph = epitaphInput ? epitaphInput.value.trim() : "";
-  const story = storyInput ? storyInput.value.trim() : "";
+    const name = nameInput ? nameInput.value.trim() : "";
+    const birthDate = birthInput ? birthInput.value : "";
+    const leaveDate = leaveInput ? leaveInput.value : "";
+    const epitaph = epitaphInput ? epitaphInput.value.trim() : "";
+    const story = storyInput ? storyInput.value.trim() : "";
 
-  const visibilityInput = document.querySelector("input[name='memorialVisibility']:checked");
-  const visibility = visibilityInput ? visibilityInput.value : "public";
+    const visibilityInput = document.querySelector("input[name='memorialVisibility']:checked");
+    const visibility = visibilityInput ? visibilityInput.value : "public";
 
-  if (!name) {
-    alert("Please enter your pet's name.");
-    return;
+    if (!name) {
+      alert("请填写宠物名字 / Please enter your pet's name.");
+      return;
+    }
+
+    if (birthDate && leaveDate && birthDate > leaveDate) {
+      alert("出生日期不能晚于离开日期 / Birth date cannot be later than leaving date.");
+      return;
+    }
+
+    const oldData = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+
+    const newStonePhoto = stonePhotoInput && stonePhotoInput.files[0]
+      ? await compressImage(stonePhotoInput.files[0])
+      : null;
+
+    const newPublicPhotos = publicPhotosInput
+      ? await compressMultipleImages(publicPhotosInput.files)
+      : [];
+
+    const newPrivatePhotos = privatePhotosInput
+      ? await compressMultipleImages(privatePhotosInput.files)
+      : [];
+
+    const memorial = {
+      name: name,
+      birthDate: birthDate,
+      leaveDate: leaveDate,
+      memory: epitaph,
+      epitaph: epitaph,
+      story: story,
+      visibility: visibility,
+      photo: newStonePhoto || oldData.photo || "",
+      publicPhotos: [
+        ...(oldData.publicPhotos || []),
+        ...newPublicPhotos
+      ],
+      privatePhotos: [
+        ...(oldData.privatePhotos || []),
+        ...newPrivatePhotos
+      ],
+      updatedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem("myPetMemorial", JSON.stringify(memorial));
+
+    window.location.href = "cemetery.html";
+
+  } catch (error) {
+    console.error(error);
+    alert("保存失败。请先少上传几张照片，或换小一点的照片。");
   }
-
-  if (birthDate && leaveDate && birthDate > leaveDate) {
-    alert("The birth date cannot be later than the leaving date.");
-    return;
-  }
-
-  const oldData = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
-
-  const newStonePhoto = stonePhotoInput && stonePhotoInput.files[0]
-    ? await readFileAsDataURL(stonePhotoInput.files[0])
-    : null;
-
-  const newPublicPhotos = publicPhotosInput
-    ? await readMultipleFilesAsDataURL(publicPhotosInput.files)
-    : [];
-
-  const newPrivatePhotos = privatePhotosInput
-    ? await readMultipleFilesAsDataURL(privatePhotosInput.files)
-    : [];
-
-  const memorial = {
-    name: name,
-    birthDate: birthDate,
-    leaveDate: leaveDate,
-
-    // 旧字段 memory 继续保留，避免墓碑页坏掉
-    memory: epitaph,
-
-    // 新字段
-    epitaph: epitaph,
-    story: story,
-    visibility: visibility,
-
-    // 墓碑照片：如果没重新上传，就保留旧照片
-    photo: newStonePhoto || oldData.photo || "",
-
-    // 公开照片：新上传会追加到旧照片后面
-    publicPhotos: [
-      ...(oldData.publicPhotos || []),
-      ...newPublicPhotos
-    ],
-
-    // 私密照片：新上传会追加到旧照片后面
-    privatePhotos: [
-      ...(oldData.privatePhotos || []),
-      ...newPrivatePhotos
-    ],
-
-    updatedAt: new Date().toISOString()
-  };
-
-  localStorage.setItem("myPetMemorial", JSON.stringify(memorial));
-
-  window.location.href = "cemetery.html";
 }
 
 function loadCreateForm() {
@@ -120,34 +144,17 @@ function loadCreateForm() {
   const epitaphInput = document.getElementById("petMemory");
   const storyInput = document.getElementById("petStory");
 
-  if (nameInput && data.name) {
-    nameInput.value = data.name;
-  }
-
-  if (birthInput && data.birthDate) {
-    birthInput.value = data.birthDate;
-  }
-
-  if (leaveInput && data.leaveDate) {
-    leaveInput.value = data.leaveDate;
-  }
-
-  if (epitaphInput) {
-    epitaphInput.value = data.epitaph || data.memory || "";
-  }
-
-  if (storyInput) {
-    storyInput.value = data.story || "";
-  }
+  if (nameInput && data.name) nameInput.value = data.name;
+  if (birthInput && data.birthDate) birthInput.value = data.birthDate;
+  if (leaveInput && data.leaveDate) leaveInput.value = data.leaveDate;
+  if (epitaphInput) epitaphInput.value = data.epitaph || data.memory || "";
+  if (storyInput) storyInput.value = data.story || "";
 
   if (data.visibility) {
     const visibilityInput = document.querySelector(
       "input[name='memorialVisibility'][value='" + data.visibility + "']"
     );
-
-    if (visibilityInput) {
-      visibilityInput.checked = true;
-    }
+    if (visibilityInput) visibilityInput.checked = true;
   }
 }
 
@@ -159,23 +166,17 @@ function loadMemorial() {
   const memoryDisplay = document.getElementById("petMemoryDisplay");
   const photoDisplay = document.getElementById("petPhotoDisplay");
 
-  if (!nameDisplay) {
-    return;
-  }
+  if (!nameDisplay) return;
 
   nameDisplay.textContent = data.name || "Luna";
 
   if (yearsDisplay) {
-    const birth = data.birthDate || "----";
-    const leave = data.leaveDate || "----";
-    yearsDisplay.textContent = birth + "  —  " + leave;
+    yearsDisplay.textContent =
+      (data.birthDate || "----") + "  —  " + (data.leaveDate || "----");
   }
 
   if (memoryDisplay) {
-    memoryDisplay.textContent =
-      data.epitaph ||
-      data.memory ||
-      "You are loved, always.";
+    memoryDisplay.textContent = data.epitaph || data.memory || "You are loved, always.";
   }
 
   if (photoDisplay) {
@@ -192,15 +193,10 @@ function addMessage() {
   const messageInput = document.getElementById("messageInput");
   const messageList = document.getElementById("messageList");
 
-  if (!messageInput || !messageList) {
-    return;
-  }
+  if (!messageInput || !messageList) return;
 
   const text = messageInput.value.trim();
-
-  if (!text) {
-    return;
-  }
+  if (!text) return;
 
   const item = document.createElement("div");
   item.className = "message-item";
@@ -214,9 +210,7 @@ function placeGift(type) {
   const placedItems = document.getElementById("placedItems");
   const status = document.getElementById("animalStatus");
 
-  if (!placedItems) {
-    return;
-  }
+  if (!placedItems) return;
 
   const gift = document.createElement("div");
   gift.className = "scene-item";
@@ -264,9 +258,7 @@ function callAnimal(type) {
   const animals = document.getElementById("animals");
   const status = document.getElementById("animalStatus");
 
-  if (!animals) {
-    return;
-  }
+  if (!animals) return;
 
   if (document.querySelector(".animal-" + type)) {
     if (status) status.textContent = "It is already staying nearby.";
@@ -339,9 +331,7 @@ function touchAnimal(animal, type) {
   void animal.offsetWidth;
   animal.classList.add("touched");
 
-  if (!status) {
-    return;
-  }
+  if (!status) return;
 
   if (type === "cat") status.textContent = "The cat gently leans into your touch.";
   if (type === "dog") status.textContent = "The dog looks up, as if it understands.";
@@ -363,10 +353,7 @@ function searchAnimal() {
 
 function leaveTrace() {
   const traces = document.getElementById("traces");
-
-  if (!traces) {
-    return;
-  }
+  if (!traces) return;
 
   const trace = document.createElement("div");
   trace.className = "trace";
@@ -379,10 +366,7 @@ function leaveTrace() {
 
 function dropOnePetal() {
   const petals = document.getElementById("petals");
-
-  if (!petals) {
-    return;
-  }
+  if (!petals) return;
 
   const petal = document.createElement("div");
   petal.className = "petal";
