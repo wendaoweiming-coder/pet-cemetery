@@ -1,7 +1,8 @@
 // 保存创建的墓碑
 function saveMemorial() {
   const name = document.getElementById("petName")?.value.trim();
-  const years = document.getElementById("petYears")?.value.trim();
+  const birthDate = document.getElementById("petBirthDate")?.value;
+  const leaveDate = document.getElementById("petLeaveDate")?.value;
   const memory = document.getElementById("petMemory")?.value.trim();
   const photoInput = document.getElementById("petPhoto");
 
@@ -10,9 +11,24 @@ function saveMemorial() {
     return;
   }
 
+  if (!birthDate) {
+    alert("请选择出生日期");
+    return;
+  }
+
+  if (!leaveDate) {
+    alert("请选择离开日期");
+    return;
+  }
+
+  if (birthDate > leaveDate) {
+    alert("出生日期不能晚于离开日期");
+    return;
+  }
+
   const memorial = {
     name: name,
-    years: years || "永远被爱记得",
+    years: birthDate + " - " + leaveDate,
     memory: memory || "谢谢你陪我们走过那么多温柔的日子。",
     photo: ""
   };
