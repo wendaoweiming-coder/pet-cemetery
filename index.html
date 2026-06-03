@@ -4,40 +4,214 @@
   <meta charset="UTF-8">
   <title>Starlit Pet Memorial Garden</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    body.home-body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      color: #fffaf5;
+      background: #1f1c1a;
+    }
+
+    .home-fullscreen {
+      min-height: 100vh;
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(25, 20, 18, 0.72) 0%,
+          rgba(25, 20, 18, 0.48) 38%,
+          rgba(25, 20, 18, 0.12) 72%,
+          rgba(25, 20, 18, 0.22) 100%
+        ),
+        url("assets/hero.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .home-top {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 34px 42px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-logo {
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      color: rgba(255, 250, 245, 0.86);
+    }
+
+    .language-button {
+      border: 1px solid rgba(255, 250, 245, 0.26);
+      background: rgba(255, 250, 245, 0.12);
+      color: #fffaf5;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .home-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 110px 42px 80px;
+    }
+
+    .home-copy {
+      max-width: 560px;
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: rgba(255, 238, 220, 0.78);
+      font-size: 15px;
+      letter-spacing: 0.6px;
+    }
+
+    .home-copy h1 {
+      margin: 0 0 28px;
+      font-size: 64px;
+      line-height: 1.08;
+      font-weight: 500;
+      letter-spacing: -1.6px;
+      color: #fff8ef;
+    }
+
+    .home-desc {
+      margin: 0 0 36px;
+      color: rgba(255, 244, 232, 0.82);
+      font-size: 17px;
+      line-height: 1.95;
+    }
+
+    .home-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .primary-action,
+    .quiet-action {
+      display: inline-block;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+    }
+
+    .primary-action {
+      background: #fff3e7;
+      color: #4b3d35;
+    }
+
+    .quiet-action {
+      color: #fffaf5;
+      border: 1px solid rgba(255, 250, 245, 0.32);
+      background: rgba(255, 250, 245, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .home-bottom-notes {
+      position: absolute;
+      left: 50%;
+      bottom: 34px;
+      transform: translateX(-50%);
+      z-index: 2;
+      width: calc(100% - 84px);
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      color: rgba(255, 244, 232, 0.78);
+      font-size: 14px;
+    }
+
+    .home-note {
+      border-top: 1px solid rgba(255, 250, 245, 0.22);
+      padding-top: 14px;
+    }
+
+    .home-note strong {
+      display: block;
+      margin-bottom: 6px;
+      color: rgba(255, 250, 245, 0.92);
+      font-weight: 500;
+    }
+
+    @media (max-width: 800px) {
+      .home-fullscreen {
+        background-position: center;
+      }
+
+      .home-top {
+        padding: 24px;
+      }
+
+      .home-content {
+        padding: 76px 24px 180px;
+      }
+
+      .home-copy h1 {
+        font-size: 42px;
+      }
+
+      .home-desc {
+        font-size: 15px;
+      }
+
+      .home-bottom-notes {
+        grid-template-columns: 1fr;
+        width: calc(100% - 48px);
+        bottom: 22px;
+      }
+    }
+  </style>
 </head>
+
 <body class="home-body">
 
-  <div class="home-page">
+  <main class="home-fullscreen">
 
-    <header class="home-header">
-      <div class="logo" data-en="Starlit Pet Memorial Garden" data-zh="星眠宠物纪念园">
+    <header class="home-top">
+      <div class="home-logo" data-en="Starlit Pet Memorial Garden" data-zh="星眠宠物纪念园">
         Starlit Pet Memorial Garden
       </div>
 
-      <button class="language-button" onclick="toggleLanguage()">
-        中文
-      </button>
+      <button class="language-button" onclick="toggleLanguage()">中文</button>
     </header>
 
-    <main class="new-hero">
+    <section class="home-content">
+      <div class="home-copy">
 
-      <section class="hero-copy">
-        <p class="eyebrow" data-en="A quiet place for the love that remains" data-zh="给仍然存在的爱，一个安静的地方">
+        <p class="eyebrow"
+           data-en="A quiet place for the love that remains"
+           data-zh="给仍然存在的爱，一个安静的地方">
           A quiet place for the love that remains
         </p>
 
-        <h1 data-en="They simply went to the stars first." data-zh="它只是先去了星星上。">
+        <h1
+          data-en="They simply went to the stars first."
+          data-zh="它只是先去了星星上。">
           They simply went to the stars first.
         </h1>
 
-        <p class="hero-description"
+        <p class="home-desc"
            data-en="Place the words you never had time to say into a small, quiet memorial. Here, you can keep their name, photo, story, and every gentle memory that still stays with you."
            data-zh="把那些没来得及说完的话，放进一座安静的小墓碑里。在这里，你可以为离开的宠物留下名字、照片、故事和想念。">
-          Place the words you never had time to say into a small, quiet memorial.
-          Here, you can keep their name, photo, story, and every gentle memory that still stays with you.
+          Place the words you never had time to say into a small, quiet memorial. Here, you can keep their name, photo, story, and every gentle memory that still stays with you.
         </p>
 
-        <div class="hero-actions">
+        <div class="home-actions">
           <a href="create.html" class="primary-action"
              data-en="Build a Memorial"
              data-zh="为它建一座墓碑">
@@ -50,68 +224,51 @@
             Enter the Garden
           </a>
         </div>
-      </section>
 
-      <section class="hero-image-card">
-        <img src="assets/hero.png" alt="Peaceful pet memorial garden">
-      </section>
-
-    </main>
-
-    <section class="home-notes">
-
-      <div class="note-card">
-        <span>01</span>
-        <h3 data-en="Create a memorial" data-zh="创建墓碑">
-          Create a memorial
-        </h3>
-        <p data-en="Keep their name, photo, dates, and story in one quiet place."
-           data-zh="留下它的名字、照片、日期和故事。">
-          Keep their name, photo, dates, and story in one quiet place.
-        </p>
       </div>
-
-      <div class="note-card">
-        <span>02</span>
-        <h3 data-en="Preserve what you miss" data-zh="记录想念">
-          Preserve what you miss
-        </h3>
-        <p data-en="Save the words you still want to say, slowly turning them into a place of memory."
-           data-zh="把想说的话保存下来，慢慢变成一座回忆之地。">
-          Save the words you still want to say, slowly turning them into a place of memory.
-        </p>
-      </div>
-
-      <div class="note-card">
-        <span>03</span>
-        <h3 data-en="Leave gentle traces" data-zh="来访痕迹">
-          Leave gentle traces
-        </h3>
-        <p data-en="Every visit can become a quiet sign that they are still remembered."
-           data-zh="每一次看望，都会在墓碑旁留下轻轻的痕迹。">
-          Every visit can become a quiet sign that they are still remembered.
-        </p>
-      </div>
-
     </section>
 
-  </div>
+    <section class="home-bottom-notes">
+      <div class="home-note">
+        <strong data-en="Create a memorial" data-zh="创建墓碑">Create a memorial</strong>
+        <span data-en="Keep their name, photo, dates, and story."
+              data-zh="留下它的名字、照片、日期和故事。">
+          Keep their name, photo, dates, and story.
+        </span>
+      </div>
+
+      <div class="home-note">
+        <strong data-en="Preserve what you miss" data-zh="记录想念">Preserve what you miss</strong>
+        <span data-en="Save the words you still want to say."
+              data-zh="把想说的话保存下来。">
+          Save the words you still want to say.
+        </span>
+      </div>
+
+      <div class="home-note">
+        <strong data-en="Leave gentle traces" data-zh="来访痕迹">Leave gentle traces</strong>
+        <span data-en="Every visit can become a quiet sign of remembrance."
+              data-zh="每一次看望，都会留下轻轻的痕迹。">
+          Every visit can become a quiet sign of remembrance.
+        </span>
+      </div>
+    </section>
+
+  </main>
 
   <script>
     let currentLanguage = "en";
 
     function toggleLanguage() {
       currentLanguage = currentLanguage === "en" ? "zh" : "en";
-
       document.documentElement.lang = currentLanguage === "en" ? "en" : "zh-CN";
 
-      const items = document.querySelectorAll("[data-en][data-zh]");
-      items.forEach(function(item) {
+      document.querySelectorAll("[data-en][data-zh]").forEach(function(item) {
         item.textContent = item.getAttribute("data-" + currentLanguage);
       });
 
-      const button = document.querySelector(".language-button");
-      button.textContent = currentLanguage === "en" ? "中文" : "English";
+      document.querySelector(".language-button").textContent =
+        currentLanguage === "en" ? "中文" : "English";
     }
   </script>
 
