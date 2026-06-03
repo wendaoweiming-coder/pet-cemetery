@@ -187,7 +187,7 @@
     <header class="home-top">
       <div class="home-logo" data-key="logo">Starlit Pet Memorial Garden</div>
 
-      <select class="language-select" onchange="changeLanguage(this.value)">
+      <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
         <option value="zh">简体中文</option>
         <option value="zh-TW">繁體中文</option>
@@ -344,12 +344,175 @@
         note2Text: "Conserva las palabras que aún quieres decir.",
         note3Title: "Dejar huellas suaves",
         note3Text: "Cada visita puede ser una señal tranquila de recuerdo."
+      },
+
+      fr: {
+        logo: "Jardin commémoratif pour animaux",
+        eyebrow: "Un lieu paisible pour l’amour qui demeure",
+        title: "Ils sont simplement partis vers les étoiles avant nous.",
+        desc: "Déposez les mots que vous n’avez pas eu le temps de dire dans un petit mémorial calme. Ici, vous pouvez garder leur nom, leur photo, leur histoire et chaque souvenir tendre.",
+        buildBtn: "Créer un mémorial",
+        enterBtn: "Entrer dans le jardin",
+        note1Title: "Créer un mémorial",
+        note1Text: "Gardez son nom, sa photo, ses dates et son histoire.",
+        note2Title: "Préserver le souvenir",
+        note2Text: "Conservez les mots que vous voulez encore dire.",
+        note3Title: "Laisser une trace",
+        note3Text: "Chaque visite devient un signe doux de mémoire."
+      },
+
+      de: {
+        logo: "Gedenkgarten für Haustiere",
+        eyebrow: "Ein stiller Ort für die Liebe, die bleibt",
+        title: "Sie sind nur zuerst zu den Sternen gegangen.",
+        desc: "Bewahre die Worte, die du nicht mehr sagen konntest, in einem kleinen stillen Gedenkort. Hier bleiben Name, Foto, Geschichte und alle sanften Erinnerungen.",
+        buildBtn: "Gedenkstein erstellen",
+        enterBtn: "Garten betreten",
+        note1Title: "Gedenkort erstellen",
+        note1Text: "Bewahre Name, Foto, Daten und Geschichte.",
+        note2Title: "Erinnerungen bewahren",
+        note2Text: "Speichere die Worte, die du noch sagen möchtest.",
+        note3Title: "Sanfte Spuren",
+        note3Text: "Jeder Besuch wird zu einem stillen Zeichen der Erinnerung."
+      },
+
+      pt: {
+        logo: "Jardim Memorial de Animais",
+        eyebrow: "Um lugar tranquilo para o amor que permanece",
+        title: "Eles apenas foram primeiro para as estrelas.",
+        desc: "Guarde as palavras que você não teve tempo de dizer em um pequeno memorial tranquilo. Aqui ficam o nome, a foto, a história e cada lembrança carinhosa.",
+        buildBtn: "Criar memorial",
+        enterBtn: "Entrar no jardim",
+        note1Title: "Criar um memorial",
+        note1Text: "Guarde nome, foto, datas e história.",
+        note2Title: "Preservar a saudade",
+        note2Text: "Salve as palavras que ainda quer dizer.",
+        note3Title: "Deixar rastros suaves",
+        note3Text: "Cada visita pode ser um sinal calmo de lembrança."
+      },
+
+      it: {
+        logo: "Giardino commemorativo per animali",
+        eyebrow: "Un luogo quieto per l’amore che resta",
+        title: "Sono semplicemente andati prima tra le stelle.",
+        desc: "Lascia le parole che non hai fatto in tempo a dire in un piccolo memoriale silenzioso. Qui puoi conservare nome, foto, storia e ogni ricordo gentile.",
+        buildBtn: "Crea un memoriale",
+        enterBtn: "Entra nel giardino",
+        note1Title: "Crea un memoriale",
+        note1Text: "Conserva nome, foto, date e storia.",
+        note2Title: "Custodire il ricordo",
+        note2Text: "Salva le parole che vuoi ancora dire.",
+        note3Title: "Lasciare tracce leggere",
+        note3Text: "Ogni visita diventa un segno quieto di memoria."
+      },
+
+      th: {
+        logo: "สวนรำลึกสัตว์เลี้ยง",
+        eyebrow: "สถานที่เงียบสงบสำหรับความรักที่ยังคงอยู่",
+        title: "พวกเขาเพียงไปถึงดวงดาวก่อนเราเท่านั้น",
+        desc: "เก็บถ้อยคำที่คุณยังไม่ได้พูดไว้ในอนุสรณ์เล็ก ๆ อันเงียบสงบ ที่นี่คุณสามารถเก็บชื่อ รูปภาพ เรื่องราว และความทรงจำอันอ่อนโยนไว้ได้",
+        buildBtn: "สร้างอนุสรณ์",
+        enterBtn: "เข้าสู่สวน",
+        note1Title: "สร้างอนุสรณ์",
+        note1Text: "เก็บชื่อ รูปภาพ วันที่ และเรื่องราวของเขา",
+        note2Title: "เก็บความคิดถึง",
+        note2Text: "เก็บคำพูดที่คุณยังอยากบอกเขา",
+        note3Title: "ทิ้งร่องรอยอ่อนโยน",
+        note3Text: "ทุกการมาเยือนคือสัญญาณแห่งความทรงจำ"
+      },
+
+      vi: {
+        logo: "Khu vườn tưởng niệm thú cưng",
+        eyebrow: "Một nơi yên tĩnh cho tình yêu còn ở lại",
+        title: "Các em chỉ đi đến những vì sao trước chúng ta.",
+        desc: "Hãy đặt những lời chưa kịp nói vào một nơi tưởng niệm nhỏ và yên bình. Tại đây, bạn có thể giữ tên, ảnh, câu chuyện và mọi ký ức dịu dàng.",
+        buildBtn: "Tạo bia tưởng niệm",
+        enterBtn: "Vào khu vườn",
+        note1Title: "Tạo tưởng niệm",
+        note1Text: "Lưu tên, ảnh, ngày tháng và câu chuyện.",
+        note2Title: "Giữ lại nỗi nhớ",
+        note2Text: "Lưu những lời bạn vẫn muốn nói.",
+        note3Title: "Để lại dấu vết nhẹ nhàng",
+        note3Text: "Mỗi lần ghé thăm là một dấu hiệu của ký ức."
+      },
+
+      id: {
+        logo: "Taman Kenangan Hewan Peliharaan",
+        eyebrow: "Tempat tenang untuk cinta yang tetap tinggal",
+        title: "Mereka hanya lebih dulu pergi ke bintang-bintang.",
+        desc: "Simpan kata-kata yang belum sempat kamu ucapkan dalam sebuah memorial kecil yang tenang. Di sini, kamu dapat menyimpan nama, foto, cerita, dan kenangan lembut mereka.",
+        buildBtn: "Buat Memorial",
+        enterBtn: "Masuk ke Taman",
+        note1Title: "Buat memorial",
+        note1Text: "Simpan nama, foto, tanggal, dan cerita.",
+        note2Title: "Simpan kerinduan",
+        note2Text: "Simpan kata-kata yang masih ingin kamu ucapkan.",
+        note3Title: "Tinggalkan jejak lembut",
+        note3Text: "Setiap kunjungan menjadi tanda kenangan yang tenang."
+      },
+
+      ms: {
+        logo: "Taman Memorial Haiwan Kesayangan",
+        eyebrow: "Tempat yang tenang untuk cinta yang masih tinggal",
+        title: "Mereka hanya pergi ke bintang lebih awal.",
+        desc: "Simpan kata-kata yang belum sempat diucapkan dalam memorial kecil yang tenang. Di sini, anda boleh menyimpan nama, foto, cerita dan kenangan lembut mereka.",
+        buildBtn: "Bina Memorial",
+        enterBtn: "Masuk ke Taman",
+        note1Title: "Bina memorial",
+        note1Text: "Simpan nama, foto, tarikh dan cerita.",
+        note2Title: "Simpan rindu",
+        note2Text: "Simpan kata-kata yang masih ingin anda ucapkan.",
+        note3Title: "Tinggalkan jejak lembut",
+        note3Text: "Setiap kunjungan menjadi tanda ingatan yang tenang."
+      },
+
+      hi: {
+        logo: "पालतू स्मृति उद्यान",
+        eyebrow: "उस प्रेम के लिए एक शांत जगह जो अब भी बाकी है",
+        title: "वे बस हमसे पहले तारों के पास चले गए।",
+        desc: "जो शब्द आप कह नहीं पाए, उन्हें एक छोटे और शांत स्मारक में रखिए। यहाँ आप उनका नाम, तस्वीर, कहानी और हर कोमल याद सँभाल सकते हैं।",
+        buildBtn: "स्मारक बनाएँ",
+        enterBtn: "उद्यान में जाएँ",
+        note1Title: "स्मारक बनाएँ",
+        note1Text: "नाम, तस्वीर, तारीखें और कहानी सँभालें।",
+        note2Title: "यादों को सँभालें",
+        note2Text: "वे शब्द रखें जो आप अभी भी कहना चाहते हैं।",
+        note3Title: "कोमल निशान छोड़ें",
+        note3Text: "हर मुलाक़ात स्मृति का शांत संकेत बन सकती है।"
+      },
+
+      ar: {
+        logo: "حديقة تذكارية للحيوانات الأليفة",
+        eyebrow: "مكان هادئ للحب الذي يبقى",
+        title: "لقد سبقونا فقط إلى النجوم.",
+        desc: "ضع الكلمات التي لم تجد وقتًا لقولها في نصب تذكاري صغير وهادئ. هنا يمكنك حفظ الاسم والصورة والقصة وكل ذكرى لطيفة.",
+        buildBtn: "إنشاء نصب تذكاري",
+        enterBtn: "دخول الحديقة",
+        note1Title: "إنشاء نصب تذكاري",
+        note1Text: "احتفظ بالاسم والصورة والتواريخ والقصة.",
+        note2Title: "حفظ الاشتياق",
+        note2Text: "احفظ الكلمات التي ما زلت تريد قولها.",
+        note3Title: "ترك أثر لطيف",
+        note3Text: "كل زيارة يمكن أن تصبح علامة هادئة للذكرى."
       }
     };
 
     function changeLanguage(lang) {
       const data = translations[lang] || translations.en;
+
+      localStorage.setItem("siteLanguage", lang);
       document.documentElement.lang = lang;
+
+      if (lang === "ar") {
+        document.documentElement.dir = "rtl";
+      } else {
+        document.documentElement.dir = "ltr";
+      }
+
+      const select = document.getElementById("languageSelect");
+      if (select) {
+        select.value = lang;
+      }
 
       document.querySelectorAll("[data-key]").forEach(function(item) {
         const key = item.getAttribute("data-key");
@@ -358,6 +521,11 @@
         }
       });
     }
+
+    window.addEventListener("load", function() {
+      const savedLanguage = localStorage.getItem("siteLanguage") || "en";
+      changeLanguage(savedLanguage);
+    });
   </script>
 
 </body>
