@@ -16,10 +16,15 @@
       <div class="message-box">
         <input id="petName" placeholder="宠物名字，例如：小星星" class="form-input">
 
-        <input id="petYears" placeholder="年份，例如：2016 - 2024" class="form-input">
+        <label class="form-label">出生日期</label>
+        <input id="petBirthDate" type="date" class="form-input">
+
+        <label class="form-label">离开日期</label>
+        <input id="petLeaveDate" type="date" class="form-input">
 
         <textarea id="petMemory" placeholder="写一段想对它说的话..."></textarea>
 
+        <label class="form-label">上传宠物照片</label>
         <input id="petPhoto" type="file" accept="image/*" class="form-input">
 
         <button onclick="saveMemorial()">保存并查看墓碑</button>
