@@ -6,10 +6,14 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Microsoft YaHei", Arial, sans-serif;
       color: #fffaf5;
       background: #efe1d2;
     }
@@ -19,23 +23,21 @@
       background-image:
         linear-gradient(
           90deg,
-          rgba(42, 32, 26, 0.42) 0%,
-          rgba(82, 58, 43, 0.22) 46%,
-          rgba(255, 242, 224, 0.12) 100%
+          rgba(40, 30, 26, 0.34) 0%,
+          rgba(80, 56, 44, 0.16) 46%,
+          rgba(255, 245, 232, 0.06) 100%
         ),
-        radial-gradient(circle at 18% 18%, rgba(255, 240, 218, 0.34), transparent 34%),
-        radial-gradient(circle at 88% 18%, rgba(255, 250, 245, 0.16), transparent 30%),
+        radial-gradient(circle at 22% 18%, rgba(255, 240, 218, 0.22), transparent 34%),
         url("hero.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      box-sizing: border-box;
-      padding: 34px 42px 70px;
+      padding: 34px 42px 80px;
     }
 
     .create-header {
       max-width: 1220px;
-      margin: 0 auto 56px;
+      margin: 0 auto 58px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -44,9 +46,8 @@
     .create-logo {
       color: rgba(255, 250, 245, 0.96);
       font-size: 18px;
-      letter-spacing: 0.5px;
       text-decoration: none;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.26);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
     }
 
     .header-actions {
@@ -55,21 +56,23 @@
       align-items: center;
     }
 
+    .ios-pill,
     .top-link,
     .language-select {
-      border: 1px solid rgba(255, 250, 245, 0.42);
-      background: rgba(255, 250, 245, 0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      background: rgba(255,255,255,0.18);
       color: #fffaf5;
       padding: 10px 16px;
       border-radius: 999px;
       text-decoration: none;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.42),
+        inset 0 -1px 0 rgba(255,255,255,0.12),
+        0 8px 28px rgba(0,0,0,0.10);
       font-size: 14px;
       outline: none;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.28),
-        0 14px 34px rgba(48, 32, 22, 0.14);
     }
 
     .language-select {
@@ -77,7 +80,7 @@
     }
 
     .language-select option {
-      color: #3f342e;
+      color: #3d332d;
       background: #fffaf5;
     }
 
@@ -85,20 +88,20 @@
       max-width: 1220px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 0.86fr 1.14fr;
-      gap: 70px;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 76px;
       align-items: start;
     }
 
     .create-copy {
-      max-width: 500px;
+      max-width: 510px;
       padding-top: 42px;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.26);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
     }
 
     .eyebrow {
       margin: 0 0 20px;
-      color: rgba(255, 238, 220, 0.92);
+      color: rgba(255, 238, 220, 0.9);
       font-size: 15px;
       letter-spacing: 0.6px;
     }
@@ -114,7 +117,7 @@
 
     .create-copy p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.92);
+      color: rgba(255, 244, 232, 0.9);
       font-size: 17px;
       line-height: 1.95;
     }
@@ -130,47 +133,69 @@
       font-size: 28px;
       font-weight: 500;
       color: #fff8ef;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.24);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.22);
     }
 
     .form-intro {
       margin: 0 0 20px;
-      color: rgba(255, 244, 232, 0.88);
+      color: rgba(255, 244, 232, 0.86);
       font-size: 14px;
       line-height: 1.7;
       text-shadow: 0 2px 12px rgba(0,0,0,0.18);
     }
 
-    .glass-panel {
+    /* iOS Liquid Glass 核心 */
+    .ios-glass {
       position: relative;
       margin-bottom: 18px;
       padding: 22px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.38);
+      border-radius: 32px;
+      overflow: hidden;
+
       background:
         linear-gradient(
           135deg,
-          rgba(255, 255, 255, 0.38),
-          rgba(255, 255, 255, 0.16)
+          rgba(255,255,255,0.30),
+          rgba(255,255,255,0.10) 48%,
+          rgba(255,255,255,0.20)
         );
-      backdrop-filter: blur(26px) saturate(135%);
-      -webkit-backdrop-filter: blur(26px) saturate(135%);
+
+      border: 1px solid rgba(255,255,255,0.38);
+
+      backdrop-filter: blur(34px) saturate(190%) brightness(1.08);
+      -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.08);
+
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.42),
-        inset 0 -1px 0 rgba(255,255,255,0.12),
-        0 22px 58px rgba(50, 32, 22, 0.18);
-      overflow: hidden;
+        inset 0 1px 0 rgba(255,255,255,0.58),
+        inset 0 -1px 0 rgba(255,255,255,0.16),
+        0 16px 42px rgba(0,0,0,0.10);
     }
 
-    .glass-panel::before {
+    .ios-glass::before {
       content: "";
       position: absolute;
       top: 0;
       left: 18px;
       right: 18px;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent);
-      opacity: 0.7;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.9),
+        transparent
+      );
+      opacity: 0.9;
+    }
+
+    .ios-glass::after {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -30%;
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 62%);
+      pointer-events: none;
     }
 
     .form-section-title {
@@ -179,14 +204,15 @@
       font-size: 15px;
       font-weight: 500;
       color: #fff8ef;
-      letter-spacing: 0.2px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.20);
     }
 
     .visibility-options {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
+      position: relative;
+      z-index: 1;
     }
 
     .visibility-card {
@@ -202,36 +228,39 @@
       min-height: 92px;
       padding: 14px;
       border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.34);
-      background: rgba(255, 250, 245, 0.34);
-      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
       transition: 0.2s;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.32);
     }
 
     .visibility-card input:checked + .visibility-content {
-      border-color: rgba(255, 250, 245, 0.86);
-      background: rgba(255, 250, 245, 0.64);
+      background: rgba(255,255,255,0.46);
+      border-color: rgba(255,255,255,0.78);
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.4),
-        0 0 0 4px rgba(255, 250, 245, 0.12);
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        0 0 0 4px rgba(255,255,255,0.14);
     }
 
     .visibility-content strong {
       display: block;
       margin-bottom: 6px;
-      color: #4b3d35;
+      color: #4a3c35;
       font-size: 14px;
       font-weight: 500;
     }
 
     .visibility-content span {
-      color: #745d50;
+      color: #6f5a50;
       font-size: 12px;
       line-height: 1.5;
     }
 
     .form-label {
+      position: relative;
+      z-index: 1;
       display: block;
       margin: 15px 0 8px;
       color: #fff8ef;
@@ -241,24 +270,29 @@
 
     .form-input,
     textarea {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      box-sizing: border-box;
-      border: 1px solid rgba(255, 255, 255, 0.42);
-      background: rgba(255, 250, 245, 0.66);
-      color: #4f413a;
+      border: 1px solid rgba(255,255,255,0.38);
+      background: rgba(255,255,255,0.42);
+      color: #453832;
       padding: 14px 16px;
       border-radius: 24px;
       font-size: 15px;
       outline: none;
       font-family: inherit;
+
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.34),
-        0 8px 22px rgba(55, 35, 24, 0.08);
+        inset 0 1px 0 rgba(255,255,255,0.55),
+        0 8px 24px rgba(0,0,0,0.06);
     }
 
     .form-input::placeholder,
     textarea::placeholder {
-      color: rgba(92, 72, 60, 0.44);
+      color: rgba(69, 56, 50, 0.46);
     }
 
     textarea {
@@ -276,11 +310,11 @@
 
     .form-input:focus,
     textarea:focus {
-      border-color: rgba(255, 250, 245, 0.94);
+      background: rgba(255,255,255,0.58);
+      border-color: rgba(255,255,255,0.82);
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.5),
-        0 0 0 4px rgba(255, 250, 245, 0.18);
-      background: rgba(255, 250, 245, 0.9);
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        0 0 0 4px rgba(255,255,255,0.16);
     }
 
     .date-row {
@@ -290,6 +324,8 @@
     }
 
     .photo-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
@@ -298,9 +334,11 @@
     .photo-box {
       padding: 16px;
       border-radius: 26px;
-      border: 1px solid rgba(255, 255, 255, 0.34);
-      background: rgba(255, 250, 245, 0.28);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.30);
     }
 
     .photo-box-title {
@@ -308,15 +346,15 @@
       color: #fff8ef;
       font-size: 14px;
       font-weight: 500;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
 
     .photo-box-desc {
       margin: 0 0 12px;
-      color: rgba(255, 244, 232, 0.86);
+      color: rgba(255, 244, 232, 0.84);
       font-size: 12px;
       line-height: 1.6;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.16);
     }
 
     .hidden-file {
@@ -327,71 +365,68 @@
       display: block;
       padding: 14px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.58);
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.78),
-          rgba(255, 250, 245, 0.54)
-        );
-      color: #5f4a3f;
+      border: 1px solid rgba(255,255,255,0.48);
+      background: rgba(255,255,255,0.42);
+      color: #4b3d35;
       cursor: pointer;
       text-align: center;
       transition: 0.2s;
       font-size: 14px;
+
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.56),
-        0 12px 26px rgba(63, 38, 24, 0.1);
+        inset 0 1px 0 rgba(255,255,255,0.62),
+        0 10px 24px rgba(0,0,0,0.08);
     }
 
     .upload-label:hover {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.96),
-          rgba(255, 250, 245, 0.72)
-        );
+      background: rgba(255,255,255,0.62);
       transform: translateY(-1px);
     }
 
-    .file-name {
-      margin-top: 8px;
-      color: rgba(255, 244, 232, 0.9);
+    .file-name,
+    .form-tip {
+      position: relative;
+      z-index: 1;
+      color: rgba(255, 244, 232, 0.88);
       font-size: 12px;
       line-height: 1.5;
       text-shadow: 0 2px 10px rgba(0,0,0,0.16);
     }
 
+    .file-name {
+      margin-top: 8px;
+    }
+
     .form-tip {
-      color: rgba(255, 244, 232, 0.9);
+      margin: 12px 0 0;
       font-size: 13px;
       line-height: 1.6;
-      margin: 12px 0 0;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
 
     .submit-button {
       width: 100%;
-      border: 1px solid rgba(255,255,255,0.56);
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.94),
-          rgba(255, 238, 220, 0.82)
-        );
+      border: 1px solid rgba(255,255,255,0.58);
+      background: rgba(255,255,255,0.48);
       color: #40342e;
       padding: 15px 22px;
       border-radius: 999px;
       cursor: pointer;
       font-size: 15px;
       margin-top: 8px;
+
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.66),
-        0 18px 38px rgba(70, 45, 30, 0.18);
+        inset 0 1px 0 rgba(255,255,255,0.68),
+        0 16px 34px rgba(0,0,0,0.10);
     }
 
     .submit-button:hover {
-      background: #ffffff;
+      background: rgba(255,255,255,0.68);
       transform: translateY(-1px);
     }
 
@@ -426,21 +461,9 @@
         max-width: none;
       }
 
-      .visibility-options {
-        grid-template-columns: 1fr;
-      }
-
+      .visibility-options,
       .date-row {
         grid-template-columns: 1fr;
-      }
-
-      .header-actions {
-        gap: 8px;
-      }
-
-      .top-link,
-      .language-select {
-        padding: 9px 12px;
       }
     }
   </style>
@@ -484,14 +507,8 @@
     <section class="create-layout">
 
       <div class="create-copy">
-        <p class="eyebrow" data-key="eyebrow">
-          Create a quiet place for remembrance
-        </p>
-
-        <h1 data-key="title">
-          Build a small memorial for them.
-        </h1>
-
+        <p class="eyebrow" data-key="eyebrow">Create a quiet place for remembrance</p>
+        <h1 data-key="title">Build a small memorial for them.</h1>
         <p data-key="desc">
           Leave their name, dates, epitaph, story, and photos. Choose what should be public, private, or shared only by invitation.
         </p>
@@ -500,12 +517,9 @@
       <div class="create-form-area">
 
         <h2 class="form-title" data-key="formTitle">Memorial details</h2>
+        <p class="form-intro" data-key="formIntro">You can edit these details later.</p>
 
-        <p class="form-intro" data-key="formIntro">
-          You can edit these details later.
-        </p>
-
-        <div class="glass-panel">
+        <div class="ios-glass">
           <h3 class="form-section-title" data-key="visibilityTitle">Memorial visibility</h3>
 
           <div class="visibility-options">
@@ -539,13 +553,11 @@
           </p>
         </div>
 
-        <div class="glass-panel">
+        <div class="ios-glass">
           <h3 class="form-section-title" data-key="basicTitle">Basic information</h3>
 
           <label class="form-label" data-key="nameLabel">Pet name</label>
-          <input id="petName" class="form-input"
-                 data-placeholder-key="namePlaceholder"
-                 placeholder="For example: Luna">
+          <input id="petName" class="form-input" data-placeholder-key="namePlaceholder" placeholder="For example: Luna">
 
           <div class="date-row">
             <div>
@@ -560,31 +572,23 @@
           </div>
         </div>
 
-        <div class="glass-panel">
+        <div class="ios-glass">
           <h3 class="form-section-title" data-key="wordsTitle">Words on the stone</h3>
 
           <label class="form-label" data-key="epitaphLabel">Epitaph</label>
-          <textarea id="petMemory"
-            data-placeholder-key="epitaphPlaceholder"
-            placeholder="A short sentence that will appear on the memorial stone."></textarea>
+          <textarea id="petMemory" data-placeholder-key="epitaphPlaceholder" placeholder="A short sentence that will appear on the memorial stone."></textarea>
 
           <label class="form-label" data-key="storyLabel">Pet story</label>
-          <textarea id="petStory"
-            data-placeholder-key="storyPlaceholder"
-            placeholder="Write their story, memories, habits, and the little things you never want to forget."></textarea>
+          <textarea id="petStory" data-placeholder-key="storyPlaceholder" placeholder="Write their story, memories, habits, and the little things you never want to forget."></textarea>
         </div>
 
-        <div class="glass-panel">
+        <div class="ios-glass">
           <h3 class="form-section-title" data-key="photosTitle">Photos</h3>
 
           <div class="photo-grid">
-
             <div class="photo-box">
               <p class="photo-box-title" data-key="stonePhotoTitle">Tombstone photo</p>
-              <p class="photo-box-desc" data-key="stonePhotoDesc">
-                This photo appears on the memorial stone.
-              </p>
-
+              <p class="photo-box-desc" data-key="stonePhotoDesc">This photo appears on the memorial stone.</p>
               <input id="petPhoto" type="file" accept="image/*" class="hidden-file" onchange="showFileName('petPhoto', 'stoneFileName')">
               <label for="petPhoto" class="upload-label" data-key="chooseStonePhoto">Choose tombstone photo</label>
               <div id="stoneFileName" class="file-name" data-key="noFile">No file chosen</div>
@@ -592,10 +596,7 @@
 
             <div class="photo-box">
               <p class="photo-box-title" data-key="publicPhotosTitle">Public memory photos</p>
-              <p class="photo-box-desc" data-key="publicPhotosDesc">
-                These photos can be seen by visitors.
-              </p>
-
+              <p class="photo-box-desc" data-key="publicPhotosDesc">These photos can be seen by visitors.</p>
               <input id="publicPhotos" type="file" accept="image/*" multiple class="hidden-file" onchange="showFileName('publicPhotos', 'publicFileName')">
               <label for="publicPhotos" class="upload-label" data-key="choosePublicPhotos">Choose public photos</label>
               <div id="publicFileName" class="file-name" data-key="noFile">No file chosen</div>
@@ -603,15 +604,11 @@
 
             <div class="photo-box">
               <p class="photo-box-title" data-key="privatePhotosTitle">Private memory photos</p>
-              <p class="photo-box-desc" data-key="privatePhotosDesc">
-                These photos are meant only for you.
-              </p>
-
+              <p class="photo-box-desc" data-key="privatePhotosDesc">These photos are meant only for you.</p>
               <input id="privatePhotos" type="file" accept="image/*" multiple class="hidden-file" onchange="showFileName('privatePhotos', 'privateFileName')">
               <label for="privatePhotos" class="upload-label" data-key="choosePrivatePhotos">Choose private photos</label>
               <div id="privateFileName" class="file-name" data-key="noFile">No file chosen</div>
             </div>
-
           </div>
 
           <p class="form-tip" data-key="photoTip">
@@ -673,7 +670,6 @@
         photoTip: "In this first version, photos are saved only in your browser. Real private albums require login and database later.",
         saveBtn: "Save and View Memorial"
       },
-
       zh: {
         logo: "星眠宠物纪念园",
         viewBtn: "查看墓碑",
@@ -714,7 +710,6 @@
         photoTip: "第一版照片只会保存在你的浏览器里。真正的私密相册需要之后加入登录和数据库。",
         saveBtn: "保存并查看墓碑"
       },
-
       "zh-TW": {
         logo: "星眠寵物紀念園",
         viewBtn: "查看墓碑",
@@ -760,7 +755,6 @@
     function showFileName(inputId, displayId) {
       const input = document.getElementById(inputId);
       const display = document.getElementById(displayId);
-
       if (!input || !display) return;
 
       const lang = localStorage.getItem("siteLanguage") || "en";
@@ -771,24 +765,16 @@
         return;
       }
 
-      if (input.files.length === 1) {
-        display.textContent = input.files[0].name;
-      } else {
-        display.textContent = input.files.length + " files selected";
-      }
+      display.textContent = input.files.length === 1
+        ? input.files[0].name
+        : input.files.length + " files selected";
     }
 
     function changeLanguage(lang) {
       const data = translations[lang] || translations.en;
-
       localStorage.setItem("siteLanguage", lang);
       document.documentElement.lang = lang;
-
-      if (lang === "ar") {
-        document.documentElement.dir = "rtl";
-      } else {
-        document.documentElement.dir = "ltr";
-      }
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
 
       const select = document.getElementById("languageSelect");
       if (select) select.value = lang;
