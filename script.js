@@ -1,4 +1,4 @@
-// 保存创建的墓碑
+// 保存创建 / 编辑的墓碑
 function saveMemorial() {
   const name = document.getElementById("petName")?.value.trim();
   const birthDate = document.getElementById("petBirthDate")?.value;
@@ -26,11 +26,16 @@ function saveMemorial() {
     return;
   }
 
+  const oldSaved = localStorage.getItem("myPetMemorial");
+  const oldMemorial = oldSaved ? JSON.parse(oldSaved) : {};
+
   const memorial = {
     name: name,
+    birthDate: birthDate,
+    leaveDate: leaveDate,
     years: birthDate + " - " + leaveDate,
     memory: memory || "谢谢你陪我们走过那么多温柔的日子。",
-    photo: ""
+    photo: oldMemorial.photo || ""
   };
 
   if (photoInput && photoInput.files && photoInput.files[0]) {
@@ -47,6 +52,24 @@ function saveMemorial() {
     localStorage.setItem("myPetMemorial", JSON.stringify(memorial));
     window.location.href = "cemetery.html";
   }
+}
+
+// 进入创建 / 编辑页时，自动填入原来的内容
+function loadCreateForm() {
+  const saved = localStorage.getItem("myPetMemorial");
+  if (!saved) return;
+
+  const memorial = JSON.parse(saved);
+
+  const nameInput = document.getElementById("petName");
+  const birthInput = document.getElementById("petBirthDate");
+  const leaveInput = document.getElementById("petLeaveDate");
+  const memoryInput = document.getElementById("petMemory");
+
+  if (nameInput) nameInput.value = memorial.name || "";
+  if (birthInput) birthInput.value = memorial.birthDate || "";
+  if (leaveInput) leaveInput.value = memorial.leaveDate || "";
+  if (memoryInput) memoryInput.value = memorial.memory || "";
 }
 
 // 读取墓碑资料
@@ -373,6 +396,7 @@ function randomBetween(min, max) {
 
 // 页面打开后运行
 window.addEventListener("load", () => {
+  loadCreateForm();
   loadMemorial();
   dropOnePetal();
 });
