@@ -189,7 +189,8 @@
 
       <select class="language-select" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
-        <option value="zh">中文</option>
+        <option value="zh">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
         <option value="ja">日本語</option>
         <option value="ko">한국어</option>
         <option value="es">Español</option>
@@ -269,6 +270,7 @@
         note3Title: "Leave gentle traces",
         note3Text: "Every visit can become a quiet sign of remembrance."
       },
+
       zh: {
         logo: "星眠宠物纪念园",
         eyebrow: "给仍然存在的爱，一个安静的地方",
@@ -283,6 +285,22 @@
         note3Title: "来访痕迹",
         note3Text: "每一次看望，都会留下轻轻的痕迹。"
       },
+
+      "zh-TW": {
+        logo: "星眠寵物紀念園",
+        eyebrow: "給仍然存在的愛，一個安靜的地方",
+        title: "牠只是先去了星星上。",
+        desc: "把那些沒來得及說完的話，放進一座安靜的小墓碑裡。在這裡，你可以為離開的寵物留下名字、照片、故事和想念。",
+        buildBtn: "為牠建一座墓碑",
+        enterBtn: "進入紀念園",
+        note1Title: "建立墓碑",
+        note1Text: "留下牠的名字、照片、日期和故事。",
+        note2Title: "記錄想念",
+        note2Text: "把想說的話保存下來。",
+        note3Title: "來訪痕跡",
+        note3Text: "每一次看望，都會留下輕輕的痕跡。"
+      },
+
       ja: {
         logo: "星眠ペット記念園",
         eyebrow: "残された愛のための静かな場所",
@@ -297,6 +315,7 @@
         note3Title: "訪問のしるし",
         note3Text: "訪れるたび、静かな記憶の跡が残ります。"
       },
+
       ko: {
         logo: "별잠 반려동물 추모정원",
         eyebrow: "남아 있는 사랑을 위한 조용한 곳",
@@ -311,6 +330,7 @@
         note3Title: "방문의 흔적",
         note3Text: "방문할 때마다 조용한 기억의 흔적이 남습니다."
       },
+
       es: {
         logo: "Jardín Memorial de Mascotas",
         eyebrow: "Un lugar tranquilo para el amor que permanece",
@@ -333,7 +353,9 @@
 
       document.querySelectorAll("[data-key]").forEach(function(item) {
         const key = item.getAttribute("data-key");
-        if (data[key]) item.textContent = data[key];
+        if (data[key]) {
+          item.textContent = data[key];
+        }
       });
     }
   </script>
