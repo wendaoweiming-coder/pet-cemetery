@@ -1,68 +1,539 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>宠物纪念墓碑</title>
+  <title>Pet Memorial</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: #1f1c1a;
+      color: #fffaf5;
+    }
+
+    .memorial-page {
+      min-height: 100vh;
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(10, 13, 18, 0.72) 0%,
+          rgba(10, 13, 18, 0.5) 42%,
+          rgba(10, 13, 18, 0.22) 100%
+        ),
+        url("hero.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 34px 42px 70px;
+      box-sizing: border-box;
+    }
+
+    .memorial-header {
+      max-width: 1220px;
+      margin: 0 auto 46px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .memorial-logo {
+      color: rgba(255, 250, 245, 0.9);
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .top-link {
+      border: 1px solid rgba(255, 250, 245, 0.24);
+      background: rgba(255, 250, 245, 0.1);
+      color: #fffaf5;
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      backdrop-filter: blur(12px);
+      font-size: 14px;
+    }
+
+    .memorial-layout {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .grave-card {
+      position: relative;
+      min-height: 600px;
+      border-radius: 36px;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 250, 245, 0.13),
+          rgba(255, 250, 245, 0.06)
+        );
+      border: 1px solid rgba(255, 250, 245, 0.14);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(18px);
+    }
+
+    .grave-ground {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(180deg, rgba(116, 94, 68, 0.15), rgba(82, 62, 42, 0.65));
+    }
+
+    .stone {
+      position: absolute;
+      left: 50%;
+      bottom: 125px;
+      transform: translateX(-50%);
+      width: 270px;
+      min-height: 300px;
+      padding: 32px 24px;
+      background:
+        linear-gradient(180deg, #d6d0c7, #aaa195);
+      border-radius: 135px 135px 28px 28px;
+      box-shadow:
+        inset 0 5px 14px rgba(255,255,255,0.5),
+        0 22px 48px rgba(0,0,0,0.32);
+      text-align: center;
+      color: #4f463f;
+      z-index: 5;
+    }
+
+    .visibility-badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.46);
+      color: #5d5048;
+      font-size: 12px;
+    }
+
+    .photo-frame {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: #f7eee4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .stone h1 {
+      margin: 8px 0 6px;
+      font-size: 30px;
+      font-weight: 500;
+    }
+
+    .date {
+      margin: 0 0 14px;
+      color: #746a63;
+      font-size: 14px;
+    }
+
+    .memory {
+      max-width: 210px;
+      margin: 0 auto;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #5c514b;
+    }
+
+    .placed-items,
+    .animals,
+    #petals,
+    #traces {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .placed-items {
+      z-index: 7;
+    }
+
+    .animals {
+      z-index: 8;
+      pointer-events: auto;
+    }
+
+    #petals {
+      z-index: 9;
+    }
+
+    #traces {
+      z-index: 6;
+    }
+
+    .scene-item {
+      position: absolute;
+      font-size: 34px;
+      filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.22));
+    }
+
+    .animal {
+      position: absolute;
+      font-size: 42px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: 2.4s ease;
+      filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.22));
+    }
+
+    .animal.resting {
+      animation: breathing 3s ease-in-out infinite;
+    }
+
+    .animal.touched {
+      animation: nuzzle 0.9s ease-in-out;
+    }
+
+    @keyframes breathing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    @keyframes nuzzle {
+      0% { transform: translateX(0) rotate(0); }
+      30% { transform: translateX(-8px) rotate(-5deg); }
+      60% { transform: translateX(8px) rotate(5deg); }
+      100% { transform: translateX(0) rotate(0); }
+    }
+
+    .petal {
+      position: absolute;
+      width: 13px;
+      height: 20px;
+      background: linear-gradient(180deg, #f5c9d2, #df93a4);
+      border-radius: 80% 0 80% 0;
+      opacity: 0.9;
+    }
+
+    .trace {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0.65;
+    }
+
+    .memorial-info {
+      border-radius: 34px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(31, 34, 38, 0.72),
+          rgba(18, 20, 24, 0.82)
+        );
+      border: 1px solid rgba(255, 250, 245, 0.16);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(22px);
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    .info-section {
+      padding: 22px 0;
+      border-top: 1px solid rgba(255, 250, 245, 0.12);
+    }
+
+    .info-section:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .info-section h2 {
+      margin: 0 0 14px;
+      font-size: 20px;
+      font-weight: 500;
+      color: #fff8ef;
+    }
+
+    .info-section p {
+      margin: 0;
+      color: rgba(255, 244, 232, 0.74);
+      line-height: 1.85;
+      font-size: 15px;
+    }
+
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .gallery-photo {
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255, 250, 245, 0.08);
+      border: 1px solid rgba(255, 250, 245, 0.12);
+    }
+
+    .gallery-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .empty-text {
+      color: rgba(255, 244, 232, 0.45);
+      font-size: 14px;
+    }
+
+    .gift-buttons {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .gift-buttons button,
+    .message-box button {
+      border: none;
+      background: rgba(255, 243, 231, 0.9);
+      color: #40342e;
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .animal-status {
+      margin-top: 16px;
+      padding: 13px 16px;
+      border-radius: 18px;
+      background: rgba(255, 250, 245, 0.08);
+      color: rgba(255, 244, 232, 0.7);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .message-box textarea {
+      width: 100%;
+      height: 90px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 250, 245, 0.16);
+      background: rgba(255, 250, 245, 0.1);
+      color: #fffaf5;
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-size: 15px;
+      outline: none;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .message-list {
+      margin-top: 16px;
+    }
+
+    .message-item {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 250, 245, 0.1);
+      color: rgba(255, 244, 232, 0.72);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .memorial-page {
+        padding: 24px;
+      }
+
+      .memorial-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .grave-card {
+        min-height: 560px;
+      }
+
+      .photo-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <div class="cemetery-page">
 
-    <a href="index.html" class="back-link">← 返回首页</a>
-    <a href="create.html" class="back-link">编辑墓碑</a>
+  <main class="memorial-page">
 
-    <section class="memorial-scene">
+    <header class="memorial-header">
+      <a href="index.html" class="memorial-logo">
+        Starlit Pet Memorial Garden
+      </a>
 
-      <div class="sky-note">
-        愿每一次想念，都轻轻落在它身边。
+      <div class="header-actions">
+        <a href="create.html" class="top-link">Edit Memorial</a>
+        <a href="index.html" class="top-link">Home</a>
       </div>
+    </header>
 
-      <div class="grave-area">
+    <section class="memorial-layout">
+
+      <div class="grave-card">
 
         <div id="petals"></div>
         <div id="traces"></div>
 
         <div class="stone">
-          <div class="photo-frame" id="petPhotoDisplay">🐾</div>
-          <h1 id="petNameDisplay">小星星</h1>
-          <p class="date" id="petYearsDisplay">2016 - 2024</p>
-          <p class="memory" id="petMemoryDisplay">谢谢你陪我们走过那么多温柔的日子。</p>
+          <div class="visibility-badge" id="visibilityDisplay">Public</div>
+
+          <div class="photo-frame" id="petPhotoDisplay">
+            🐾
+          </div>
+
+          <h1 id="petNameDisplay">Luna</h1>
+          <p class="date" id="petYearsDisplay">---- — ----</p>
+          <p class="memory" id="petMemoryDisplay">You are loved, always.</p>
         </div>
 
-        <div id="placedItems" class="placed-items"></div>
-        <div id="animals" class="animals"></div>
+        <div class="grave-ground"></div>
 
+        <div class="placed-items" id="placedItems"></div>
+        <div class="animals" id="animals"></div>
       </div>
 
-      <div id="animalStatus" class="animal-status">
-        这里很安静，还没有小动物来。
-      </div>
+      <div class="memorial-info">
 
-      <div class="gift-buttons">
-        <button onclick="placeGift('can')">摆一罐猫罐头</button>
-        <button onclick="placeGift('ball')">放一个小球</button>
-        <button onclick="placeGift('seed')">撒一点鸟食</button>
-        <button onclick="placeGift('flower')">献一束花</button>
-      </div>
+        <div class="info-section">
+          <h2>Pet Story</h2>
+          <p id="petStoryDisplay" class="empty-text">
+            No story has been written yet.
+          </p>
+        </div>
 
-      <button class="search-btn" onclick="searchAnimal()">
-        寻找去别处闲逛的小动物
-      </button>
+        <div class="info-section">
+          <h2>Public Memory Photos</h2>
+          <div id="publicPhotosDisplay" class="photo-gallery"></div>
+        </div>
 
-      <div class="message-box">
-        <textarea id="messageInput" placeholder="写下一句想对它说的话..."></textarea>
-        <button onclick="addMessage()">留下留言</button>
-      </div>
+        <div class="info-section">
+          <h2>Private Memory Photos</h2>
+          <p class="empty-text">
+            These photos are currently shown only in your browser demo. Real privacy requires login later.
+          </p>
+          <div id="privatePhotosDisplay" class="photo-gallery" style="margin-top: 14px;"></div>
+        </div>
 
-      <div class="message-area">
-        <h3>留言</h3>
-        <div id="messageList"></div>
+        <div class="info-section">
+          <h2>Offer a small gift</h2>
+
+          <div class="gift-buttons">
+            <button onclick="placeGift('can')">Place a can</button>
+            <button onclick="placeGift('ball')">Place a ball</button>
+            <button onclick="placeGift('seed')">Place seeds</button>
+            <button onclick="placeGift('flower')">Place flowers</button>
+          </div>
+
+          <div class="animal-status" id="animalStatus">
+            Quiet gifts may bring gentle visitors.
+          </div>
+        </div>
+
+        <div class="info-section message-box">
+          <h2>Leave a message</h2>
+
+          <textarea id="messageInput" placeholder="Write a few quiet words..."></textarea>
+          <br><br>
+          <button onclick="addMessage()">Leave message</button>
+
+          <div id="messageList" class="message-list"></div>
+        </div>
+
       </div>
 
     </section>
 
-  </div>
+  </main>
 
   <script src="script.js"></script>
+
+  <script>
+    function showPhotos(containerId, photos) {
+      const container = document.getElementById(containerId);
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+      if (!photos || photos.length === 0) {
+        container.innerHTML = '<p class="empty-text">No photos yet.</p>';
+        return;
+      }
+
+      photos.forEach(function(photo) {
+        const box = document.createElement("div");
+        box.className = "gallery-photo";
+
+        const img = document.createElement("img");
+        img.src = photo;
+
+        box.appendChild(img);
+        container.appendChild(box);
+      });
+    }
+
+    function loadExtraMemorialInfo() {
+      const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+
+      const visibilityDisplay = document.getElementById("visibilityDisplay");
+      const storyDisplay = document.getElementById("petStoryDisplay");
+
+      if (visibilityDisplay) {
+        if (data.visibility === "private") {
+          visibilityDisplay.textContent = "Private";
+        } else if (data.visibility === "invite") {
+          visibilityDisplay.textContent = "Invite only";
+        } else {
+          visibilityDisplay.textContent = "Public";
+        }
+      }
+
+      if (storyDisplay) {
+        if (data.story) {
+          storyDisplay.textContent = data.story;
+          storyDisplay.classList.remove("empty-text");
+        } else {
+          storyDisplay.textContent = "No story has been written yet.";
+          storyDisplay.classList.add("empty-text");
+        }
+      }
+
+      showPhotos("publicPhotosDisplay", data.publicPhotos || []);
+      showPhotos("privatePhotosDisplay", data.privatePhotos || []);
+    }
+
+    window.addEventListener("load", loadExtraMemorialInfo);
+  </script>
+
 </body>
 </html>
