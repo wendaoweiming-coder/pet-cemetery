@@ -27,7 +27,6 @@
       background: #0f1411;
     }
 
-    /* 第一屏：只看墓园和墓碑 */
     .hero-stage {
       position: relative;
       min-height: 100vh;
@@ -123,6 +122,13 @@
       align-items: end;
       justify-content: center;
       z-index: 10;
+
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+
+    body.memorial-ready .center-stone-wrap {
+      opacity: 1;
     }
 
     .center-stone-shadow {
@@ -315,26 +321,6 @@
       filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.28));
     }
 
-    .animal.resting {
-      animation: breathing 3s ease-in-out infinite;
-    }
-
-    .animal.touched {
-      animation: nuzzle 0.9s ease-in-out;
-    }
-
-    @keyframes breathing {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-    }
-
-    @keyframes nuzzle {
-      0% { transform: translateX(0) rotate(0); }
-      30% { transform: translateX(-8px) rotate(-5deg); }
-      60% { transform: translateX(8px) rotate(5deg); }
-      100% { transform: translateX(0) rotate(0); }
-    }
-
     .petal {
       position: absolute;
       width: 13px;
@@ -362,7 +348,6 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.34);
     }
 
-    /* 第二部分：把故事和照片放到墓碑下面 */
     .details-section {
       position: relative;
       z-index: 3;
@@ -681,7 +666,17 @@
       showPhotos("privatePhotosDisplay", data.privatePhotos || []);
     }
 
-    window.addEventListener("load", loadExtraMemorialInfo);
+    window.addEventListener("load", function() {
+      loadExtraMemorialInfo();
+
+      requestAnimationFrame(function() {
+        document.body.classList.add("memorial-ready");
+      });
+    });
+
+    setTimeout(function() {
+      document.body.classList.add("memorial-ready");
+    }, 800);
   </script>
 
 </body>
