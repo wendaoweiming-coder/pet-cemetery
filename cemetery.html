@@ -18,6 +18,11 @@
       color: #fffaf5;
     }
 
+    button, a, select, textarea {
+      font-family: inherit;
+      outline: none;
+    }
+
     .hero-stage {
       position: relative;
       min-height: 100vh;
@@ -69,7 +74,8 @@
       align-items: center;
     }
 
-    .soft-button {
+    .soft-button,
+    .language-select {
       border: 1px solid rgba(255, 250, 245, 0.34);
       background: rgba(255, 250, 245, 0.08);
       color: #fffaf5;
@@ -80,6 +86,11 @@
       -webkit-backdrop-filter: blur(8px);
       font-size: 14px;
       cursor: pointer;
+    }
+
+    .language-select option {
+      color: #2d2520;
+      background: #fffaf5;
     }
 
     .stage-inner {
@@ -388,9 +399,11 @@
       padding: 14px;
       border-radius: 18px;
       font-size: 14px;
-      outline: none;
       resize: none;
-      font-family: inherit;
+    }
+
+    .message-box textarea::placeholder {
+      color: rgba(255, 244, 232, 0.44);
     }
 
     .message-list {
@@ -408,6 +421,12 @@
     @media (max-width: 980px) {
       .memorial-header {
         padding: 24px 20px 0;
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
       .center-stone-wrap {
@@ -429,12 +448,33 @@
     <section class="hero-stage">
 
       <header class="memorial-header">
-        <a href="index.html" class="memorial-logo">Starlit Pet Memorial Garden</a>
+        <a href="index.html" class="memorial-logo" data-key="logo">
+          Starlit Pet Memorial Garden
+        </a>
 
         <div class="header-actions">
-          <a href="create.html" class="soft-button">Edit Info</a>
-          <a href="select-stone.html" class="soft-button">Change Stone</a>
-          <a href="#details" class="soft-button">Story & Photos</a>
+          <a href="create.html" class="soft-button" data-key="editBtn">Edit Info</a>
+          <a href="select-stone.html" class="soft-button" data-key="changeStoneBtn">Change Stone</a>
+          <a href="#details" class="soft-button" data-key="storyPhotosBtn">Story & Photos</a>
+
+          <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="zh">简体中文</option>
+            <option value="zh-TW">繁體中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+            <option value="it">Italiano</option>
+            <option value="th">ไทย</option>
+            <option value="vi">Tiếng Việt</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="ms">Bahasa Melayu</option>
+            <option value="hi">हिन्दी</option>
+            <option value="ar">العربية</option>
+          </select>
         </div>
       </header>
 
@@ -463,7 +503,9 @@
         </div>
       </div>
 
-      <div class="scroll-tip">Scroll down to view story and photos</div>
+      <div class="scroll-tip" data-key="scrollTip">
+        Scroll down to view story and photos
+      </div>
 
     </section>
 
@@ -471,43 +513,43 @@
       <div class="details-inner">
 
         <div class="details-card">
-          <h2>Pet Story</h2>
+          <h2 data-key="storyTitle">Pet Story</h2>
           <p id="petStoryDisplay" class="empty-text">No story has been written yet.</p>
         </div>
 
         <div class="details-card">
-          <h2>Public Memory Photos</h2>
+          <h2 data-key="publicPhotosTitle">Public Memory Photos</h2>
           <div id="publicPhotosDisplay" class="photo-gallery"></div>
         </div>
 
         <div class="details-card">
-          <h2>Private Memory Photos</h2>
-          <p class="empty-text" style="margin-bottom:12px;">
+          <h2 data-key="privatePhotosTitle">Private Memory Photos</h2>
+          <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">
             These photos are currently shown only in your browser demo.
           </p>
           <div id="privatePhotosDisplay" class="photo-gallery"></div>
         </div>
 
         <div class="details-card">
-          <h2>Offer a small gift</h2>
+          <h2 data-key="giftTitle">Offer a small gift</h2>
 
           <div class="gift-buttons">
-            <button onclick="placeGift('can')">Place a can</button>
-            <button onclick="placeGift('ball')">Place a ball</button>
-            <button onclick="placeGift('seed')">Place seeds</button>
-            <button onclick="placeGift('flower')">Place flowers</button>
+            <button onclick="placeGift('can')" data-key="giftCan">Place a can</button>
+            <button onclick="placeGift('ball')" data-key="giftBall">Place a ball</button>
+            <button onclick="placeGift('seed')" data-key="giftSeed">Place seeds</button>
+            <button onclick="placeGift('flower')" data-key="giftFlower">Place flowers</button>
           </div>
 
-          <div class="animal-status" id="animalStatus">
+          <div class="animal-status" id="animalStatus" data-key="animalStatus">
             Quiet gifts may bring gentle visitors.
           </div>
         </div>
 
         <div class="details-card message-box">
-          <h2>Leave a message</h2>
-          <textarea id="messageInput" placeholder="Write a few quiet words..."></textarea>
+          <h2 data-key="messageTitle">Leave a message</h2>
+          <textarea id="messageInput" data-placeholder-key="messagePlaceholder" placeholder="Write a few quiet words..."></textarea>
           <br><br>
-          <button onclick="addMessage()">Leave message</button>
+          <button onclick="addMessage()" data-key="messageBtn">Leave message</button>
           <div id="messageList" class="message-list"></div>
         </div>
 
@@ -516,9 +558,186 @@
 
   </main>
 
+  <script src="script.js"></script>
+
   <script>
+    let currentLang = "en";
+
+    const translations = {
+      en: {
+        logo: "Starlit Pet Memorial Garden",
+        editBtn: "Edit Info",
+        changeStoneBtn: "Change Stone",
+        storyPhotosBtn: "Story & Photos",
+        scrollTip: "Scroll down to view story and photos",
+        storyTitle: "Pet Story",
+        publicPhotosTitle: "Public Memory Photos",
+        privatePhotosTitle: "Private Memory Photos",
+        privatePhotosDesc: "These photos are currently shown only in your browser demo.",
+        giftTitle: "Offer a small gift",
+        giftCan: "Place a can",
+        giftBall: "Place a ball",
+        giftSeed: "Place seeds",
+        giftFlower: "Place flowers",
+        animalStatus: "Quiet gifts may bring gentle visitors.",
+        messageTitle: "Leave a message",
+        messagePlaceholder: "Write a few quiet words...",
+        messageBtn: "Leave message",
+        noStory: "No story has been written yet.",
+        noPhotos: "No photos yet.",
+        defaultName: "Luna",
+        defaultWords: "You are loved, always.",
+        publicText: "Public",
+        privateText: "Private",
+        inviteText: "Invite only"
+      },
+      zh: {
+        logo: "星眠宠物纪念园",
+        editBtn: "修改信息",
+        changeStoneBtn: "更换墓碑",
+        storyPhotosBtn: "故事与照片",
+        scrollTip: "向下查看故事和照片",
+        storyTitle: "宠物故事",
+        publicPhotosTitle: "公开回忆照片",
+        privatePhotosTitle: "私密回忆照片",
+        privatePhotosDesc: "这些照片目前只会显示在你的浏览器演示中。",
+        giftTitle: "放置一个小礼物",
+        giftCan: "放一个罐头",
+        giftBall: "放一个球",
+        giftSeed: "放一些鸟食",
+        giftFlower: "放一些花",
+        animalStatus: "安静的小礼物，可能会吸引温柔的访客。",
+        messageTitle: "留言",
+        messagePlaceholder: "写几句安静的话...",
+        messageBtn: "留下留言",
+        noStory: "还没有写下故事。",
+        noPhotos: "还没有照片。",
+        defaultName: "露娜",
+        defaultWords: "永远爱你。",
+        publicText: "公开",
+        privateText: "私密",
+        inviteText: "邀请可见"
+      },
+      "zh-TW": {
+        logo: "星眠寵物紀念園",
+        editBtn: "修改資訊",
+        changeStoneBtn: "更換墓碑",
+        storyPhotosBtn: "故事與照片",
+        scrollTip: "向下查看故事和照片",
+        storyTitle: "寵物故事",
+        publicPhotosTitle: "公開回憶照片",
+        privatePhotosTitle: "私密回憶照片",
+        privatePhotosDesc: "這些照片目前只會顯示在你的瀏覽器演示中。",
+        giftTitle: "放置一個小禮物",
+        giftCan: "放一個罐頭",
+        giftBall: "放一個球",
+        giftSeed: "放一些鳥食",
+        giftFlower: "放一些花",
+        animalStatus: "安靜的小禮物，可能會吸引溫柔的訪客。",
+        messageTitle: "留言",
+        messagePlaceholder: "寫幾句安靜的話...",
+        messageBtn: "留下留言",
+        noStory: "還沒有寫下故事。",
+        noPhotos: "還沒有照片。",
+        defaultName: "露娜",
+        defaultWords: "永遠愛你。",
+        publicText: "公開",
+        privateText: "私密",
+        inviteText: "邀請可見"
+      },
+      ja: {
+        logo: "星眠ペット記念園",
+        editBtn: "情報を編集",
+        changeStoneBtn: "墓碑を変更",
+        storyPhotosBtn: "物語と写真",
+        scrollTip: "下にスクロールして物語と写真を見る",
+        storyTitle: "ペットの物語",
+        publicPhotosTitle: "公開思い出写真",
+        privatePhotosTitle: "非公開思い出写真",
+        privatePhotosDesc: "これらの写真は現在、このブラウザのデモ内だけで表示されます。",
+        giftTitle: "小さなお供えを置く",
+        giftCan: "缶詰を置く",
+        giftBall: "ボールを置く",
+        giftSeed: "餌を置く",
+        giftFlower: "花を置く",
+        animalStatus: "静かなお供えが、やさしい訪問者を呼ぶかもしれません。",
+        messageTitle: "メッセージを残す",
+        messagePlaceholder: "静かな言葉を少し書いてください...",
+        messageBtn: "メッセージを残す",
+        noStory: "まだ物語は書かれていません。",
+        noPhotos: "まだ写真はありません。",
+        defaultName: "ルナ",
+        defaultWords: "ずっと愛しています。",
+        publicText: "公開",
+        privateText: "非公開",
+        inviteText: "招待のみ"
+      },
+      ko: {
+        logo: "별잠 반려동물 추모정원",
+        editBtn: "정보 수정",
+        changeStoneBtn: "묘비 변경",
+        storyPhotosBtn: "이야기와 사진",
+        scrollTip: "아래로 내려 이야기와 사진 보기",
+        storyTitle: "반려동물 이야기",
+        publicPhotosTitle: "공개 추억 사진",
+        privatePhotosTitle: "비공개 추억 사진",
+        privatePhotosDesc: "이 사진들은 현재 브라우저 데모에서만 표시됩니다.",
+        giftTitle: "작은 선물 놓기",
+        giftCan: "캔 놓기",
+        giftBall: "공 놓기",
+        giftSeed: "먹이 놓기",
+        giftFlower: "꽃 놓기",
+        animalStatus: "조용한 선물은 다정한 방문자를 불러올 수 있습니다.",
+        messageTitle: "메시지 남기기",
+        messagePlaceholder: "조용한 말을 조금 남겨주세요...",
+        messageBtn: "메시지 남기기",
+        noStory: "아직 이야기가 작성되지 않았습니다.",
+        noPhotos: "아직 사진이 없습니다.",
+        defaultName: "루나",
+        defaultWords: "언제나 사랑해.",
+        publicText: "공개",
+        privateText: "비공개",
+        inviteText: "초대 전용"
+      }
+    };
+
+    ["es","fr","de","pt","it","th","vi","id","ms","hi","ar"].forEach(function(lang) {
+      translations[lang] = translations.en;
+    });
+
+    function getText() {
+      return translations[currentLang] || translations.en;
+    }
+
+    function changeLanguage(lang) {
+      currentLang = translations[lang] ? lang : "en";
+      localStorage.setItem("siteLanguage", currentLang);
+
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+      const select = document.getElementById("languageSelect");
+      if (select) select.value = currentLang;
+
+      const text = getText();
+
+      document.querySelectorAll("[data-key]").forEach(function(el) {
+        const key = el.getAttribute("data-key");
+        if (text[key]) el.textContent = text[key];
+      });
+
+      document.querySelectorAll("[data-placeholder-key]").forEach(function(el) {
+        const key = el.getAttribute("data-placeholder-key");
+        if (text[key]) el.placeholder = text[key];
+      });
+
+      renderStoneImmediately();
+      loadExtraMemorialInfo();
+    }
+
     function renderStoneImmediately() {
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+      const text = getText();
 
       const stone = document.getElementById("memorialStone");
       const name = document.getElementById("petNameDisplay");
@@ -529,36 +748,40 @@
 
       const style = data.tombstoneStyle || "rounded";
 
-      stone.className = "memorial-stone memorial-stone-" + style;
-      name.textContent = data.name || "Luna";
-      years.textContent = (data.birthDate || "----") + " — " + (data.leaveDate || "----");
-      words.textContent = data.epitaph || data.memory || "You are loved, always.";
+      if (stone) stone.className = "memorial-stone memorial-stone-" + style;
+      if (name) name.textContent = data.name || text.defaultName;
+      if (years) years.textContent = (data.birthDate || "----") + " — " + (data.leaveDate || "----");
+      if (words) words.textContent = data.epitaph || data.memory || text.defaultWords;
 
-      if (data.photo) {
-        photo.innerHTML = '<img src="' + data.photo + '">';
-      } else {
-        photo.textContent = "🐾";
+      if (photo) {
+        if (data.photo) {
+          photo.innerHTML = '<img src="' + data.photo + '">';
+        } else {
+          photo.textContent = "🐾";
+        }
       }
 
-      if (data.visibility === "private") {
-        visibility.textContent = "Private";
-      } else if (data.visibility === "invite") {
-        visibility.textContent = "Invite only";
-      } else {
-        visibility.textContent = "Public";
+      if (visibility) {
+        if (data.visibility === "private") {
+          visibility.textContent = text.privateText;
+        } else if (data.visibility === "invite") {
+          visibility.textContent = text.inviteText;
+        } else {
+          visibility.textContent = text.publicText;
+        }
       }
     }
 
-    renderStoneImmediately();
-
     function showPhotos(containerId, photos) {
       const container = document.getElementById(containerId);
+      const text = getText();
+
       if (!container) return;
 
       container.innerHTML = "";
 
       if (!photos || photos.length === 0) {
-        container.innerHTML = '<p class="empty-text">No photos yet.</p>';
+        container.innerHTML = '<p class="empty-text">' + text.noPhotos + '</p>';
         return;
       }
 
@@ -576,6 +799,7 @@
 
     function loadExtraMemorialInfo() {
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+      const text = getText();
 
       const storyDisplay = document.getElementById("petStoryDisplay");
 
@@ -584,7 +808,7 @@
           storyDisplay.textContent = data.story;
           storyDisplay.classList.remove("empty-text");
         } else {
-          storyDisplay.textContent = "No story has been written yet.";
+          storyDisplay.textContent = text.noStory;
           storyDisplay.classList.add("empty-text");
         }
       }
@@ -593,12 +817,15 @@
       showPhotos("privatePhotosDisplay", data.privatePhotos || []);
     }
 
+    window.addEventListener("DOMContentLoaded", function() {
+      const savedLanguage = localStorage.getItem("siteLanguage") || "en";
+      changeLanguage(savedLanguage);
+    });
+
     window.addEventListener("load", function() {
-      loadExtraMemorialInfo();
+      changeLanguage(localStorage.getItem("siteLanguage") || "en");
     });
   </script>
-
-  <script src="script.js"></script>
 
 </body>
 </html>
