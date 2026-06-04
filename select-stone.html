@@ -29,18 +29,30 @@
       min-height: 100vh;
       position: relative;
       overflow: hidden;
+      padding: 28px 38px 34px;
+      background: #10140f;
+    }
+
+    /* 和最终墓碑页保持同一张背景、同一构图 */
+    .stone-select-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       background-image:
         linear-gradient(
           180deg,
           rgba(6, 10, 18, 0.06) 0%,
-          rgba(6, 10, 18, 0.10) 42%,
-          rgba(6, 10, 18, 0.34) 100%
+          rgba(6, 10, 18, 0.10) 40%,
+          rgba(6, 10, 18, 0.24) 100%
         ),
         url("cemetery-bg.png");
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
-      padding: 28px 38px 34px;
+      transform: scale(1.12);
+      transform-origin: center center;
+      filter: saturate(1.03);
+      z-index: 0;
     }
 
     .top-bar {
@@ -305,13 +317,15 @@
     }
 
     /*
-      选择页：墓碑先很大、很近。
-      点击确认后：缩小、后退、落到最终位置。
+      关键：
+      选择页墓碑是大的 scale(1.22)
+      确认后缩小到最终页大小 scale(1)
+      位置保持最终页中心点
     */
     .center-stone-wrap {
       position: absolute;
       left: 50%;
-      top: 56%;
+      top: 54%;
       transform: translate(-50%, -50%) scale(1.22);
       transform-origin: center bottom;
       width: 360px;
@@ -321,7 +335,6 @@
       justify-content: center;
       z-index: 4;
       transition:
-        top 1.25s cubic-bezier(0.2, 0.8, 0.2, 1),
         transform 1.25s cubic-bezier(0.2, 0.8, 0.2, 1),
         opacity 0.35s ease;
     }
@@ -331,8 +344,7 @@
     }
 
     body.planting .center-stone-wrap {
-      top: 54%;
-      transform: translate(-50%, -50%) scale(0.86);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .center-stone-shadow {
@@ -347,8 +359,8 @@
     }
 
     body.planting .center-stone-shadow {
-      width: 240px;
-      opacity: 0.85;
+      width: 260px;
+      opacity: 0.9;
     }
 
     .center-stone {
@@ -370,11 +382,6 @@
         inset 0 -8px 16px rgba(55,48,42,0.18),
         0 26px 48px rgba(0,0,0,0.42);
       z-index: 2;
-      transition: filter 1.25s ease;
-    }
-
-    body.planting .center-stone {
-      filter: brightness(0.98);
     }
 
     .center-stone.rounded {
@@ -486,7 +493,7 @@
     }
 
     body.planting .stone-base {
-      width: 270px;
+      width: 294px;
     }
 
     .right-space {
@@ -499,11 +506,11 @@
       background: rgba(6, 10, 18, 0);
       z-index: 100;
       pointer-events: none;
-      transition: background 0.5s ease 1.0s;
+      transition: background 0.45s ease 1.05s;
     }
 
     body.planting .planting-cover {
-      background: rgba(6, 10, 18, 0.18);
+      background: rgba(6, 10, 18, 0.12);
     }
 
     @media (max-width: 900px) {
@@ -545,12 +552,11 @@
       }
 
       .center-stone-wrap {
-        top: 57%;
+        top: 54%;
         transform: translate(-50%, -50%) scale(1);
       }
 
       body.planting .center-stone-wrap {
-        top: 55%;
         transform: translate(-50%, -50%) scale(0.82);
       }
 
@@ -885,7 +891,7 @@
 
       setTimeout(function() {
         window.location.replace("cemetery.html");
-      }, 1400);
+      }, 1350);
     }
 
     window.addEventListener("load", function() {
