@@ -90,6 +90,7 @@
       text-align: center;
       z-index: 5;
       text-shadow: 0 3px 18px rgba(0,0,0,0.34);
+      width: min(680px, 90vw);
     }
 
     .instruction h1 {
@@ -487,19 +488,19 @@
   <main class="stone-select-page">
 
     <header class="top-bar">
-      <a href="index.html" class="logo">Starlit Pet Memorial Garden</a>
+      <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
 
       <div class="top-actions">
-        <a href="create.html" class="soft-button">Back to Edit</a>
-        <button class="soft-button" onclick="confirmStone()">Confirm</button>
+        <a href="create.html" class="soft-button" data-key="backBtn">Back to Edit</a>
+        <button class="soft-button" onclick="confirmStone()" data-key="confirmTopBtn">Confirm</button>
       </div>
     </header>
 
     <section class="stage">
 
       <div class="instruction">
-        <h1>Choose a tombstone</h1>
-        <p>Click a style below. The tombstone in the garden will change immediately.</p>
+        <h1 data-key="title">Choose a tombstone</h1>
+        <p data-key="subtitle">Click a style below. The tombstone in the garden will change immediately.</p>
       </div>
 
       <div class="center-stone-wrap" id="centerStoneWrap">
@@ -521,8 +522,8 @@
       <div class="picker-inner">
 
         <div class="picker-title-row">
-          <p class="picker-title">Tombstone styles</p>
-          <button class="confirm-button" onclick="confirmStone()">Use this tombstone</button>
+          <p class="picker-title" data-key="pickerTitle">Tombstone styles</p>
+          <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">Use this tombstone</button>
         </div>
 
         <div class="stone-strip" id="stoneStrip">
@@ -532,7 +533,7 @@
               <div class="mini-stone mini-rounded"></div>
               <div class="mini-base"></div>
             </div>
-            <p class="option-name">Rounded top</p>
+            <p class="option-name" data-key="roundedName">Rounded top</p>
           </button>
 
           <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
@@ -540,7 +541,7 @@
               <div class="mini-stone mini-square"></div>
               <div class="mini-base"></div>
             </div>
-            <p class="option-name">Soft square</p>
+            <p class="option-name" data-key="squareName">Soft square</p>
           </button>
 
           <button class="stone-option" data-style="heart" onclick="selectStone('heart', this)">
@@ -548,7 +549,7 @@
               <div class="mini-stone mini-heart"></div>
               <div class="mini-base"></div>
             </div>
-            <p class="option-name">Heart style</p>
+            <p class="option-name" data-key="heartName">Heart style</p>
           </button>
 
           <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
@@ -556,7 +557,7 @@
               <div class="mini-stone mini-arch"></div>
               <div class="mini-base"></div>
             </div>
-            <p class="option-name">Tall arch</p>
+            <p class="option-name" data-key="archName">Tall arch</p>
           </button>
 
           <button class="stone-option" data-style="small" onclick="selectStone('small', this)">
@@ -564,7 +565,7 @@
               <div class="mini-stone mini-small"></div>
               <div class="mini-base"></div>
             </div>
-            <p class="option-name">Small pet stone</p>
+            <p class="option-name" data-key="smallName">Small pet stone</p>
           </button>
 
         </div>
@@ -577,6 +578,251 @@
   <script>
     let selectedStoneStyle = "rounded";
 
+    const translations = {
+      en: {
+        logo: "Starlit Pet Memorial Garden",
+        backBtn: "Back to Edit",
+        confirmTopBtn: "Confirm",
+        title: "Choose a tombstone",
+        subtitle: "Click a style below. The tombstone in the garden will change immediately.",
+        pickerTitle: "Tombstone styles",
+        confirmBtn: "Use this tombstone",
+        roundedName: "Rounded top",
+        squareName: "Soft square",
+        heartName: "Heart style",
+        archName: "Tall arch",
+        smallName: "Small pet stone"
+      },
+      zh: {
+        logo: "星眠宠物纪念园",
+        backBtn: "返回修改",
+        confirmTopBtn: "确认",
+        title: "选择墓碑",
+        subtitle: "点击下方样式，中间墓碑会立刻变化。",
+        pickerTitle: "墓碑样式",
+        confirmBtn: "使用这个墓碑",
+        roundedName: "圆顶墓碑",
+        squareName: "方角墓碑",
+        heartName: "爱心墓碑",
+        archName: "高拱墓碑",
+        smallName: "小型宠物墓碑"
+      },
+      "zh-TW": {
+        logo: "星眠寵物紀念園",
+        backBtn: "返回修改",
+        confirmTopBtn: "確認",
+        title: "選擇墓碑",
+        subtitle: "點擊下方樣式，中間墓碑會立刻變化。",
+        pickerTitle: "墓碑樣式",
+        confirmBtn: "使用這個墓碑",
+        roundedName: "圓頂墓碑",
+        squareName: "方角墓碑",
+        heartName: "愛心墓碑",
+        archName: "高拱墓碑",
+        smallName: "小型寵物墓碑"
+      },
+      ja: {
+        logo: "星眠ペット記念園",
+        backBtn: "戻って編集",
+        confirmTopBtn: "決定",
+        title: "墓碑を選ぶ",
+        subtitle: "下のスタイルをクリックすると、中央の墓碑がすぐに変わります。",
+        pickerTitle: "墓碑スタイル",
+        confirmBtn: "この墓碑を使う",
+        roundedName: "丸い墓碑",
+        squareName: "角丸墓碑",
+        heartName: "ハート型",
+        archName: "高いアーチ型",
+        smallName: "小さなペット墓碑"
+      },
+      ko: {
+        logo: "별잠 반려동물 추모정원",
+        backBtn: "수정으로 돌아가기",
+        confirmTopBtn: "확인",
+        title: "묘비 선택",
+        subtitle: "아래 스타일을 클릭하면 가운데 묘비가 바로 바뀝니다.",
+        pickerTitle: "묘비 스타일",
+        confirmBtn: "이 묘비 사용",
+        roundedName: "둥근 묘비",
+        squareName: "부드러운 사각형",
+        heartName: "하트 스타일",
+        archName: "높은 아치형",
+        smallName: "작은 반려동물 묘비"
+      },
+      es: {
+        logo: "Jardín Memorial de Mascotas",
+        backBtn: "Volver a editar",
+        confirmTopBtn: "Confirmar",
+        title: "Elige una lápida",
+        subtitle: "Haz clic en un estilo. La lápida central cambiará al instante.",
+        pickerTitle: "Estilos de lápida",
+        confirmBtn: "Usar esta lápida",
+        roundedName: "Parte superior redonda",
+        squareName: "Cuadrada suave",
+        heartName: "Estilo corazón",
+        archName: "Arco alto",
+        smallName: "Lápida pequeña"
+      },
+      fr: {
+        logo: "Jardin commémoratif pour animaux",
+        backBtn: "Retour à l’édition",
+        confirmTopBtn: "Confirmer",
+        title: "Choisir une pierre tombale",
+        subtitle: "Cliquez sur un style. La pierre au centre changera immédiatement.",
+        pickerTitle: "Styles de pierre",
+        confirmBtn: "Utiliser cette pierre",
+        roundedName: "Sommet arrondi",
+        squareName: "Carré doux",
+        heartName: "Style cœur",
+        archName: "Grande arche",
+        smallName: "Petite pierre"
+      },
+      de: {
+        logo: "Gedenkgarten für Haustiere",
+        backBtn: "Zurück zum Bearbeiten",
+        confirmTopBtn: "Bestätigen",
+        title: "Grabstein auswählen",
+        subtitle: "Klicke unten auf einen Stil. Der Stein in der Mitte ändert sich sofort.",
+        pickerTitle: "Grabstein-Stile",
+        confirmBtn: "Diesen Grabstein verwenden",
+        roundedName: "Runder Kopf",
+        squareName: "Weiches Quadrat",
+        heartName: "Herz-Stil",
+        archName: "Hoher Bogen",
+        smallName: "Kleiner Haustierstein"
+      },
+      pt: {
+        logo: "Jardim Memorial de Animais",
+        backBtn: "Voltar para editar",
+        confirmTopBtn: "Confirmar",
+        title: "Escolha uma lápide",
+        subtitle: "Clique em um estilo abaixo. A lápide central mudará imediatamente.",
+        pickerTitle: "Estilos de lápide",
+        confirmBtn: "Usar esta lápide",
+        roundedName: "Topo arredondado",
+        squareName: "Quadrada suave",
+        heartName: "Estilo coração",
+        archName: "Arco alto",
+        smallName: "Lápide pequena"
+      },
+      it: {
+        logo: "Giardino commemorativo per animali",
+        backBtn: "Torna a modificare",
+        confirmTopBtn: "Conferma",
+        title: "Scegli una lapide",
+        subtitle: "Clicca uno stile qui sotto. La lapide al centro cambierà subito.",
+        pickerTitle: "Stili di lapide",
+        confirmBtn: "Usa questa lapide",
+        roundedName: "Parte superiore tonda",
+        squareName: "Quadrata morbida",
+        heartName: "Stile cuore",
+        archName: "Arco alto",
+        smallName: "Piccola lapide"
+      },
+      th: {
+        logo: "สวนรำลึกสัตว์เลี้ยง",
+        backBtn: "กลับไปแก้ไข",
+        confirmTopBtn: "ยืนยัน",
+        title: "เลือกป้ายหลุมศพ",
+        subtitle: "คลิกสไตล์ด้านล่าง ป้ายตรงกลางจะเปลี่ยนทันที",
+        pickerTitle: "รูปแบบป้ายหลุมศพ",
+        confirmBtn: "ใช้ป้ายนี้",
+        roundedName: "ทรงโค้งมน",
+        squareName: "ทรงสี่เหลี่ยมนุ่ม",
+        heartName: "ทรงหัวใจ",
+        archName: "ทรงโค้งสูง",
+        smallName: "ป้ายขนาดเล็ก"
+      },
+      vi: {
+        logo: "Khu vườn tưởng niệm thú cưng",
+        backBtn: "Quay lại sửa",
+        confirmTopBtn: "Xác nhận",
+        title: "Chọn bia tưởng niệm",
+        subtitle: "Bấm vào một kiểu bên dưới. Bia ở giữa sẽ đổi ngay.",
+        pickerTitle: "Kiểu bia tưởng niệm",
+        confirmBtn: "Dùng bia này",
+        roundedName: "Đỉnh tròn",
+        squareName: "Vuông mềm",
+        heartName: "Kiểu trái tim",
+        archName: "Vòm cao",
+        smallName: "Bia nhỏ"
+      },
+      id: {
+        logo: "Taman Kenangan Hewan Peliharaan",
+        backBtn: "Kembali mengedit",
+        confirmTopBtn: "Konfirmasi",
+        title: "Pilih batu nisan",
+        subtitle: "Klik gaya di bawah. Batu nisan di tengah akan langsung berubah.",
+        pickerTitle: "Gaya batu nisan",
+        confirmBtn: "Gunakan batu ini",
+        roundedName: "Atas membulat",
+        squareName: "Kotak lembut",
+        heartName: "Gaya hati",
+        archName: "Lengkung tinggi",
+        smallName: "Batu kecil"
+      },
+      ms: {
+        logo: "Taman Memorial Haiwan Kesayangan",
+        backBtn: "Kembali sunting",
+        confirmTopBtn: "Sahkan",
+        title: "Pilih batu nisan",
+        subtitle: "Klik gaya di bawah. Batu di tengah akan berubah serta-merta.",
+        pickerTitle: "Gaya batu nisan",
+        confirmBtn: "Guna batu ini",
+        roundedName: "Bahagian atas bulat",
+        squareName: "Segi empat lembut",
+        heartName: "Gaya hati",
+        archName: "Gerbang tinggi",
+        smallName: "Batu kecil"
+      },
+      hi: {
+        logo: "पालतू स्मृति उद्यान",
+        backBtn: "संपादन पर लौटें",
+        confirmTopBtn: "पुष्टि करें",
+        title: "स्मारक पत्थर चुनें",
+        subtitle: "नीचे किसी शैली पर क्लिक करें। बीच का पत्थर तुरंत बदल जाएगा।",
+        pickerTitle: "स्मारक पत्थर की शैलियाँ",
+        confirmBtn: "यह पत्थर उपयोग करें",
+        roundedName: "गोल ऊपरी भाग",
+        squareName: "मुलायम चौकोर",
+        heartName: "दिल शैली",
+        archName: "ऊँचा मेहराब",
+        smallName: "छोटा पालतू पत्थर"
+      },
+      ar: {
+        logo: "حديقة تذكارية للحيوانات الأليفة",
+        backBtn: "العودة للتعديل",
+        confirmTopBtn: "تأكيد",
+        title: "اختر شاهد القبر",
+        subtitle: "اضغط على النمط في الأسفل. سيتغير الشاهد في المنتصف فورًا.",
+        pickerTitle: "أنماط شواهد القبور",
+        confirmBtn: "استخدام هذا الشاهد",
+        roundedName: "قمة مستديرة",
+        squareName: "مربع ناعم",
+        heartName: "نمط القلب",
+        archName: "قوس عالٍ",
+        smallName: "شاهد صغير"
+      }
+    };
+
+    function changeLanguage(lang) {
+      const data = translations[lang] || translations.en;
+
+      localStorage.setItem("siteLanguage", lang);
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+      document.querySelectorAll("[data-key]").forEach(function(item) {
+        const key = item.getAttribute("data-key");
+        if (data[key]) item.textContent = data[key];
+      });
+    }
+
+    function loadLanguage() {
+      const savedLanguage = localStorage.getItem("siteLanguage") || "en";
+      changeLanguage(savedLanguage);
+    }
+
     function loadMemorialPreview() {
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
 
@@ -585,9 +831,7 @@
       const stoneWords = document.getElementById("stoneWords");
       const stonePhoto = document.getElementById("stonePhoto");
 
-      if (stoneName) {
-        stoneName.textContent = data.name || "Luna";
-      }
+      if (stoneName) stoneName.textContent = data.name || "Luna";
 
       if (stoneYears) {
         stoneYears.textContent =
@@ -622,24 +866,19 @@
 
     function applyStoneStyle(style) {
       const centerStone = document.getElementById("centerStone");
-
       if (!centerStone) return;
-
       centerStone.className = "center-stone " + style;
     }
 
     function selectStone(style, button) {
       const wrap = document.getElementById("centerStoneWrap");
-
       selectedStoneStyle = style;
 
       document.querySelectorAll(".stone-option").forEach(function(btn) {
         btn.classList.remove("active");
       });
 
-      if (button) {
-        button.classList.add("active");
-      }
+      if (button) button.classList.add("active");
 
       if (wrap) {
         wrap.classList.add("changing");
@@ -657,13 +896,11 @@
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
       data.tombstoneStyle = selectedStoneStyle;
       localStorage.setItem("myPetMemorial", JSON.stringify(data));
-
       window.location.href = "cemetery.html";
     }
 
     function setupHorizontalScroll() {
       const strip = document.getElementById("stoneStrip");
-
       if (!strip) return;
 
       strip.addEventListener("wheel", function(event) {
@@ -675,6 +912,7 @@
     }
 
     window.addEventListener("load", function() {
+      loadLanguage();
       loadMemorialPreview();
       setupHorizontalScroll();
     });
