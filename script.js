@@ -39,26 +39,22 @@ function compressImage(file, maxSize = 1000, quality = 0.72) {
   });
 }
 
-function compressMultipleImages(files) {
-  return new Promise(async function(resolve) {
-    if (!files || files.length === 0) {
-      resolve([]);
-      return;
+async function compressMultipleImages(files) {
+  if (!files || files.length === 0) {
+    return [];
+  }
+
+  const fileArray = Array.from(files);
+  const results = [];
+
+  for (let i = 0; i < fileArray.length; i++) {
+    const compressed = await compressImage(fileArray[i]);
+    if (compressed) {
+      results.push(compressed);
     }
+  }
 
-    const fileArray = Array.from(files);
-
-    const results = [];
-
-    for (let i = 0; i < fileArray.length; i++) {
-      const compressed = await compressImage(fileArray[i]);
-      if (compressed) {
-        results.push(compressed);
-      }
-    }
-
-    resolve(results);
-  });
+  return results;
 }
 
 async function saveMemorial() {
@@ -109,25 +105,34 @@ async function saveMemorial() {
       name: name,
       birthDate: birthDate,
       leaveDate: leaveDate,
+
       memory: epitaph,
       epitaph: epitaph,
       story: story,
+
       visibility: visibility,
+
+      tombstoneStyle: oldData.tombstoneStyle || "rounded",
+
       photo: newStonePhoto || oldData.photo || "",
+
       publicPhotos: [
         ...(oldData.publicPhotos || []),
         ...newPublicPhotos
       ],
+
       privatePhotos: [
         ...(oldData.privatePhotos || []),
         ...newPrivatePhotos
       ],
+
       updatedAt: new Date().toISOString()
     };
 
     localStorage.setItem("myPetMemorial", JSON.stringify(memorial));
 
-    window.location.href = "cemetery.html";
+    // 关键修改：保存信息后，先进入选择墓碑页面
+    window.location.href = "select-stone.html";
 
   } catch (error) {
     console.error(error);
@@ -154,7 +159,10 @@ function loadCreateForm() {
     const visibilityInput = document.querySelector(
       "input[name='memorialVisibility'][value='" + data.visibility + "']"
     );
-    if (visibilityInput) visibilityInput.checked = true;
+
+    if (visibilityInput) {
+      visibilityInput.checked = true;
+    }
   }
 }
 
@@ -165,6 +173,7 @@ function loadMemorial() {
   const yearsDisplay = document.getElementById("petYearsDisplay");
   const memoryDisplay = document.getElementById("petMemoryDisplay");
   const photoDisplay = document.getElementById("petPhotoDisplay");
+  const stoneDisplay = document.getElementById("memorialStone");
 
   if (!nameDisplay) return;
 
@@ -186,6 +195,19 @@ function loadMemorial() {
     } else {
       photoDisplay.textContent = "🐾";
     }
+  }
+
+  if (stoneDisplay) {
+    stoneDisplay.classList.remove(
+      "memorial-stone-rounded",
+      "memorial-stone-square",
+      "memorial-stone-heart",
+      "memorial-stone-arch",
+      "memorial-stone-small"
+    );
+
+    const style = data.tombstoneStyle || "rounded";
+    stoneDisplay.classList.add("memorial-stone-" + style);
   }
 }
 
