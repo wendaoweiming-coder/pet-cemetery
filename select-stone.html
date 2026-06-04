@@ -11,6 +11,10 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -27,14 +31,17 @@
 
     .stone-select-page {
       min-height: 100vh;
-      position: relative;
-      overflow: hidden;
-      padding: 28px 38px 34px;
-      background: #10140f;
+      background: #0f1411;
     }
 
-    /* 和最终墓碑页保持同一张背景、同一构图 */
-    .stone-select-page::before {
+    /* 这里和最终 cemetery.html 的第一屏结构保持一致 */
+    .hero-stage {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-stage::before {
       content: "";
       position: absolute;
       inset: 0;
@@ -52,14 +59,14 @@
       transform: scale(1.12);
       transform-origin: center center;
       filter: saturate(1.03);
-      z-index: 0;
     }
 
     .top-bar {
       position: relative;
-      z-index: 20;
+      z-index: 30;
       max-width: 1280px;
       margin: 0 auto;
+      padding: 28px 38px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -74,7 +81,7 @@
     }
 
     .logo {
-      color: rgba(255, 250, 245, 0.92);
+      color: rgba(255, 250, 245, 0.95);
       text-decoration: none;
       font-size: 18px;
       text-shadow: 0 3px 16px rgba(0,0,0,0.3);
@@ -92,21 +99,57 @@
       color: #fffaf5;
     }
 
-    .page-layout {
+    /* 这里也和最终 cemetery.html 的 stage-inner / center-stage 对齐 */
+    .stage-inner {
       position: relative;
       z-index: 5;
-      max-width: 1280px;
-      margin: 0 auto;
-      height: calc(100vh - 70px);
-      display: grid;
-      grid-template-columns: 240px 1fr 240px;
-      gap: 24px;
+      min-height: calc(100vh - 80px);
+      display: flex;
       align-items: center;
+      justify-content: center;
+      padding: 40px 20px 140px;
     }
 
+    .center-stage {
+      position: relative;
+      width: 100%;
+      max-width: 1280px;
+      min-height: 720px;
+    }
+
+    .instruction {
+      position: absolute;
+      left: 50%;
+      top: 34px;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 20;
+      width: min(680px, 90vw);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
+      transition: opacity 0.45s ease;
+    }
+
+    .instruction h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      font-weight: 500;
+      color: #fff8ef;
+    }
+
+    .instruction p {
+      margin: 0;
+      color: rgba(255, 244, 232, 0.76);
+      font-size: 14px;
+    }
+
+    /* 左侧选择栏只是浮层，不再参与中间墓碑布局 */
     .left-panel {
-      align-self: center;
-      padding-top: 30px;
+      position: absolute;
+      left: 38px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 25;
+      width: 245px;
       transition: opacity 0.45s ease;
     }
 
@@ -286,41 +329,15 @@
       background: #fffaf5;
     }
 
-    .center-area {
-      position: relative;
-      height: 100%;
-    }
-
-    .instruction {
-      position: absolute;
-      left: 50%;
-      top: 42px;
-      transform: translateX(-50%);
-      text-align: center;
-      z-index: 5;
-      width: min(680px, 90vw);
-      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
-      transition: opacity 0.45s ease;
-    }
-
-    .instruction h1 {
-      margin: 0 0 8px;
-      font-size: 34px;
-      font-weight: 500;
-      color: #fff8ef;
-    }
-
-    .instruction p {
-      margin: 0;
-      color: rgba(255, 244, 232, 0.76);
-      font-size: 14px;
-    }
-
     /*
-      关键：
-      选择页墓碑是大的 scale(1.22)
-      确认后缩小到最终页大小 scale(1)
-      位置保持最终页中心点
+      墓碑最终位置和 cemetery.html 保持一致：
+      left: 50%;
+      top: 54%;
+      width: 360px;
+      height: 480px;
+
+      选择状态：scale(1.22)
+      确认状态：scale(1)
     */
     .center-stone-wrap {
       position: absolute;
@@ -333,7 +350,7 @@
       display: flex;
       align-items: end;
       justify-content: center;
-      z-index: 4;
+      z-index: 10;
       transition:
         transform 1.25s cubic-bezier(0.2, 0.8, 0.2, 1),
         opacity 0.35s ease;
@@ -359,8 +376,8 @@
     }
 
     body.planting .center-stone-shadow {
-      width: 260px;
-      opacity: 0.9;
+      width: 290px;
+      opacity: 0.95;
     }
 
     .center-stone {
@@ -489,15 +506,6 @@
         inset 0 3px 6px rgba(255,255,255,0.14),
         0 18px 34px rgba(0,0,0,0.32);
       z-index: 1;
-      transition: width 1.25s ease;
-    }
-
-    body.planting .stone-base {
-      width: 294px;
-    }
-
-    .right-space {
-      pointer-events: none;
     }
 
     .planting-cover {
@@ -518,29 +526,28 @@
         overflow: auto;
       }
 
-      .stone-select-page {
-        padding: 24px;
+      .top-bar {
+        padding: 24px 20px 0;
       }
 
-      .page-layout {
-        height: auto;
-        min-height: calc(100vh - 80px);
-        grid-template-columns: 1fr;
-        gap: 20px;
+      .stage-inner {
+        min-height: 700px;
+        padding: 30px 20px 80px;
+      }
+
+      .center-stage {
+        min-height: 620px;
       }
 
       .left-panel {
-        order: 2;
-        padding-top: 0;
-      }
-
-      .center-area {
-        order: 1;
-        height: 620px;
-      }
-
-      .right-space {
-        display: none;
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto 24px;
+        z-index: 30;
       }
 
       .instruction {
@@ -571,116 +578,116 @@
 
   <main class="stone-select-page">
 
-    <header class="top-bar">
-      <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
-      <a href="create.html" class="back-link" data-key="backBtn">Back to edit</a>
-    </header>
+    <section class="hero-stage">
 
-    <section class="page-layout">
+      <header class="top-bar">
+        <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
+        <a href="create.html" class="back-link" data-key="backBtn">Back to edit</a>
+      </header>
 
-      <aside class="left-panel">
-        <h2 class="panel-title" data-key="panelTitle">Tombstone</h2>
-        <p class="panel-subtitle" data-key="panelSubtitle">
-          Choose one style. The stone in the garden will change immediately.
-        </p>
+      <div class="stage-inner">
+        <div class="center-stage">
 
-        <div class="stone-list" id="stoneList">
+          <aside class="left-panel">
+            <h2 class="panel-title" data-key="panelTitle">Tombstone</h2>
+            <p class="panel-subtitle" data-key="panelSubtitle">
+              Choose one style. The stone in the garden will change immediately.
+            </p>
 
-          <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
-            <div class="stone-option-inner">
-              <div class="mini-preview">
-                <div class="mini-stone mini-rounded"></div>
-                <div class="mini-base"></div>
-              </div>
-              <div>
-                <p class="option-name" data-key="roundedName">Rounded top</p>
-                <p class="option-desc" data-key="roundedDesc">Gentle and classic.</p>
-              </div>
+            <div class="stone-list" id="stoneList">
+
+              <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
+                <div class="stone-option-inner">
+                  <div class="mini-preview">
+                    <div class="mini-stone mini-rounded"></div>
+                    <div class="mini-base"></div>
+                  </div>
+                  <div>
+                    <p class="option-name" data-key="roundedName">Rounded top</p>
+                    <p class="option-desc" data-key="roundedDesc">Gentle and classic.</p>
+                  </div>
+                </div>
+              </button>
+
+              <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
+                <div class="stone-option-inner">
+                  <div class="mini-preview">
+                    <div class="mini-stone mini-square"></div>
+                    <div class="mini-base"></div>
+                  </div>
+                  <div>
+                    <p class="option-name" data-key="squareName">Soft square</p>
+                    <p class="option-desc" data-key="squareDesc">Simple and quiet.</p>
+                  </div>
+                </div>
+              </button>
+
+              <button class="stone-option" data-style="heart" onclick="selectStone('heart', this)">
+                <div class="stone-option-inner">
+                  <div class="mini-preview">
+                    <div class="mini-stone mini-heart"></div>
+                    <div class="mini-base"></div>
+                  </div>
+                  <div>
+                    <p class="option-name" data-key="heartName">Heart style</p>
+                    <p class="option-desc" data-key="heartDesc">Warm and soft.</p>
+                  </div>
+                </div>
+              </button>
+
+              <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
+                <div class="stone-option-inner">
+                  <div class="mini-preview">
+                    <div class="mini-stone mini-arch"></div>
+                    <div class="mini-base"></div>
+                  </div>
+                  <div>
+                    <p class="option-name" data-key="archName">Tall arch</p>
+                    <p class="option-desc" data-key="archDesc">Calm and solemn.</p>
+                  </div>
+                </div>
+              </button>
+
+              <button class="stone-option" data-style="small" onclick="selectStone('small', this)">
+                <div class="stone-option-inner">
+                  <div class="mini-preview">
+                    <div class="mini-stone mini-small"></div>
+                    <div class="mini-base"></div>
+                  </div>
+                  <div>
+                    <p class="option-name" data-key="smallName">Small pet stone</p>
+                    <p class="option-desc" data-key="smallDesc">Tiny and gentle.</p>
+                  </div>
+                </div>
+              </button>
+
             </div>
-          </button>
 
-          <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
-            <div class="stone-option-inner">
-              <div class="mini-preview">
-                <div class="mini-stone mini-square"></div>
-                <div class="mini-base"></div>
-              </div>
-              <div>
-                <p class="option-name" data-key="squareName">Soft square</p>
-                <p class="option-desc" data-key="squareDesc">Simple and quiet.</p>
-              </div>
-            </div>
-          </button>
+            <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">
+              Use this tombstone
+            </button>
+          </aside>
 
-          <button class="stone-option" data-style="heart" onclick="selectStone('heart', this)">
-            <div class="stone-option-inner">
-              <div class="mini-preview">
-                <div class="mini-stone mini-heart"></div>
-                <div class="mini-base"></div>
-              </div>
-              <div>
-                <p class="option-name" data-key="heartName">Heart style</p>
-                <p class="option-desc" data-key="heartDesc">Warm and soft.</p>
-              </div>
-            </div>
-          </button>
-
-          <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
-            <div class="stone-option-inner">
-              <div class="mini-preview">
-                <div class="mini-stone mini-arch"></div>
-                <div class="mini-base"></div>
-              </div>
-              <div>
-                <p class="option-name" data-key="archName">Tall arch</p>
-                <p class="option-desc" data-key="archDesc">Calm and solemn.</p>
-              </div>
-            </div>
-          </button>
-
-          <button class="stone-option" data-style="small" onclick="selectStone('small', this)">
-            <div class="stone-option-inner">
-              <div class="mini-preview">
-                <div class="mini-stone mini-small"></div>
-                <div class="mini-base"></div>
-              </div>
-              <div>
-                <p class="option-name" data-key="smallName">Small pet stone</p>
-                <p class="option-desc" data-key="smallDesc">Tiny and gentle.</p>
-              </div>
-            </div>
-          </button>
-
-        </div>
-
-        <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">
-          Use this tombstone
-        </button>
-      </aside>
-
-      <section class="center-area">
-
-        <div class="instruction">
-          <h1 data-key="title">Choose a tombstone</h1>
-          <p data-key="subtitle">Click a style on the left. The center stone will change.</p>
-        </div>
-
-        <div class="center-stone-wrap" id="centerStoneWrap">
-          <div class="center-stone-shadow"></div>
-
-          <div class="center-stone rounded" id="centerStone">
-            <div class="stone-photo" id="stonePhoto">🐾</div>
-            <h2 class="stone-name" id="stoneName">Luna</h2>
-            <p class="stone-years" id="stoneYears">---- — ----</p>
-            <p class="stone-words" id="stoneWords">You are loved, always.</p>
+          <div class="instruction">
+            <h1 data-key="title">Choose a tombstone</h1>
+            <p data-key="subtitle">Click a style on the left. The center stone will change.</p>
           </div>
 
-          <div class="stone-base"></div>
+          <div class="center-stone-wrap" id="centerStoneWrap">
+            <div class="center-stone-shadow"></div>
+
+            <div class="center-stone rounded" id="centerStone">
+              <div class="stone-photo" id="stonePhoto">🐾</div>
+              <h2 class="stone-name" id="stoneName">Luna</h2>
+              <p class="stone-years" id="stoneYears">---- — ----</p>
+              <p class="stone-words" id="stoneWords">You are loved, always.</p>
+            </div>
+
+            <div class="stone-base"></div>
+          </div>
+
         </div>
-
-      </section>
-
-      <div class="right-space"></div>
+      </div>
 
     </section>
 
@@ -750,46 +757,6 @@
         archDesc: "安靜、莊重。",
         smallName: "小型寵物墓碑",
         smallDesc: "小巧、輕柔。"
-      },
-
-      ja: {
-        logo: "星眠ペット記念園",
-        backBtn: "戻って編集",
-        panelTitle: "墓碑スタイル",
-        panelSubtitle: "スタイルを選ぶと、中央の墓碑がすぐに変わります。",
-        title: "墓碑を選ぶ",
-        subtitle: "左のスタイルをクリックすると、中央の墓碑が変わります。",
-        confirmBtn: "この墓碑を使う",
-        roundedName: "丸い墓碑",
-        roundedDesc: "やさしく定番。",
-        squareName: "角丸墓碑",
-        squareDesc: "シンプルで静か。",
-        heartName: "ハート型",
-        heartDesc: "温かくやわらかい。",
-        archName: "高いアーチ型",
-        archDesc: "静かで厳か。",
-        smallName: "小さな墓碑",
-        smallDesc: "小さくやさしい。"
-      },
-
-      ko: {
-        logo: "별잠 반려동물 추모정원",
-        backBtn: "수정으로 돌아가기",
-        panelTitle: "묘비 스타일",
-        panelSubtitle: "스타일을 선택하면 가운데 묘비가 바로 바뀝니다.",
-        title: "묘비 선택",
-        subtitle: "왼쪽 스타일을 클릭하면 가운데 묘비가 바뀝니다.",
-        confirmBtn: "이 묘비 사용",
-        roundedName: "둥근 묘비",
-        roundedDesc: "부드럽고 클래식.",
-        squareName: "부드러운 사각형",
-        squareDesc: "단순하고 조용함.",
-        heartName: "하트 스타일",
-        heartDesc: "따뜻하고 부드러움.",
-        archName: "높은 아치형",
-        archDesc: "차분하고 엄숙함.",
-        smallName: "작은 묘비",
-        smallDesc: "작고 다정함."
       }
     };
 
