@@ -249,119 +249,6 @@
       line-height: 1.5;
     }
 
-    /* 新增：墓碑选择 */
-    .stone-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .stone-card {
-      display: block;
-      cursor: pointer;
-    }
-
-    .stone-card input {
-      display: none;
-    }
-
-    .stone-card-content {
-      padding: 16px;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 250, 245, 0.22);
-      background: rgba(255, 250, 245, 0.07);
-      transition: 0.2s;
-      min-height: 220px;
-    }
-
-    .stone-card input:checked + .stone-card-content {
-      border-color: rgba(255, 250, 245, 0.62);
-      background: rgba(255, 250, 245, 0.18);
-    }
-
-    .stone-preview {
-      height: 120px;
-      display: flex;
-      align-items: end;
-      justify-content: center;
-      margin-bottom: 14px;
-      position: relative;
-    }
-
-    .stone-base {
-      width: 88px;
-      height: 14px;
-      background: linear-gradient(to bottom, #8b847d, #6a635d);
-      border-radius: 12px;
-      position: absolute;
-      bottom: 0;
-      box-shadow: inset 0 2px 2px rgba(255,255,255,0.15);
-    }
-
-    .stone-shape {
-      position: absolute;
-      bottom: 10px;
-      background: linear-gradient(to bottom, #c9c2bc, #9d958f 55%, #7b736d 100%);
-      box-shadow: inset 0 2px 3px rgba(255,255,255,0.22);
-    }
-
-    .stone-rounded .stone-shape {
-      width: 74px;
-      height: 86px;
-      border-radius: 38px 38px 14px 14px;
-    }
-
-    .stone-square .stone-shape {
-      width: 78px;
-      height: 84px;
-      border-radius: 16px;
-    }
-
-    .stone-heart .stone-shape {
-      width: 68px;
-      height: 76px;
-      border-radius: 18px 18px 14px 14px;
-    }
-
-    .stone-heart .stone-shape::before,
-    .stone-heart .stone-shape::after {
-      content: "";
-      position: absolute;
-      top: -16px;
-      width: 34px;
-      height: 34px;
-      background: linear-gradient(to bottom, #c9c2bc, #a19892);
-      border-radius: 50%;
-    }
-
-    .stone-heart .stone-shape::before {
-      left: 4px;
-    }
-
-    .stone-heart .stone-shape::after {
-      right: 4px;
-    }
-
-    .stone-arch .stone-shape {
-      width: 82px;
-      height: 96px;
-      border-radius: 42px 42px 10px 10px;
-    }
-
-    .stone-name {
-      margin: 0 0 6px;
-      color: rgba(255, 250, 245, 0.95);
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    .stone-desc {
-      margin: 0;
-      color: rgba(255, 244, 232, 0.68);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
     .photo-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -474,8 +361,7 @@
       }
 
       .visibility-options,
-      .date-row,
-      .stone-options {
+      .date-row {
         grid-template-columns: 1fr;
       }
 
@@ -532,7 +418,7 @@
         <p class="eyebrow" data-key="eyebrow">Create a quiet place for remembrance</p>
         <h1 data-key="title">Build a small memorial for them.</h1>
         <p data-key="desc">
-          Leave their name, dates, epitaph, story, and photos. Choose a tombstone style you like, then save your memorial.
+          Leave their name, dates, epitaph, story, and photos. After saving, you will choose a tombstone in the garden.
         </p>
       </div>
 
@@ -573,61 +459,6 @@
           <p class="form-tip" data-key="visibilityTip">
             Privacy settings will become fully effective after login and database are added.
           </p>
-        </div>
-
-        <!-- 新增：墓碑选择 -->
-        <div class="soft-panel">
-          <h3 class="form-section-title" data-key="stoneTitle">Choose a tombstone style</h3>
-
-          <div class="stone-options">
-            <label class="stone-card stone-rounded">
-              <input type="radio" name="tombstoneStyle" value="rounded" checked>
-              <div class="stone-card-content">
-                <div class="stone-preview">
-                  <div class="stone-shape"></div>
-                  <div class="stone-base"></div>
-                </div>
-                <p class="stone-name" data-key="stoneRoundedName">Rounded top</p>
-                <p class="stone-desc" data-key="stoneRoundedDesc">A gentle and classic memorial shape.</p>
-              </div>
-            </label>
-
-            <label class="stone-card stone-square">
-              <input type="radio" name="tombstoneStyle" value="square">
-              <div class="stone-card-content">
-                <div class="stone-preview">
-                  <div class="stone-shape"></div>
-                  <div class="stone-base"></div>
-                </div>
-                <p class="stone-name" data-key="stoneSquareName">Soft square</p>
-                <p class="stone-desc" data-key="stoneSquareDesc">Simple, neat, and quiet.</p>
-              </div>
-            </label>
-
-            <label class="stone-card stone-heart">
-              <input type="radio" name="tombstoneStyle" value="heart">
-              <div class="stone-card-content">
-                <div class="stone-preview">
-                  <div class="stone-shape"></div>
-                  <div class="stone-base"></div>
-                </div>
-                <p class="stone-name" data-key="stoneHeartName">Heart style</p>
-                <p class="stone-desc" data-key="stoneHeartDesc">A warmer style for a beloved pet.</p>
-              </div>
-            </label>
-
-            <label class="stone-card stone-arch">
-              <input type="radio" name="tombstoneStyle" value="arch">
-              <div class="stone-card-content">
-                <div class="stone-preview">
-                  <div class="stone-shape"></div>
-                  <div class="stone-base"></div>
-                </div>
-                <p class="stone-name" data-key="stoneArchName">Tall arch</p>
-                <p class="stone-desc" data-key="stoneArchDesc">A taller stone with a calm presence.</p>
-              </div>
-            </label>
-          </div>
         </div>
 
         <div class="soft-panel">
@@ -697,7 +528,7 @@
         </div>
 
         <button class="submit-button" onclick="saveMemorial()" data-key="saveBtn">
-          Save and View Memorial
+          Save and Choose Tombstone
         </button>
 
       </div>
@@ -715,7 +546,7 @@
         viewBtn: "View Memorial",
         eyebrow: "Create a quiet place for remembrance",
         title: "Build a small memorial for them.",
-        desc: "Leave their name, dates, epitaph, story, and photos. Choose a tombstone style you like, then save your memorial.",
+        desc: "Leave their name, dates, epitaph, story, and photos. After saving, you will choose a tombstone in the garden.",
         formTitle: "Memorial details",
         formIntro: "You can edit these details later.",
         visibilityTitle: "Memorial visibility",
@@ -726,15 +557,6 @@
         inviteTitle: "Invite only",
         inviteDesc: "Only people with your link can visit.",
         visibilityTip: "Privacy settings will become fully effective after login and database are added.",
-        stoneTitle: "Choose a tombstone style",
-        stoneRoundedName: "Rounded top",
-        stoneRoundedDesc: "A gentle and classic memorial shape.",
-        stoneSquareName: "Soft square",
-        stoneSquareDesc: "Simple, neat, and quiet.",
-        stoneHeartName: "Heart style",
-        stoneHeartDesc: "A warmer style for a beloved pet.",
-        stoneArchName: "Tall arch",
-        stoneArchDesc: "A taller stone with a calm presence.",
         basicTitle: "Basic information",
         nameLabel: "Pet name",
         namePlaceholder: "For example: Luna",
@@ -757,7 +579,7 @@
         choosePrivatePhotos: "Choose private photos",
         noFile: "No file chosen",
         photoTip: "In this first version, photos are saved only in your browser. Real private albums require login and database later.",
-        saveBtn: "Save and View Memorial"
+        saveBtn: "Save and Choose Tombstone"
       },
 
       zh: {
@@ -765,7 +587,7 @@
         viewBtn: "查看墓碑",
         eyebrow: "为想念创建一个安静的地方",
         title: "为它建一座小小的墓碑。",
-        desc: "留下它的名字、日期、墓志铭、故事和照片。再选择你喜欢的墓碑样式，然后保存墓碑。",
+        desc: "留下它的名字、日期、墓志铭、故事和照片。保存后，你会进入墓园中选择墓碑。",
         formTitle: "墓碑信息",
         formIntro: "这些信息之后还可以继续修改。",
         visibilityTitle: "墓地可见范围",
@@ -776,15 +598,6 @@
         inviteTitle: "邀请可见",
         inviteDesc: "只有拿到链接的人可以访问。",
         visibilityTip: "隐私设置会在之后加入登录和数据库后真正生效。",
-        stoneTitle: "选择墓碑样式",
-        stoneRoundedName: "圆顶墓碑",
-        stoneRoundedDesc: "温柔、经典、最常见的样式。",
-        stoneSquareName: "方角墓碑",
-        stoneSquareDesc: "简洁、整齐、安静。",
-        stoneHeartName: "爱心墓碑",
-        stoneHeartDesc: "更温暖，适合纪念很亲密的宠物。",
-        stoneArchName: "高拱墓碑",
-        stoneArchDesc: "更高一些，看起来安静庄重。",
         basicTitle: "基础信息",
         nameLabel: "宠物名字",
         namePlaceholder: "例如：小星星",
@@ -807,7 +620,7 @@
         choosePrivatePhotos: "选择私密照片",
         noFile: "还没有选择文件",
         photoTip: "第一版照片只会保存在你的浏览器里。真正的私密相册需要之后加入登录和数据库。",
-        saveBtn: "保存并查看墓碑"
+        saveBtn: "保存并选择墓碑"
       },
 
       "zh-TW": {
@@ -815,7 +628,7 @@
         viewBtn: "查看墓碑",
         eyebrow: "為想念建立一個安靜的地方",
         title: "為牠建一座小小的墓碑。",
-        desc: "留下牠的名字、日期、墓誌銘、故事和照片。再選擇你喜歡的墓碑樣式，然後保存墓碑。",
+        desc: "留下牠的名字、日期、墓誌銘、故事和照片。保存後，你會進入墓園中選擇墓碑。",
         formTitle: "墓碑資訊",
         formIntro: "這些資訊之後還可以繼續修改。",
         visibilityTitle: "墓地可見範圍",
@@ -826,15 +639,6 @@
         inviteTitle: "邀請可見",
         inviteDesc: "只有拿到連結的人可以造訪。",
         visibilityTip: "隱私設定會在之後加入登入和資料庫後真正生效。",
-        stoneTitle: "選擇墓碑樣式",
-        stoneRoundedName: "圓頂墓碑",
-        stoneRoundedDesc: "溫柔、經典、最常見的樣式。",
-        stoneSquareName: "方角墓碑",
-        stoneSquareDesc: "簡潔、整齊、安靜。",
-        stoneHeartName: "愛心墓碑",
-        stoneHeartDesc: "更溫暖，適合紀念很親密的寵物。",
-        stoneArchName: "高拱墓碑",
-        stoneArchDesc: "更高一些，看起來安靜莊重。",
         basicTitle: "基本資訊",
         nameLabel: "寵物名字",
         namePlaceholder: "例如：小星星",
@@ -857,7 +661,7 @@
         choosePrivatePhotos: "選擇私密照片",
         noFile: "尚未選擇檔案",
         photoTip: "第一版照片只會保存在你的瀏覽器裡。真正的私密相簿需要之後加入登入和資料庫。",
-        saveBtn: "保存並查看墓碑"
+        saveBtn: "保存並選擇墓碑"
       }
     };
 
