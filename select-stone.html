@@ -8,6 +8,7 @@
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -19,31 +20,36 @@
       overflow: hidden;
     }
 
+    button,
+    a {
+      outline: none;
+    }
+
     .stone-select-page {
       min-height: 100vh;
       position: relative;
       background-image:
         linear-gradient(
           180deg,
-          rgba(6, 10, 18, 0.08) 0%,
-          rgba(6, 10, 18, 0.1) 42%,
-          rgba(6, 10, 18, 0.46) 100%
+          rgba(6, 10, 18, 0.06) 0%,
+          rgba(6, 10, 18, 0.10) 42%,
+          rgba(6, 10, 18, 0.34) 100%
         ),
         url("cemetery-bg.png");
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
-      padding: 28px 38px 30px;
+      padding: 28px 38px 34px;
     }
 
     .top-bar {
       position: relative;
-      z-index: 10;
+      z-index: 20;
+      max-width: 1280px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1280px;
-      margin: 0 auto;
     }
 
     .logo {
@@ -53,39 +59,220 @@
       text-shadow: 0 3px 16px rgba(0,0,0,0.3);
     }
 
-    .top-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .soft-button {
-      border: 1px solid rgba(255, 250, 245, 0.34);
-      background: rgba(255, 250, 245, 0.08);
-      color: #fffaf5;
-      padding: 10px 16px;
-      border-radius: 999px;
+    .back-link {
+      color: rgba(255, 244, 232, 0.78);
       text-decoration: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       font-size: 14px;
-      cursor: pointer;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
+      padding: 8px 0;
     }
 
-    .soft-button:hover {
-      background: rgba(255, 250, 245, 0.16);
+    .back-link:hover {
+      color: #fffaf5;
     }
 
-    .stage {
+    .page-layout {
       position: relative;
-      height: calc(100vh - 210px);
+      z-index: 5;
       max-width: 1280px;
       margin: 0 auto;
+      height: calc(100vh - 70px);
+      display: grid;
+      grid-template-columns: 240px 1fr 240px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .left-panel {
+      align-self: center;
+      padding-top: 30px;
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      color: rgba(255, 250, 245, 0.94);
+      font-size: 22px;
+      font-weight: 500;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.3);
+    }
+
+    .panel-subtitle {
+      margin: 0 0 22px;
+      color: rgba(255, 244, 232, 0.68);
+      font-size: 13px;
+      line-height: 1.7;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.24);
+    }
+
+    .stone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 460px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .stone-list::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .stone-list::-webkit-scrollbar-track {
+      background: rgba(255, 250, 245, 0.04);
+      border-radius: 999px;
+    }
+
+    .stone-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 250, 245, 0.24);
+      border-radius: 999px;
+    }
+
+    .stone-option {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #fffaf5;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .stone-option-inner {
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 250, 245, 0.14);
+      background: rgba(255, 250, 245, 0.05);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: 0.22s ease;
+    }
+
+    .stone-option:hover .stone-option-inner {
+      background: rgba(255, 250, 245, 0.10);
+      border-color: rgba(255, 250, 245, 0.28);
+      transform: translateX(6px);
+    }
+
+    .stone-option.active .stone-option-inner {
+      background: rgba(255, 250, 245, 0.16);
+      border-color: rgba(255, 250, 245, 0.46);
+    }
+
+    .mini-preview {
+      width: 58px;
+      height: 72px;
+      position: relative;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+    }
+
+    .mini-base {
+      position: absolute;
+      bottom: 0;
+      width: 52px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #968d85, #625a53);
+    }
+
+    .mini-stone {
+      position: absolute;
+      bottom: 7px;
+      width: 40px;
+      height: 52px;
+      background: linear-gradient(180deg, #ded8d0, #8c837b);
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.22);
+    }
+
+    .mini-rounded {
+      border-radius: 24px 24px 8px 8px;
+    }
+
+    .mini-square {
+      border-radius: 10px;
+    }
+
+    .mini-arch {
+      width: 42px;
+      height: 60px;
+      border-radius: 24px 24px 6px 6px;
+    }
+
+    .mini-small {
+      width: 34px;
+      height: 44px;
+      border-radius: 18px 18px 8px 8px;
+    }
+
+    .mini-heart {
+      width: 40px;
+      height: 42px;
+      border-radius: 12px 12px 8px 8px;
+    }
+
+    .mini-heart::before,
+    .mini-heart::after {
+      content: "";
+      position: absolute;
+      top: -13px;
+      width: 21px;
+      height: 21px;
+      background: linear-gradient(180deg, #ded8d0, #a49b93);
+      border-radius: 50%;
+    }
+
+    .mini-heart::before {
+      left: 1px;
+    }
+
+    .mini-heart::after {
+      right: 1px;
+    }
+
+    .option-name {
+      margin: 0 0 4px;
+      font-size: 14px;
+      color: rgba(255, 250, 245, 0.92);
+    }
+
+    .option-desc {
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255, 244, 232, 0.58);
+      line-height: 1.5;
+    }
+
+    .confirm-button {
+      width: 100%;
+      margin-top: 22px;
+      border: none;
+      background: rgba(255, 250, 245, 0.92);
+      color: #4b3d35;
+      padding: 13px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.16);
+    }
+
+    .confirm-button:hover {
+      background: #fffaf5;
+    }
+
+    .center-area {
+      position: relative;
+      height: 100%;
     }
 
     .instruction {
       position: absolute;
       left: 50%;
-      top: 18px;
+      top: 42px;
       transform: translateX(-50%);
       text-align: center;
       z-index: 5;
@@ -102,17 +289,17 @@
 
     .instruction p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.78);
+      color: rgba(255, 244, 232, 0.76);
       font-size: 14px;
     }
 
     .center-stone-wrap {
       position: absolute;
       left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      width: 320px;
-      height: 430px;
+      top: 58%;
+      transform: translate(-50%, -50%);
+      width: 340px;
+      height: 460px;
       display: flex;
       align-items: end;
       justify-content: center;
@@ -121,15 +308,15 @@
     }
 
     .center-stone-wrap.changing {
-      transform: translateX(-50%) scale(0.96);
+      transform: translate(-50%, -50%) scale(0.96);
       opacity: 0.72;
     }
 
     .center-stone-shadow {
       position: absolute;
       bottom: 6px;
-      width: 260px;
-      height: 36px;
+      width: 270px;
+      height: 38px;
       border-radius: 50%;
       background: rgba(0,0,0,0.32);
       filter: blur(14px);
@@ -137,8 +324,8 @@
 
     .center-stone {
       position: relative;
-      width: 210px;
-      min-height: 275px;
+      width: 215px;
+      min-height: 282px;
       padding: 34px 24px 30px;
       background:
         linear-gradient(
@@ -157,7 +344,7 @@
     }
 
     .center-stone.rounded {
-      border-radius: 105px 105px 24px 24px;
+      border-radius: 108px 108px 24px 24px;
     }
 
     .center-stone.square {
@@ -165,20 +352,20 @@
     }
 
     .center-stone.arch {
-      width: 220px;
-      min-height: 310px;
-      border-radius: 115px 115px 18px 18px;
+      width: 225px;
+      min-height: 318px;
+      border-radius: 116px 116px 18px 18px;
     }
 
     .center-stone.small {
-      width: 178px;
-      min-height: 230px;
-      border-radius: 88px 88px 22px 22px;
+      width: 182px;
+      min-height: 236px;
+      border-radius: 90px 90px 22px 22px;
     }
 
     .center-stone.heart {
-      width: 210px;
-      min-height: 250px;
+      width: 214px;
+      min-height: 255px;
       border-radius: 34px 34px 24px 24px;
       margin-top: 40px;
     }
@@ -253,7 +440,7 @@
     .stone-base {
       position: absolute;
       bottom: 0;
-      width: 270px;
+      width: 276px;
       height: 36px;
       border-radius: 20px 20px 10px 10px;
       background: linear-gradient(180deg, #968d85, #665d56);
@@ -263,222 +450,42 @@
       z-index: 1;
     }
 
-    /* 底部素材选择栏 */
-    .bottom-picker {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 20;
-      padding: 22px 36px 26px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(8, 12, 16, 0),
-          rgba(8, 12, 16, 0.52) 28%,
-          rgba(8, 12, 16, 0.76) 100%
-        );
+    .right-space {
+      pointer-events: none;
     }
 
-    .picker-dock {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 16px;
-      border-radius: 34px;
-      border: 1px solid rgba(255, 250, 245, 0.18);
-      background: rgba(255, 250, 245, 0.08);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .picker-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
-      padding: 0 4px;
-    }
-
-    .picker-title {
-      margin: 0;
-      color: rgba(255, 250, 245, 0.9);
-      font-size: 15px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
-    }
-
-    .confirm-button {
-      border: 1px solid rgba(255, 250, 245, 0.36);
-      background: rgba(255, 250, 245, 0.9);
-      color: #4b3d35;
-      padding: 11px 20px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .confirm-button:hover {
-      background: #fffaf5;
-    }
-
-    .stone-strip {
-      display: flex;
-      gap: 18px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 10px 4px 14px;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      cursor: grab;
-    }
-
-    .stone-strip:active {
-      cursor: grabbing;
-    }
-
-    .stone-strip::-webkit-scrollbar {
-      height: 7px;
-    }
-
-    .stone-strip::-webkit-scrollbar-track {
-      background: rgba(255, 250, 245, 0.06);
-      border-radius: 999px;
-    }
-
-    .stone-strip::-webkit-scrollbar-thumb {
-      background: rgba(255, 250, 245, 0.28);
-      border-radius: 999px;
-    }
-
-    .stone-option {
-      flex: 0 0 170px;
-      min-height: 190px;
-      border: none;
-      background: transparent;
-      color: #fffaf5;
-      cursor: pointer;
-      padding: 0;
-      text-align: center;
-      scroll-snap-align: center;
-    }
-
-    .stone-option-inner {
-      position: relative;
-      min-height: 190px;
-      padding: 16px 14px 14px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 250, 245, 0.14);
-      background: rgba(255, 250, 245, 0.06);
-      transition: 0.25s ease;
-    }
-
-    .stone-option:hover .stone-option-inner {
-      transform: translateY(-12px) scale(1.04);
-      background: rgba(255, 250, 245, 0.12);
-      border-color: rgba(255, 250, 245, 0.34);
-    }
-
-    .stone-option.active .stone-option-inner {
-      transform: translateY(-10px);
-      background: rgba(255, 250, 245, 0.18);
-      border-color: rgba(255, 250, 245, 0.62);
-      box-shadow: 0 18px 36px rgba(0,0,0,0.22);
-    }
-
-    .mini-preview {
-      height: 122px;
-      display: flex;
-      justify-content: center;
-      align-items: end;
-      position: relative;
-      margin-bottom: 10px;
-    }
-
-    .mini-base {
-      position: absolute;
-      bottom: 0;
-      width: 92px;
-      height: 14px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #968d85, #625a53);
-      box-shadow: 0 8px 12px rgba(0,0,0,0.18);
-    }
-
-    .mini-stone {
-      position: absolute;
-      bottom: 11px;
-      width: 68px;
-      height: 88px;
-      background: linear-gradient(180deg, #ded8d0, #8c837b);
-      box-shadow:
-        inset 0 3px 5px rgba(255,255,255,0.24),
-        0 10px 18px rgba(0,0,0,0.18);
-    }
-
-    .mini-rounded {
-      border-radius: 38px 38px 12px 12px;
-    }
-
-    .mini-square {
-      border-radius: 16px;
-    }
-
-    .mini-arch {
-      width: 72px;
-      height: 100px;
-      border-radius: 40px 40px 8px 8px;
-    }
-
-    .mini-small {
-      width: 58px;
-      height: 72px;
-      border-radius: 30px 30px 10px 10px;
-    }
-
-    .mini-heart {
-      width: 66px;
-      height: 70px;
-      border-radius: 18px 18px 10px 10px;
-    }
-
-    .mini-heart::before,
-    .mini-heart::after {
-      content: "";
-      position: absolute;
-      top: -20px;
-      width: 34px;
-      height: 34px;
-      background: linear-gradient(180deg, #ded8d0, #a49b93);
-      border-radius: 50%;
-    }
-
-    .mini-heart::before {
-      left: 2px;
-    }
-
-    .mini-heart::after {
-      right: 2px;
-    }
-
-    .option-name {
-      margin: 0;
-      font-size: 13px;
-      color: rgba(255, 250, 245, 0.92);
-    }
-
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       body {
         overflow: auto;
       }
 
       .stone-select-page {
-        min-height: 100vh;
         padding: 24px;
       }
 
-      .stage {
+      .page-layout {
+        height: auto;
+        min-height: calc(100vh - 80px);
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .left-panel {
+        order: 2;
+        padding-top: 0;
+      }
+
+      .center-area {
+        order: 1;
         height: 560px;
+      }
+
+      .right-space {
+        display: none;
+      }
+
+      .instruction {
+        top: 24px;
       }
 
       .instruction h1 {
@@ -486,26 +493,12 @@
       }
 
       .center-stone-wrap {
-        transform: translateX(-50%) scale(0.82);
-        bottom: 0;
+        top: 58%;
+        transform: translate(-50%, -50%) scale(0.82);
       }
 
-      .bottom-picker {
-        position: relative;
-        padding: 18px 0 0;
-        background: transparent;
-      }
-
-      .picker-dock {
-        padding: 14px;
-      }
-
-      .stone-option {
-        flex-basis: 145px;
-      }
-
-      .stone-option-inner {
-        min-height: 176px;
+      .stone-list {
+        max-height: none;
       }
     }
   </style>
@@ -517,44 +510,18 @@
 
     <header class="top-bar">
       <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
-
-      <div class="top-actions">
-        <a href="create.html" class="soft-button" data-key="backBtn">Back to Edit</a>
-        <button class="soft-button" onclick="confirmStone()" data-key="confirmTopBtn">Confirm</button>
-      </div>
+      <a href="create.html" class="back-link" data-key="backBtn">Back to edit</a>
     </header>
 
-    <section class="stage">
+    <section class="page-layout">
 
-      <div class="instruction">
-        <h1 data-key="title">Choose a tombstone</h1>
-        <p data-key="subtitle">Click a style below. The tombstone in the garden will change immediately.</p>
-      </div>
+      <aside class="left-panel">
+        <h2 class="panel-title" data-key="panelTitle">Tombstone</h2>
+        <p class="panel-subtitle" data-key="panelSubtitle">
+          Choose one style. The stone in the garden will change immediately.
+        </p>
 
-      <div class="center-stone-wrap" id="centerStoneWrap">
-        <div class="center-stone-shadow"></div>
-
-        <div class="center-stone rounded" id="centerStone">
-          <div class="stone-photo" id="stonePhoto">🐾</div>
-          <h2 class="stone-name" id="stoneName">Luna</h2>
-          <p class="stone-years" id="stoneYears">---- — ----</p>
-          <p class="stone-words" id="stoneWords">You are loved, always.</p>
-        </div>
-
-        <div class="stone-base"></div>
-      </div>
-
-    </section>
-
-    <section class="bottom-picker">
-      <div class="picker-dock">
-
-        <div class="picker-title-row">
-          <p class="picker-title" data-key="pickerTitle">Tombstone styles</p>
-          <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">Use this tombstone</button>
-        </div>
-
-        <div class="stone-strip" id="stoneStrip">
+        <div class="stone-list" id="stoneList">
 
           <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
             <div class="stone-option-inner">
@@ -562,7 +529,10 @@
                 <div class="mini-stone mini-rounded"></div>
                 <div class="mini-base"></div>
               </div>
-              <p class="option-name" data-key="roundedName">Rounded top</p>
+              <div>
+                <p class="option-name" data-key="roundedName">Rounded top</p>
+                <p class="option-desc" data-key="roundedDesc">Gentle and classic.</p>
+              </div>
             </div>
           </button>
 
@@ -572,7 +542,10 @@
                 <div class="mini-stone mini-square"></div>
                 <div class="mini-base"></div>
               </div>
-              <p class="option-name" data-key="squareName">Soft square</p>
+              <div>
+                <p class="option-name" data-key="squareName">Soft square</p>
+                <p class="option-desc" data-key="squareDesc">Simple and quiet.</p>
+              </div>
             </div>
           </button>
 
@@ -582,7 +555,10 @@
                 <div class="mini-stone mini-heart"></div>
                 <div class="mini-base"></div>
               </div>
-              <p class="option-name" data-key="heartName">Heart style</p>
+              <div>
+                <p class="option-name" data-key="heartName">Heart style</p>
+                <p class="option-desc" data-key="heartDesc">Warm and soft.</p>
+              </div>
             </div>
           </button>
 
@@ -592,7 +568,10 @@
                 <div class="mini-stone mini-arch"></div>
                 <div class="mini-base"></div>
               </div>
-              <p class="option-name" data-key="archName">Tall arch</p>
+              <div>
+                <p class="option-name" data-key="archName">Tall arch</p>
+                <p class="option-desc" data-key="archDesc">Calm and solemn.</p>
+              </div>
             </div>
           </button>
 
@@ -602,13 +581,44 @@
                 <div class="mini-stone mini-small"></div>
                 <div class="mini-base"></div>
               </div>
-              <p class="option-name" data-key="smallName">Small pet stone</p>
+              <div>
+                <p class="option-name" data-key="smallName">Small pet stone</p>
+                <p class="option-desc" data-key="smallDesc">Tiny and gentle.</p>
+              </div>
             </div>
           </button>
 
         </div>
 
-      </div>
+        <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">
+          Use this tombstone
+        </button>
+      </aside>
+
+      <section class="center-area">
+
+        <div class="instruction">
+          <h1 data-key="title">Choose a tombstone</h1>
+          <p data-key="subtitle">Click a style on the left. The center stone will change.</p>
+        </div>
+
+        <div class="center-stone-wrap" id="centerStoneWrap">
+          <div class="center-stone-shadow"></div>
+
+          <div class="center-stone rounded" id="centerStone">
+            <div class="stone-photo" id="stonePhoto">🐾</div>
+            <h2 class="stone-name" id="stoneName">Luna</h2>
+            <p class="stone-years" id="stoneYears">---- — ----</p>
+            <p class="stone-words" id="stoneWords">You are loved, always.</p>
+          </div>
+
+          <div class="stone-base"></div>
+        </div>
+
+      </section>
+
+      <div class="right-space"></div>
+
     </section>
 
   </main>
@@ -619,115 +629,102 @@
     const translations = {
       en: {
         logo: "Starlit Pet Memorial Garden",
-        backBtn: "Back to Edit",
-        confirmTopBtn: "Confirm",
+        backBtn: "Back to edit",
+        panelTitle: "Tombstone",
+        panelSubtitle: "Choose one style. The stone in the garden will change immediately.",
         title: "Choose a tombstone",
-        subtitle: "Click a style below. The tombstone in the garden will change immediately.",
-        pickerTitle: "Tombstone styles",
+        subtitle: "Click a style on the left. The center stone will change.",
         confirmBtn: "Use this tombstone",
         roundedName: "Rounded top",
+        roundedDesc: "Gentle and classic.",
         squareName: "Soft square",
+        squareDesc: "Simple and quiet.",
         heartName: "Heart style",
+        heartDesc: "Warm and soft.",
         archName: "Tall arch",
-        smallName: "Small pet stone"
+        archDesc: "Calm and solemn.",
+        smallName: "Small pet stone",
+        smallDesc: "Tiny and gentle."
       },
+
       zh: {
         logo: "星眠宠物纪念园",
         backBtn: "返回修改",
-        confirmTopBtn: "确认",
+        panelTitle: "墓碑样式",
+        panelSubtitle: "选择一种样式，中间的墓碑会立刻变化。",
         title: "选择墓碑",
-        subtitle: "点击下方样式，中间墓碑会立刻变化。",
-        pickerTitle: "墓碑样式",
+        subtitle: "点击左侧样式，中间墓碑会跟着变化。",
         confirmBtn: "使用这个墓碑",
         roundedName: "圆顶墓碑",
+        roundedDesc: "温柔、经典。",
         squareName: "方角墓碑",
+        squareDesc: "简洁、安静。",
         heartName: "爱心墓碑",
+        heartDesc: "温暖、柔和。",
         archName: "高拱墓碑",
-        smallName: "小型宠物墓碑"
+        archDesc: "安静、庄重。",
+        smallName: "小型宠物墓碑",
+        smallDesc: "小巧、轻柔。"
       },
+
       "zh-TW": {
         logo: "星眠寵物紀念園",
         backBtn: "返回修改",
-        confirmTopBtn: "確認",
+        panelTitle: "墓碑樣式",
+        panelSubtitle: "選擇一種樣式，中間的墓碑會立刻變化。",
         title: "選擇墓碑",
-        subtitle: "點擊下方樣式，中間墓碑會立刻變化。",
-        pickerTitle: "墓碑樣式",
+        subtitle: "點擊左側樣式，中間墓碑會跟著變化。",
         confirmBtn: "使用這個墓碑",
         roundedName: "圓頂墓碑",
+        roundedDesc: "溫柔、經典。",
         squareName: "方角墓碑",
+        squareDesc: "簡潔、安靜。",
         heartName: "愛心墓碑",
+        heartDesc: "溫暖、柔和。",
         archName: "高拱墓碑",
-        smallName: "小型寵物墓碑"
+        archDesc: "安靜、莊重。",
+        smallName: "小型寵物墓碑",
+        smallDesc: "小巧、輕柔。"
       },
+
       ja: {
         logo: "星眠ペット記念園",
         backBtn: "戻って編集",
-        confirmTopBtn: "決定",
+        panelTitle: "墓碑スタイル",
+        panelSubtitle: "スタイルを選ぶと、中央の墓碑がすぐに変わります。",
         title: "墓碑を選ぶ",
-        subtitle: "下のスタイルをクリックすると、中央の墓碑がすぐに変わります。",
-        pickerTitle: "墓碑スタイル",
+        subtitle: "左のスタイルをクリックすると、中央の墓碑が変わります。",
         confirmBtn: "この墓碑を使う",
         roundedName: "丸い墓碑",
+        roundedDesc: "やさしく定番。",
         squareName: "角丸墓碑",
+        squareDesc: "シンプルで静か。",
         heartName: "ハート型",
+        heartDesc: "温かくやわらかい。",
         archName: "高いアーチ型",
-        smallName: "小さなペット墓碑"
+        archDesc: "静かで厳か。",
+        smallName: "小さな墓碑",
+        smallDesc: "小さくやさしい。"
       },
+
       ko: {
         logo: "별잠 반려동물 추모정원",
         backBtn: "수정으로 돌아가기",
-        confirmTopBtn: "확인",
+        panelTitle: "묘비 스타일",
+        panelSubtitle: "스타일을 선택하면 가운데 묘비가 바로 바뀝니다.",
         title: "묘비 선택",
-        subtitle: "아래 스타일을 클릭하면 가운데 묘비가 바로 바뀝니다.",
-        pickerTitle: "묘비 스타일",
+        subtitle: "왼쪽 스타일을 클릭하면 가운데 묘비가 바뀝니다.",
         confirmBtn: "이 묘비 사용",
         roundedName: "둥근 묘비",
+        roundedDesc: "부드럽고 클래식.",
         squareName: "부드러운 사각형",
+        squareDesc: "단순하고 조용함.",
         heartName: "하트 스타일",
+        heartDesc: "따뜻하고 부드러움.",
         archName: "높은 아치형",
-        smallName: "작은 반려동물 묘비"
-      },
-      es: {
-        logo: "Jardín Memorial de Mascotas",
-        backBtn: "Volver a editar",
-        confirmTopBtn: "Confirmar",
-        title: "Elige una lápida",
-        subtitle: "Haz clic en un estilo. La lápida central cambiará al instante.",
-        pickerTitle: "Estilos de lápida",
-        confirmBtn: "Usar esta lápida",
-        roundedName: "Parte superior redonda",
-        squareName: "Cuadrada suave",
-        heartName: "Estilo corazón",
-        archName: "Arco alto",
-        smallName: "Lápida pequeña"
-      },
-      fr: {
-        logo: "Jardin commémoratif pour animaux",
-        backBtn: "Retour à l’édition",
-        confirmTopBtn: "Confirmer",
-        title: "Choisir une pierre tombale",
-        subtitle: "Cliquez sur un style. La pierre au centre changera immédiatement.",
-        pickerTitle: "Styles de pierre",
-        confirmBtn: "Utiliser cette pierre",
-        roundedName: "Sommet arrondi",
-        squareName: "Carré doux",
-        heartName: "Style cœur",
-        archName: "Grande arche",
-        smallName: "Petite pierre"
-      },
-      de: {
-        logo: "Gedenkgarten für Haustiere",
-        backBtn: "Zurück zum Bearbeiten",
-        confirmTopBtn: "Bestätigen",
-        title: "Grabstein auswählen",
-        subtitle: "Klicke unten auf einen Stil. Der Stein in der Mitte ändert sich sofort.",
-        pickerTitle: "Grabstein-Stile",
-        confirmBtn: "Diesen Grabstein verwenden",
-        roundedName: "Runder Kopf",
-        squareName: "Weiches Quadrat",
-        heartName: "Herz-Stil",
-        archName: "Hoher Bogen",
-        smallName: "Kleiner Haustierstein"
+        archDesc: "차분하고 엄숙함.",
+        smallName: "작은 묘비",
+        smallDesc: "작고 다정함."
       }
     };
 
@@ -827,22 +824,9 @@
       window.location.href = "cemetery.html";
     }
 
-    function setupHorizontalScroll() {
-      const strip = document.getElementById("stoneStrip");
-      if (!strip) return;
-
-      strip.addEventListener("wheel", function(event) {
-        if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-          event.preventDefault();
-          strip.scrollLeft += event.deltaY;
-        }
-      }, { passive: false });
-    }
-
     window.addEventListener("load", function() {
       loadLanguage();
       loadMemorialPreview();
-      setupHorizontalScroll();
     });
   </script>
 
