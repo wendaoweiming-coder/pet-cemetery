@@ -25,13 +25,13 @@
       background-image:
         linear-gradient(
           180deg,
-          rgba(6, 10, 18, 0.12) 0%,
-          rgba(6, 10, 18, 0.12) 42%,
-          rgba(6, 10, 18, 0.42) 100%
+          rgba(6, 10, 18, 0.08) 0%,
+          rgba(6, 10, 18, 0.1) 42%,
+          rgba(6, 10, 18, 0.46) 100%
         ),
         url("cemetery-bg.png");
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
       padding: 28px 38px 30px;
     }
@@ -89,8 +89,8 @@
       transform: translateX(-50%);
       text-align: center;
       z-index: 5;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
       width: min(680px, 90vw);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
     }
 
     .instruction h1 {
@@ -170,6 +170,12 @@
       border-radius: 115px 115px 18px 18px;
     }
 
+    .center-stone.small {
+      width: 178px;
+      min-height: 230px;
+      border-radius: 88px 88px 22px 22px;
+    }
+
     .center-stone.heart {
       width: 210px;
       min-height: 250px;
@@ -202,12 +208,6 @@
 
     .center-stone.heart::after {
       right: 14px;
-    }
-
-    .center-stone.small {
-      width: 178px;
-      min-height: 230px;
-      border-radius: 88px 88px 22px 22px;
     }
 
     .stone-photo {
@@ -256,43 +256,48 @@
       width: 270px;
       height: 36px;
       border-radius: 20px 20px 10px 10px;
-      background:
-        linear-gradient(
-          180deg,
-          #968d85,
-          #665d56
-        );
+      background: linear-gradient(180deg, #968d85, #665d56);
       box-shadow:
         inset 0 3px 6px rgba(255,255,255,0.14),
         0 18px 34px rgba(0,0,0,0.32);
       z-index: 1;
     }
 
+    /* 底部素材选择栏 */
     .bottom-picker {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
       z-index: 20;
-      padding: 18px 36px 24px;
+      padding: 22px 36px 26px;
       background:
         linear-gradient(
           180deg,
           rgba(8, 12, 16, 0),
-          rgba(8, 12, 16, 0.62)
+          rgba(8, 12, 16, 0.52) 28%,
+          rgba(8, 12, 16, 0.76) 100%
         );
     }
 
-    .picker-inner {
+    .picker-dock {
       max-width: 1180px;
       margin: 0 auto;
+      padding: 16px;
+      border-radius: 34px;
+      border: 1px solid rgba(255, 250, 245, 0.18);
+      background: rgba(255, 250, 245, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .picker-title-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 14px;
       margin-bottom: 12px;
+      padding: 0 4px;
     }
 
     .picker-title {
@@ -303,74 +308,86 @@
     }
 
     .confirm-button {
-      border: 1px solid rgba(255, 250, 245, 0.34);
+      border: 1px solid rgba(255, 250, 245, 0.36);
       background: rgba(255, 250, 245, 0.9);
       color: #4b3d35;
       padding: 11px 20px;
       border-radius: 999px;
       cursor: pointer;
       font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .confirm-button:hover {
+      background: #fffaf5;
     }
 
     .stone-strip {
       display: flex;
-      gap: 14px;
+      gap: 18px;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: 4px 2px 12px;
+      padding: 10px 4px 14px;
       scroll-behavior: smooth;
       scrollbar-width: thin;
       cursor: grab;
     }
 
-    .stone-strip:hover {
-      scroll-snap-type: x proximity;
+    .stone-strip:active {
+      cursor: grabbing;
     }
 
     .stone-strip::-webkit-scrollbar {
-      height: 8px;
+      height: 7px;
     }
 
     .stone-strip::-webkit-scrollbar-track {
-      background: rgba(255, 250, 245, 0.08);
+      background: rgba(255, 250, 245, 0.06);
       border-radius: 999px;
     }
 
     .stone-strip::-webkit-scrollbar-thumb {
-      background: rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.28);
       border-radius: 999px;
     }
 
     .stone-option {
-      flex: 0 0 160px;
-      min-height: 174px;
-      border-radius: 26px;
-      border: 1px solid rgba(255, 250, 245, 0.24);
-      background: rgba(255, 250, 245, 0.08);
+      flex: 0 0 170px;
+      min-height: 190px;
+      border: none;
+      background: transparent;
       color: #fffaf5;
       cursor: pointer;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: 0.22s ease;
-      scroll-snap-align: center;
-      padding: 14px;
+      padding: 0;
       text-align: center;
+      scroll-snap-align: center;
     }
 
-    .stone-option:hover {
-      transform: translateY(-8px);
-      background: rgba(255, 250, 245, 0.16);
-      border-color: rgba(255, 250, 245, 0.44);
+    .stone-option-inner {
+      position: relative;
+      min-height: 190px;
+      padding: 16px 14px 14px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 250, 245, 0.14);
+      background: rgba(255, 250, 245, 0.06);
+      transition: 0.25s ease;
     }
 
-    .stone-option.active {
-      background: rgba(255, 250, 245, 0.24);
-      border-color: rgba(255, 250, 245, 0.72);
-      transform: translateY(-8px);
+    .stone-option:hover .stone-option-inner {
+      transform: translateY(-12px) scale(1.04);
+      background: rgba(255, 250, 245, 0.12);
+      border-color: rgba(255, 250, 245, 0.34);
+    }
+
+    .stone-option.active .stone-option-inner {
+      transform: translateY(-10px);
+      background: rgba(255, 250, 245, 0.18);
+      border-color: rgba(255, 250, 245, 0.62);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.22);
     }
 
     .mini-preview {
-      height: 96px;
+      height: 122px;
       display: flex;
       justify-content: center;
       align-items: end;
@@ -381,64 +398,67 @@
     .mini-base {
       position: absolute;
       bottom: 0;
-      width: 80px;
-      height: 12px;
+      width: 92px;
+      height: 14px;
       border-radius: 999px;
       background: linear-gradient(180deg, #968d85, #625a53);
+      box-shadow: 0 8px 12px rgba(0,0,0,0.18);
     }
 
     .mini-stone {
       position: absolute;
-      bottom: 9px;
-      width: 58px;
-      height: 74px;
-      background: linear-gradient(180deg, #d7d1c9, #8c837b);
-      box-shadow: inset 0 2px 4px rgba(255,255,255,0.22);
+      bottom: 11px;
+      width: 68px;
+      height: 88px;
+      background: linear-gradient(180deg, #ded8d0, #8c837b);
+      box-shadow:
+        inset 0 3px 5px rgba(255,255,255,0.24),
+        0 10px 18px rgba(0,0,0,0.18);
     }
 
     .mini-rounded {
-      border-radius: 32px 32px 10px 10px;
+      border-radius: 38px 38px 12px 12px;
     }
 
     .mini-square {
-      border-radius: 14px;
+      border-radius: 16px;
     }
 
     .mini-arch {
-      width: 62px;
-      height: 84px;
-      border-radius: 34px 34px 8px 8px;
+      width: 72px;
+      height: 100px;
+      border-radius: 40px 40px 8px 8px;
     }
 
     .mini-small {
-      width: 50px;
-      height: 62px;
-      border-radius: 26px 26px 10px 10px;
+      width: 58px;
+      height: 72px;
+      border-radius: 30px 30px 10px 10px;
     }
 
     .mini-heart {
-      width: 56px;
-      height: 60px;
-      border-radius: 16px 16px 10px 10px;
+      width: 66px;
+      height: 70px;
+      border-radius: 18px 18px 10px 10px;
     }
 
     .mini-heart::before,
     .mini-heart::after {
       content: "";
       position: absolute;
-      top: -18px;
-      width: 30px;
-      height: 30px;
-      background: linear-gradient(180deg, #d7d1c9, #a49b93);
+      top: -20px;
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(180deg, #ded8d0, #a49b93);
       border-radius: 50%;
     }
 
     .mini-heart::before {
-      left: 1px;
+      left: 2px;
     }
 
     .mini-heart::after {
-      right: 1px;
+      right: 2px;
     }
 
     .option-name {
@@ -476,8 +496,16 @@
         background: transparent;
       }
 
+      .picker-dock {
+        padding: 14px;
+      }
+
       .stone-option {
-        flex-basis: 138px;
+        flex-basis: 145px;
+      }
+
+      .stone-option-inner {
+        min-height: 176px;
       }
     }
   </style>
@@ -519,7 +547,7 @@
     </section>
 
     <section class="bottom-picker">
-      <div class="picker-inner">
+      <div class="picker-dock">
 
         <div class="picker-title-row">
           <p class="picker-title" data-key="pickerTitle">Tombstone styles</p>
@@ -529,43 +557,53 @@
         <div class="stone-strip" id="stoneStrip">
 
           <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
-            <div class="mini-preview">
-              <div class="mini-stone mini-rounded"></div>
-              <div class="mini-base"></div>
+            <div class="stone-option-inner">
+              <div class="mini-preview">
+                <div class="mini-stone mini-rounded"></div>
+                <div class="mini-base"></div>
+              </div>
+              <p class="option-name" data-key="roundedName">Rounded top</p>
             </div>
-            <p class="option-name" data-key="roundedName">Rounded top</p>
           </button>
 
           <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
-            <div class="mini-preview">
-              <div class="mini-stone mini-square"></div>
-              <div class="mini-base"></div>
+            <div class="stone-option-inner">
+              <div class="mini-preview">
+                <div class="mini-stone mini-square"></div>
+                <div class="mini-base"></div>
+              </div>
+              <p class="option-name" data-key="squareName">Soft square</p>
             </div>
-            <p class="option-name" data-key="squareName">Soft square</p>
           </button>
 
           <button class="stone-option" data-style="heart" onclick="selectStone('heart', this)">
-            <div class="mini-preview">
-              <div class="mini-stone mini-heart"></div>
-              <div class="mini-base"></div>
+            <div class="stone-option-inner">
+              <div class="mini-preview">
+                <div class="mini-stone mini-heart"></div>
+                <div class="mini-base"></div>
+              </div>
+              <p class="option-name" data-key="heartName">Heart style</p>
             </div>
-            <p class="option-name" data-key="heartName">Heart style</p>
           </button>
 
           <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
-            <div class="mini-preview">
-              <div class="mini-stone mini-arch"></div>
-              <div class="mini-base"></div>
+            <div class="stone-option-inner">
+              <div class="mini-preview">
+                <div class="mini-stone mini-arch"></div>
+                <div class="mini-base"></div>
+              </div>
+              <p class="option-name" data-key="archName">Tall arch</p>
             </div>
-            <p class="option-name" data-key="archName">Tall arch</p>
           </button>
 
           <button class="stone-option" data-style="small" onclick="selectStone('small', this)">
-            <div class="mini-preview">
-              <div class="mini-stone mini-small"></div>
-              <div class="mini-base"></div>
+            <div class="stone-option-inner">
+              <div class="mini-preview">
+                <div class="mini-stone mini-small"></div>
+                <div class="mini-base"></div>
+              </div>
+              <p class="option-name" data-key="smallName">Small pet stone</p>
             </div>
-            <p class="option-name" data-key="smallName">Small pet stone</p>
           </button>
 
         </div>
@@ -690,118 +728,6 @@
         heartName: "Herz-Stil",
         archName: "Hoher Bogen",
         smallName: "Kleiner Haustierstein"
-      },
-      pt: {
-        logo: "Jardim Memorial de Animais",
-        backBtn: "Voltar para editar",
-        confirmTopBtn: "Confirmar",
-        title: "Escolha uma lápide",
-        subtitle: "Clique em um estilo abaixo. A lápide central mudará imediatamente.",
-        pickerTitle: "Estilos de lápide",
-        confirmBtn: "Usar esta lápide",
-        roundedName: "Topo arredondado",
-        squareName: "Quadrada suave",
-        heartName: "Estilo coração",
-        archName: "Arco alto",
-        smallName: "Lápide pequena"
-      },
-      it: {
-        logo: "Giardino commemorativo per animali",
-        backBtn: "Torna a modificare",
-        confirmTopBtn: "Conferma",
-        title: "Scegli una lapide",
-        subtitle: "Clicca uno stile qui sotto. La lapide al centro cambierà subito.",
-        pickerTitle: "Stili di lapide",
-        confirmBtn: "Usa questa lapide",
-        roundedName: "Parte superiore tonda",
-        squareName: "Quadrata morbida",
-        heartName: "Stile cuore",
-        archName: "Arco alto",
-        smallName: "Piccola lapide"
-      },
-      th: {
-        logo: "สวนรำลึกสัตว์เลี้ยง",
-        backBtn: "กลับไปแก้ไข",
-        confirmTopBtn: "ยืนยัน",
-        title: "เลือกป้ายหลุมศพ",
-        subtitle: "คลิกสไตล์ด้านล่าง ป้ายตรงกลางจะเปลี่ยนทันที",
-        pickerTitle: "รูปแบบป้ายหลุมศพ",
-        confirmBtn: "ใช้ป้ายนี้",
-        roundedName: "ทรงโค้งมน",
-        squareName: "ทรงสี่เหลี่ยมนุ่ม",
-        heartName: "ทรงหัวใจ",
-        archName: "ทรงโค้งสูง",
-        smallName: "ป้ายขนาดเล็ก"
-      },
-      vi: {
-        logo: "Khu vườn tưởng niệm thú cưng",
-        backBtn: "Quay lại sửa",
-        confirmTopBtn: "Xác nhận",
-        title: "Chọn bia tưởng niệm",
-        subtitle: "Bấm vào một kiểu bên dưới. Bia ở giữa sẽ đổi ngay.",
-        pickerTitle: "Kiểu bia tưởng niệm",
-        confirmBtn: "Dùng bia này",
-        roundedName: "Đỉnh tròn",
-        squareName: "Vuông mềm",
-        heartName: "Kiểu trái tim",
-        archName: "Vòm cao",
-        smallName: "Bia nhỏ"
-      },
-      id: {
-        logo: "Taman Kenangan Hewan Peliharaan",
-        backBtn: "Kembali mengedit",
-        confirmTopBtn: "Konfirmasi",
-        title: "Pilih batu nisan",
-        subtitle: "Klik gaya di bawah. Batu nisan di tengah akan langsung berubah.",
-        pickerTitle: "Gaya batu nisan",
-        confirmBtn: "Gunakan batu ini",
-        roundedName: "Atas membulat",
-        squareName: "Kotak lembut",
-        heartName: "Gaya hati",
-        archName: "Lengkung tinggi",
-        smallName: "Batu kecil"
-      },
-      ms: {
-        logo: "Taman Memorial Haiwan Kesayangan",
-        backBtn: "Kembali sunting",
-        confirmTopBtn: "Sahkan",
-        title: "Pilih batu nisan",
-        subtitle: "Klik gaya di bawah. Batu di tengah akan berubah serta-merta.",
-        pickerTitle: "Gaya batu nisan",
-        confirmBtn: "Guna batu ini",
-        roundedName: "Bahagian atas bulat",
-        squareName: "Segi empat lembut",
-        heartName: "Gaya hati",
-        archName: "Gerbang tinggi",
-        smallName: "Batu kecil"
-      },
-      hi: {
-        logo: "पालतू स्मृति उद्यान",
-        backBtn: "संपादन पर लौटें",
-        confirmTopBtn: "पुष्टि करें",
-        title: "स्मारक पत्थर चुनें",
-        subtitle: "नीचे किसी शैली पर क्लिक करें। बीच का पत्थर तुरंत बदल जाएगा।",
-        pickerTitle: "स्मारक पत्थर की शैलियाँ",
-        confirmBtn: "यह पत्थर उपयोग करें",
-        roundedName: "गोल ऊपरी भाग",
-        squareName: "मुलायम चौकोर",
-        heartName: "दिल शैली",
-        archName: "ऊँचा मेहराब",
-        smallName: "छोटा पालतू पत्थर"
-      },
-      ar: {
-        logo: "حديقة تذكارية للحيوانات الأليفة",
-        backBtn: "العودة للتعديل",
-        confirmTopBtn: "تأكيد",
-        title: "اختر شاهد القبر",
-        subtitle: "اضغط على النمط في الأسفل. سيتغير الشاهد في المنتصف فورًا.",
-        pickerTitle: "أنماط شواهد القبور",
-        confirmBtn: "استخدام هذا الشاهد",
-        roundedName: "قمة مستديرة",
-        squareName: "مربع ناعم",
-        heartName: "نمط القلب",
-        archName: "قوس عالٍ",
-        smallName: "شاهد صغير"
       }
     };
 
@@ -855,10 +781,12 @@
         applyStoneStyle(selectedStoneStyle);
 
         const activeButton = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
+
         if (activeButton) {
           document.querySelectorAll(".stone-option").forEach(function(btn) {
             btn.classList.remove("active");
           });
+
           activeButton.classList.add("active");
         }
       }
