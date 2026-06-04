@@ -10,6 +10,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -20,34 +24,49 @@
 
     .memorial-page {
       min-height: 100vh;
+      background: #0f1411;
+    }
+
+    /* 第一屏：只看墓园和墓碑 */
+    .hero-stage {
       position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       background-image:
         linear-gradient(
           180deg,
-          rgba(6, 10, 18, 0.08) 0%,
-          rgba(6, 10, 18, 0.12) 42%,
-          rgba(6, 10, 18, 0.42) 100%
+          rgba(6, 10, 18, 0.06) 0%,
+          rgba(6, 10, 18, 0.10) 40%,
+          rgba(6, 10, 18, 0.24) 100%
         ),
         url("cemetery-bg.png");
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
-      padding: 28px 38px 38px;
-      overflow-x: hidden;
+      transform: scale(1.12);
+      transform-origin: center center;
+      filter: saturate(1.03);
     }
 
     .memorial-header {
       position: relative;
       z-index: 20;
       max-width: 1280px;
-      margin: 0 auto 24px;
+      margin: 0 auto;
+      padding: 28px 38px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .memorial-logo {
-      color: rgba(255, 250, 245, 0.92);
+      color: rgba(255, 250, 245, 0.95);
       text-decoration: none;
       font-size: 18px;
       text-shadow: 0 3px 16px rgba(0,0,0,0.3);
@@ -76,49 +95,51 @@
       background: rgba(255, 250, 245, 0.16);
     }
 
-    .memorial-layout {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 34px;
-      align-items: start;
+    .stage-inner {
+      position: relative;
+      z-index: 5;
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 140px;
     }
 
-    .garden-stage {
+    .center-stage {
       position: relative;
-      height: calc(100vh - 120px);
-      min-height: 650px;
+      width: 100%;
+      max-width: 1280px;
+      min-height: 720px;
     }
 
     .center-stone-wrap {
       position: absolute;
       left: 50%;
-      bottom: 82px;
-      transform: translateX(-50%);
-      width: 320px;
-      height: 430px;
+      top: 54%;
+      transform: translate(-50%, -50%);
+      width: 360px;
+      height: 480px;
       display: flex;
       align-items: end;
       justify-content: center;
-      z-index: 4;
+      z-index: 10;
     }
 
     .center-stone-shadow {
       position: absolute;
       bottom: 6px;
-      width: 260px;
-      height: 36px;
+      width: 290px;
+      height: 42px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.34);
+      background: rgba(0,0,0,0.36);
       filter: blur(14px);
     }
 
     .memorial-stone {
       position: relative;
-      width: 210px;
-      min-height: 275px;
-      padding: 34px 24px 30px;
+      width: 230px;
+      min-height: 300px;
+      padding: 36px 24px 30px;
       background:
         linear-gradient(
           180deg,
@@ -136,7 +157,7 @@
     }
 
     .memorial-stone-rounded {
-      border-radius: 105px 105px 24px 24px;
+      border-radius: 115px 115px 26px 26px;
     }
 
     .memorial-stone-square {
@@ -144,31 +165,31 @@
     }
 
     .memorial-stone-arch {
-      width: 220px;
-      min-height: 310px;
-      border-radius: 115px 115px 18px 18px;
+      width: 238px;
+      min-height: 336px;
+      border-radius: 120px 120px 18px 18px;
     }
 
     .memorial-stone-small {
-      width: 178px;
-      min-height: 230px;
-      border-radius: 88px 88px 22px 22px;
+      width: 192px;
+      min-height: 248px;
+      border-radius: 92px 92px 22px 22px;
     }
 
     .memorial-stone-heart {
-      width: 210px;
-      min-height: 250px;
+      width: 226px;
+      min-height: 270px;
       border-radius: 34px 34px 24px 24px;
-      margin-top: 40px;
+      margin-top: 44px;
     }
 
     .memorial-stone-heart::before,
     .memorial-stone-heart::after {
       content: "";
       position: absolute;
-      top: -52px;
-      width: 106px;
-      height: 106px;
+      top: -56px;
+      width: 112px;
+      height: 112px;
       background:
         linear-gradient(
           180deg,
@@ -182,25 +203,20 @@
     }
 
     .memorial-stone-heart::before {
-      left: 14px;
+      left: 15px;
     }
 
     .memorial-stone-heart::after {
-      right: 14px;
+      right: 15px;
     }
 
     .stone-base {
       position: absolute;
       bottom: 0;
-      width: 270px;
-      height: 36px;
+      width: 294px;
+      height: 38px;
       border-radius: 20px 20px 10px 10px;
-      background:
-        linear-gradient(
-          180deg,
-          #968d85,
-          #665d56
-        );
+      background: linear-gradient(180deg, #968d85, #665d56);
       box-shadow:
         inset 0 3px 6px rgba(255,255,255,0.14),
         0 18px 34px rgba(0,0,0,0.32);
@@ -218,8 +234,8 @@
     }
 
     .stone-photo {
-      width: 74px;
-      height: 74px;
+      width: 78px;
+      height: 78px;
       margin: 0 auto 14px;
       border-radius: 50%;
       background: rgba(255,250,245,0.58);
@@ -239,21 +255,21 @@
 
     .stone-name {
       margin: 0 0 8px;
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 500;
       color: #4d453f;
     }
 
     .stone-years {
       margin: 0 0 14px;
-      font-size: 13px;
+      font-size: 14px;
       color: #746b64;
     }
 
     .stone-words {
       margin: 0 auto;
-      max-width: 160px;
-      font-size: 13px;
+      max-width: 168px;
+      font-size: 14px;
       line-height: 1.6;
       color: #5f554e;
     }
@@ -268,20 +284,20 @@
     }
 
     #placedItems {
-      z-index: 6;
+      z-index: 12;
     }
 
     #animals {
-      z-index: 7;
+      z-index: 13;
       pointer-events: auto;
     }
 
     #petals {
-      z-index: 8;
+      z-index: 14;
     }
 
     #traces {
-      z-index: 5;
+      z-index: 11;
     }
 
     .scene-item {
@@ -334,64 +350,72 @@
       opacity: 0.65;
     }
 
-    .info-panel {
-      max-height: calc(100vh - 120px);
-      overflow-y: auto;
-      padding: 22px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 250, 245, 0.26);
-      background: rgba(255, 250, 245, 0.08);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+    .scroll-tip {
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      z-index: 16;
+      color: rgba(255, 244, 232, 0.82);
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.34);
     }
 
-    .info-panel::-webkit-scrollbar {
-      width: 8px;
+    /* 第二部分：把故事和照片放到墓碑下面 */
+    .details-section {
+      position: relative;
+      z-index: 3;
+      padding: 44px 24px 80px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(13,18,15,0.96) 0%,
+          rgba(13,18,15,1) 100%
+        );
     }
 
-    .info-panel::-webkit-scrollbar-track {
-      background: rgba(255, 250, 245, 0.06);
-      border-radius: 999px;
+    .details-inner {
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
-    .info-panel::-webkit-scrollbar-thumb {
-      background: rgba(255, 250, 245, 0.28);
-      border-radius: 999px;
+    .details-card {
+      margin-bottom: 20px;
+      padding: 24px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 250, 245, 0.12);
+      background: rgba(255, 250, 245, 0.04);
     }
 
-    .info-section {
-      padding: 20px 0;
-      border-top: 1px solid rgba(255, 250, 245, 0.12);
-    }
-
-    .info-section:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .info-section h2 {
-      margin: 0 0 12px;
-      font-size: 19px;
+    .details-card h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
       font-weight: 500;
-      color: rgba(255, 250, 245, 0.94);
+      color: rgba(255, 250, 245, 0.95);
     }
 
-    .info-section p {
+    .details-card p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.72);
-      line-height: 1.75;
+      color: rgba(255, 244, 232, 0.74);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .empty-text {
+      color: rgba(255, 244, 232, 0.45);
       font-size: 14px;
     }
 
     .photo-gallery {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
     }
 
     .gallery-photo {
       aspect-ratio: 1 / 1;
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
       background: rgba(255, 250, 245, 0.08);
       border: 1px solid rgba(255, 250, 245, 0.12);
@@ -404,15 +428,10 @@
       display: block;
     }
 
-    .empty-text {
-      color: rgba(255, 244, 232, 0.45);
-      font-size: 14px;
-    }
-
     .gift-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
 
     .gift-buttons button,
@@ -438,7 +457,7 @@
 
     .message-box textarea {
       width: 100%;
-      height: 88px;
+      height: 100px;
       border: 1px solid rgba(255, 250, 245, 0.24);
       background: rgba(255, 250, 245, 0.1);
       color: #fffaf5;
@@ -467,25 +486,42 @@
     }
 
     @media (max-width: 980px) {
-      .memorial-page {
-        padding: 24px;
+      .memorial-header {
+        padding: 24px 20px 0;
       }
 
-      .memorial-layout {
-        grid-template-columns: 1fr;
+      .header-actions {
+        gap: 8px;
       }
 
-      .garden-stage {
-        height: 650px;
+      .soft-button {
+        padding: 9px 12px;
+        font-size: 13px;
       }
 
       .center-stone-wrap {
-        bottom: 40px;
-        transform: translateX(-50%) scale(0.9);
+        top: 52%;
+        transform: translate(-50%, -50%) scale(0.9);
       }
 
-      .info-panel {
-        max-height: none;
+      .photo-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .memorial-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .center-stone-wrap {
+        transform: translate(-50%, -50%) scale(0.8);
+      }
+
+      .photo-gallery {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -495,68 +531,72 @@
 
   <main class="memorial-page">
 
-    <header class="memorial-header">
-      <a href="index.html" class="memorial-logo">
-        Starlit Pet Memorial Garden
-      </a>
+    <section class="hero-stage">
 
-      <div class="header-actions">
-        <a href="create.html" class="soft-button">Edit Info</a>
-        <a href="select-stone.html" class="soft-button">Change Stone</a>
-        <a href="index.html" class="soft-button">Home</a>
-      </div>
-    </header>
+      <header class="memorial-header">
+        <a href="index.html" class="memorial-logo">
+          Starlit Pet Memorial Garden
+        </a>
 
-    <section class="memorial-layout">
+        <div class="header-actions">
+          <a href="create.html" class="soft-button">Edit Info</a>
+          <a href="select-stone.html" class="soft-button">Change Stone</a>
+          <a href="#details" class="soft-button">Story & Photos</a>
+        </div>
+      </header>
 
-      <div class="garden-stage">
-        <div id="petals"></div>
-        <div id="traces"></div>
-        <div id="placedItems"></div>
-        <div id="animals"></div>
+      <div class="stage-inner">
+        <div class="center-stage">
+          <div id="petals"></div>
+          <div id="traces"></div>
+          <div id="placedItems"></div>
+          <div id="animals"></div>
 
-        <div class="center-stone-wrap">
-          <div class="center-stone-shadow"></div>
+          <div class="center-stone-wrap">
+            <div class="center-stone-shadow"></div>
 
-          <div class="memorial-stone memorial-stone-rounded" id="memorialStone">
-            <div class="visibility-badge" id="visibilityDisplay">Public</div>
+            <div class="memorial-stone memorial-stone-rounded" id="memorialStone">
+              <div class="visibility-badge" id="visibilityDisplay">Public</div>
 
-            <div class="stone-photo" id="petPhotoDisplay">
-              🐾
+              <div class="stone-photo" id="petPhotoDisplay">
+                🐾
+              </div>
+
+              <h1 class="stone-name" id="petNameDisplay">Luna</h1>
+              <p class="stone-years" id="petYearsDisplay">---- — ----</p>
+              <p class="stone-words" id="petMemoryDisplay">You are loved, always.</p>
             </div>
 
-            <h1 class="stone-name" id="petNameDisplay">Luna</h1>
-            <p class="stone-years" id="petYearsDisplay">---- — ----</p>
-            <p class="stone-words" id="petMemoryDisplay">You are loved, always.</p>
+            <div class="stone-base"></div>
           </div>
-
-          <div class="stone-base"></div>
         </div>
       </div>
 
-      <aside class="info-panel">
+      <div class="scroll-tip">Scroll down to view story and photos</div>
+    </section>
 
-        <div class="info-section">
+    <section class="details-section" id="details">
+      <div class="details-inner">
+
+        <div class="details-card">
           <h2>Pet Story</h2>
-          <p id="petStoryDisplay" class="empty-text">
-            No story has been written yet.
-          </p>
+          <p id="petStoryDisplay" class="empty-text">No story has been written yet.</p>
         </div>
 
-        <div class="info-section">
+        <div class="details-card">
           <h2>Public Memory Photos</h2>
           <div id="publicPhotosDisplay" class="photo-gallery"></div>
         </div>
 
-        <div class="info-section">
+        <div class="details-card">
           <h2>Private Memory Photos</h2>
-          <p class="empty-text">
+          <p class="empty-text" style="margin-bottom:12px;">
             These photos are currently shown only in your browser demo.
           </p>
-          <div id="privatePhotosDisplay" class="photo-gallery" style="margin-top: 12px;"></div>
+          <div id="privatePhotosDisplay" class="photo-gallery"></div>
         </div>
 
-        <div class="info-section">
+        <div class="details-card">
           <h2>Offer a small gift</h2>
 
           <div class="gift-buttons">
@@ -571,18 +611,15 @@
           </div>
         </div>
 
-        <div class="info-section message-box">
+        <div class="details-card message-box">
           <h2>Leave a message</h2>
-
           <textarea id="messageInput" placeholder="Write a few quiet words..."></textarea>
           <br><br>
           <button onclick="addMessage()">Leave message</button>
-
           <div id="messageList" class="message-list"></div>
         </div>
 
-      </aside>
-
+      </div>
     </section>
 
   </main>
@@ -593,9 +630,7 @@
     function showPhotos(containerId, photos) {
       const container = document.getElementById(containerId);
 
-      if (!container) {
-        return;
-      }
+      if (!container) return;
 
       container.innerHTML = "";
 
