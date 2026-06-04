@@ -123,12 +123,11 @@
       justify-content: center;
       z-index: 10;
 
-      opacity: 0;
-      transition: opacity 0.45s ease;
+      visibility: hidden;
     }
 
-    body.memorial-ready .center-stone-wrap {
-      opacity: 1;
+    .center-stone-wrap.ready {
+      visibility: visible;
     }
 
     .center-stone-shadow {
@@ -319,6 +318,26 @@
       pointer-events: auto;
       transition: 2.4s ease;
       filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.28));
+    }
+
+    .animal.resting {
+      animation: breathing 3s ease-in-out infinite;
+    }
+
+    .animal.touched {
+      animation: nuzzle 0.9s ease-in-out;
+    }
+
+    @keyframes breathing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    @keyframes nuzzle {
+      0% { transform: translateX(0) rotate(0); }
+      30% { transform: translateX(-8px) rotate(-5deg); }
+      60% { transform: translateX(8px) rotate(5deg); }
+      100% { transform: translateX(0) rotate(0); }
     }
 
     .petal {
@@ -537,7 +556,7 @@
           <div id="placedItems"></div>
           <div id="animals"></div>
 
-          <div class="center-stone-wrap">
+          <div class="center-stone-wrap" id="finalStoneWrap">
             <div class="center-stone-shadow"></div>
 
             <div class="memorial-stone memorial-stone-rounded" id="memorialStone">
@@ -609,6 +628,62 @@
 
   </main>
 
+  <script>
+    function renderMemorialImmediately() {
+      const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+
+      const wrap = document.getElementById("finalStoneWrap");
+      const stone = document.getElementById("memorialStone");
+      const petName = document.getElementById("petNameDisplay");
+      const years = document.getElementById("petYearsDisplay");
+      const words = document.getElementById("petMemoryDisplay");
+      const photo = document.getElementById("petPhotoDisplay");
+      const visibility = document.getElementById("visibilityDisplay");
+
+      const style = data.tombstoneStyle || "rounded";
+
+      if (stone) {
+        stone.className = "memorial-stone memorial-stone-" + style;
+      }
+
+      if (petName) {
+        petName.textContent = data.name || "Luna";
+      }
+
+      if (years) {
+        years.textContent = (data.birthDate || "----") + " — " + (data.leaveDate || "----");
+      }
+
+      if (words) {
+        words.textContent = data.epitaph || data.memory || "You are loved, always.";
+      }
+
+      if (photo) {
+        if (data.photo) {
+          photo.innerHTML = '<img src="' + data.photo + '">';
+        } else {
+          photo.textContent = "🐾";
+        }
+      }
+
+      if (visibility) {
+        if (data.visibility === "private") {
+          visibility.textContent = "Private";
+        } else if (data.visibility === "invite") {
+          visibility.textContent = "Invite only";
+        } else {
+          visibility.textContent = "Public";
+        }
+      }
+
+      if (wrap) {
+        wrap.classList.add("ready");
+      }
+    }
+
+    renderMemorialImmediately();
+  </script>
+
   <script src="script.js"></script>
 
   <script>
@@ -639,18 +714,7 @@
     function loadExtraMemorialInfo() {
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
 
-      const visibilityDisplay = document.getElementById("visibilityDisplay");
       const storyDisplay = document.getElementById("petStoryDisplay");
-
-      if (visibilityDisplay) {
-        if (data.visibility === "private") {
-          visibilityDisplay.textContent = "Private";
-        } else if (data.visibility === "invite") {
-          visibilityDisplay.textContent = "Invite only";
-        } else {
-          visibilityDisplay.textContent = "Public";
-        }
-      }
 
       if (storyDisplay) {
         if (data.story) {
@@ -668,15 +732,7 @@
 
     window.addEventListener("load", function() {
       loadExtraMemorialInfo();
-
-      requestAnimationFrame(function() {
-        document.body.classList.add("memorial-ready");
-      });
     });
-
-    setTimeout(function() {
-      document.body.classList.add("memorial-ready");
-    }, 800);
   </script>
 
 </body>
