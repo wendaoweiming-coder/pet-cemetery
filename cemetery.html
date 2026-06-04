@@ -14,8 +14,8 @@
       margin: 0;
       min-height: 100vh;
       font-family: "Microsoft YaHei", Arial, sans-serif;
-      background: #10140f;
-      color: #fffaf5;
+      background: #efe7da;
+      color: #4b3d35;
     }
 
     button, a, select, textarea {
@@ -126,30 +126,12 @@
 
     .center-stone-shadow {
       position: absolute;
-      bottom: 18px;
-      width: 210px;
-      height: 24px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.22);
-      filter: blur(16px);
-      z-index: 1;
-    }
-
-    .grass-touch {
-      position: absolute;
-      bottom: 4px;
-      width: 250px;
+      bottom: 6px;
+      width: 290px;
       height: 42px;
       border-radius: 50%;
-      background:
-        radial-gradient(
-          ellipse at center,
-          rgba(84, 112, 71, 0.34) 0%,
-          rgba(84, 112, 71, 0.18) 42%,
-          rgba(84, 112, 71, 0) 72%
-        );
-      z-index: 1;
-      pointer-events: none;
+      background: rgba(0,0,0,0.36);
+      filter: blur(14px);
     }
 
     .memorial-stone {
@@ -163,7 +145,7 @@
       box-shadow:
         inset 0 5px 12px rgba(255,255,255,0.34),
         inset 0 -8px 16px rgba(55,48,42,0.18),
-        0 18px 34px rgba(0,0,0,0.30);
+        0 26px 48px rgba(0,0,0,0.42);
       z-index: 2;
     }
 
@@ -204,6 +186,19 @@
 
     .memorial-stone-heart::before { left: 15px; }
     .memorial-stone-heart::after { right: 15px; }
+
+    .stone-base {
+      position: absolute;
+      bottom: 0;
+      width: 294px;
+      height: 38px;
+      border-radius: 20px 20px 10px 10px;
+      background: linear-gradient(180deg, #968d85, #665d56);
+      box-shadow:
+        inset 0 3px 6px rgba(255,255,255,0.14),
+        0 18px 34px rgba(0,0,0,0.32);
+      z-index: 1;
+    }
 
     .visibility-badge {
       display: inline-block;
@@ -308,64 +303,118 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.34);
     }
 
-    .details-section {
+    .memory-section {
       position: relative;
       z-index: 3;
-      padding: 44px 24px 80px;
-      background: linear-gradient(180deg, rgba(13,18,15,0.96) 0%, rgba(13,18,15,1) 100%);
+      padding: 90px 24px 100px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.65), rgba(255,255,255,0) 34%),
+        linear-gradient(180deg, #f3eadf 0%, #e4d6c7 100%);
+      color: #4b3d35;
     }
 
-    .details-inner {
-      max-width: 1100px;
+    .memory-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: min(920px, 86vw);
+      height: 1px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, transparent, rgba(102,79,59,0.28), transparent);
+    }
+
+    .memory-inner {
+      max-width: 1080px;
       margin: 0 auto;
     }
 
-    .details-card {
-      margin-bottom: 20px;
-      padding: 24px;
-      border-radius: 28px;
-      border: 1px solid rgba(255, 250, 245, 0.12);
-      background: rgba(255, 250, 245, 0.04);
+    .memory-intro {
+      text-align: center;
+      margin-bottom: 42px;
     }
 
-    .details-card h2 {
-      margin: 0 0 14px;
-      font-size: 22px;
+    .memory-intro span {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(118, 91, 66, 0.10);
+      color: rgba(75, 61, 53, 0.72);
+      font-size: 13px;
+    }
+
+    .memory-intro h2 {
+      margin: 0 0 12px;
+      font-size: 34px;
       font-weight: 500;
-      color: rgba(255, 250, 245, 0.95);
+      color: #4b3d35;
     }
 
-    .details-card p {
-      margin: 0;
-      color: rgba(255, 244, 232, 0.74);
+    .memory-intro p {
+      margin: 0 auto;
+      max-width: 620px;
+      color: rgba(75, 61, 53, 0.66);
       line-height: 1.8;
       font-size: 15px;
     }
 
+    .memory-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .memory-card {
+      padding: 28px;
+      border-radius: 32px;
+      background:
+        linear-gradient(180deg, rgba(255,252,246,0.92), rgba(248,239,229,0.88));
+      border: 1px solid rgba(134, 103, 75, 0.18);
+      box-shadow:
+        0 18px 48px rgba(79, 54, 33, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.75);
+    }
+
+    .memory-card h3 {
+      margin: 0 0 16px;
+      font-size: 21px;
+      font-weight: 500;
+      color: #4f3e34;
+    }
+
+    .memory-card p {
+      margin: 0;
+      color: rgba(75, 61, 53, 0.72);
+      line-height: 1.85;
+      font-size: 15px;
+    }
+
     .empty-text {
-      color: rgba(255, 244, 232, 0.45);
+      color: rgba(75, 61, 53, 0.46);
       font-size: 14px;
     }
 
     .photo-gallery {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 14px;
     }
 
     .gallery-photo {
       aspect-ratio: 1 / 1;
-      border-radius: 18px;
+      border-radius: 20px;
       overflow: hidden;
-      background: rgba(255, 250, 245, 0.08);
-      border: 1px solid rgba(255, 250, 245, 0.12);
+      background: rgba(120, 95, 70, 0.08);
+      border: 1px solid rgba(134, 103, 75, 0.16);
       cursor: zoom-in;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .gallery-photo:hover {
       transform: translateY(-3px);
-      border-color: rgba(255, 250, 245, 0.34);
+      box-shadow: 0 12px 28px rgba(79, 54, 33, 0.14);
     }
 
     .gallery-photo img {
@@ -373,6 +422,62 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    .gift-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .gift-buttons button,
+    .message-box button {
+      border: none;
+      background: #715843;
+      color: #fffaf5;
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 10px 20px rgba(79, 54, 33, 0.14);
+    }
+
+    .animal-status {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border-radius: 18px;
+      background: rgba(118, 91, 66, 0.08);
+      color: rgba(75, 61, 53, 0.66);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .message-box textarea {
+      width: 100%;
+      height: 108px;
+      border: 1px solid rgba(134, 103, 75, 0.22);
+      background: rgba(255,255,255,0.55);
+      color: #4b3d35;
+      padding: 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      resize: none;
+    }
+
+    .message-box textarea::placeholder {
+      color: rgba(75, 61, 53, 0.42);
+    }
+
+    .message-list {
+      margin-top: 14px;
+    }
+
+    .message-item {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(134, 103, 75, 0.14);
+      color: rgba(75, 61, 53, 0.72);
+      line-height: 1.6;
+      font-size: 14px;
     }
 
     .photo-lightbox {
@@ -415,61 +520,6 @@
       z-index: 1000;
     }
 
-    .gift-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .gift-buttons button,
-    .message-box button {
-      border: 1px solid rgba(255, 250, 245, 0.34);
-      background: rgba(255, 250, 245, 0.9);
-      color: #4b3d35;
-      padding: 11px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .animal-status {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      background: rgba(255, 250, 245, 0.08);
-      color: rgba(255, 244, 232, 0.68);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .message-box textarea {
-      width: 100%;
-      height: 100px;
-      border: 1px solid rgba(255, 250, 245, 0.24);
-      background: rgba(255, 250, 245, 0.1);
-      color: #fffaf5;
-      padding: 14px;
-      border-radius: 18px;
-      font-size: 14px;
-      resize: none;
-    }
-
-    .message-box textarea::placeholder {
-      color: rgba(255, 244, 232, 0.44);
-    }
-
-    .message-list {
-      margin-top: 14px;
-    }
-
-    .message-item {
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255, 250, 245, 0.1);
-      color: rgba(255, 244, 232, 0.72);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
     @media (max-width: 980px) {
       .memorial-header {
         padding: 24px 20px 0;
@@ -484,6 +534,10 @@
       .center-stone-wrap {
         top: 52%;
         transform: translate(-50%, -50%) scale(0.9);
+      }
+
+      .memory-grid {
+        grid-template-columns: 1fr;
       }
 
       .photo-gallery {
@@ -507,7 +561,7 @@
         <div class="header-actions">
           <a href="create.html" class="soft-button" data-key="editBtn">Edit Info</a>
           <a href="select-stone.html" class="soft-button" data-key="changeStoneBtn">Change Stone</a>
-          <a href="#details" class="soft-button" data-key="storyPhotosBtn">Story & Photos</a>
+          <a href="#memory" class="soft-button" data-key="storyPhotosBtn">Memory Book</a>
 
           <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
             <option value="en">English</option>
@@ -539,7 +593,6 @@
           <div id="animals"></div>
 
           <div class="center-stone-wrap" id="stoneWrap">
-            <div class="grass-touch"></div>
             <div class="center-stone-shadow"></div>
 
             <div class="memorial-stone memorial-stone-rounded" id="memorialStone">
@@ -549,59 +602,73 @@
               <p class="stone-years" id="petYearsDisplay">---- — ----</p>
               <p class="stone-words" id="petMemoryDisplay">You are loved, always.</p>
             </div>
+
+            <div class="stone-base"></div>
           </div>
 
         </div>
       </div>
 
       <div class="scroll-tip" data-key="scrollTip">
-        Scroll down to view story and photos
+        Scroll down to open the memory book
       </div>
 
     </section>
 
-    <section class="details-section" id="details">
-      <div class="details-inner">
+    <section class="memory-section" id="memory">
+      <div class="memory-inner">
 
-        <div class="details-card">
-          <h2 data-key="storyTitle">Pet Story</h2>
-          <p id="petStoryDisplay" class="empty-text">No story has been written yet.</p>
-        </div>
-
-        <div class="details-card">
-          <h2 data-key="publicPhotosTitle">Public Memory Photos</h2>
-          <div id="publicPhotosDisplay" class="photo-gallery"></div>
-        </div>
-
-        <div class="details-card">
-          <h2 data-key="privatePhotosTitle">Private Memory Photos</h2>
-          <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">
-            These photos are currently shown only in your browser demo.
+        <div class="memory-intro">
+          <span data-key="memoryLabel">Memory Book</span>
+          <h2 data-key="memoryTitle">A quiet place for stories and photos</h2>
+          <p data-key="memoryIntro">
+            These memories are kept apart from the grave scene, like a soft album you can open after visiting the garden.
           </p>
-          <div id="privatePhotosDisplay" class="photo-gallery"></div>
         </div>
 
-        <div class="details-card">
-          <h2 data-key="giftTitle">Offer a small gift</h2>
+        <div class="memory-grid">
 
-          <div class="gift-buttons">
-            <button onclick="placeGift('can')" data-key="giftCan">Place a can</button>
-            <button onclick="placeGift('ball')" data-key="giftBall">Place a ball</button>
-            <button onclick="placeGift('seed')" data-key="giftSeed">Place seeds</button>
-            <button onclick="placeGift('flower')" data-key="giftFlower">Place flowers</button>
+          <div class="memory-card">
+            <h3 data-key="storyTitle">Pet Story</h3>
+            <p id="petStoryDisplay" class="empty-text">No story has been written yet.</p>
           </div>
 
-          <div class="animal-status" id="animalStatus" data-key="animalStatus">
-            Quiet gifts may bring gentle visitors.
-          </div>
-        </div>
+          <div class="memory-card">
+            <h3 data-key="giftTitle">Offer a small gift</h3>
 
-        <div class="details-card message-box">
-          <h2 data-key="messageTitle">Leave a message</h2>
-          <textarea id="messageInput" data-placeholder-key="messagePlaceholder" placeholder="Write a few quiet words..."></textarea>
-          <br><br>
-          <button onclick="addMessage()" data-key="messageBtn">Leave message</button>
-          <div id="messageList" class="message-list"></div>
+            <div class="gift-buttons">
+              <button onclick="placeGift('can')" data-key="giftCan">Place a can</button>
+              <button onclick="placeGift('ball')" data-key="giftBall">Place a ball</button>
+              <button onclick="placeGift('seed')" data-key="giftSeed">Place seeds</button>
+              <button onclick="placeGift('flower')" data-key="giftFlower">Place flowers</button>
+            </div>
+
+            <div class="animal-status" id="animalStatus" data-key="animalStatus">
+              Quiet gifts may bring gentle visitors.
+            </div>
+          </div>
+
+          <div class="memory-card">
+            <h3 data-key="publicPhotosTitle">Public Memory Photos</h3>
+            <div id="publicPhotosDisplay" class="photo-gallery"></div>
+          </div>
+
+          <div class="memory-card">
+            <h3 data-key="privatePhotosTitle">Private Memory Photos</h3>
+            <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">
+              These photos are currently shown only in your browser demo.
+            </p>
+            <div id="privatePhotosDisplay" class="photo-gallery"></div>
+          </div>
+
+          <div class="memory-card message-box" style="grid-column: 1 / -1;">
+            <h3 data-key="messageTitle">Leave a message</h3>
+            <textarea id="messageInput" data-placeholder-key="messagePlaceholder" placeholder="Write a few quiet words..."></textarea>
+            <br><br>
+            <button onclick="addMessage()" data-key="messageBtn">Leave message</button>
+            <div id="messageList" class="message-list"></div>
+          </div>
+
         </div>
 
       </div>
@@ -624,8 +691,11 @@
         logo: "Starlit Pet Memorial Garden",
         editBtn: "Edit Info",
         changeStoneBtn: "Change Stone",
-        storyPhotosBtn: "Story & Photos",
-        scrollTip: "Scroll down to view story and photos",
+        storyPhotosBtn: "Memory Book",
+        scrollTip: "Scroll down to open the memory book",
+        memoryLabel: "Memory Book",
+        memoryTitle: "A quiet place for stories and photos",
+        memoryIntro: "These memories are kept apart from the grave scene, like a soft album you can open after visiting the garden.",
         storyTitle: "Pet Story",
         publicPhotosTitle: "Public Memory Photos",
         privatePhotosTitle: "Private Memory Photos",
@@ -651,8 +721,11 @@
         logo: "星眠宠物纪念园",
         editBtn: "修改信息",
         changeStoneBtn: "更换墓碑",
-        storyPhotosBtn: "故事与照片",
-        scrollTip: "向下查看故事和照片",
+        storyPhotosBtn: "回忆纪念册",
+        scrollTip: "向下打开回忆纪念册",
+        memoryLabel: "回忆纪念册",
+        memoryTitle: "一个安放故事和照片的安静空间",
+        memoryIntro: "这些回忆不会压在墓碑下面，而是像一本温柔的纪念册，在拜访花园之后慢慢打开。",
         storyTitle: "宠物故事",
         publicPhotosTitle: "公开回忆照片",
         privatePhotosTitle: "私密回忆照片",
@@ -678,8 +751,11 @@
         logo: "星眠寵物紀念園",
         editBtn: "修改資訊",
         changeStoneBtn: "更換墓碑",
-        storyPhotosBtn: "故事與照片",
-        scrollTip: "向下查看故事和照片",
+        storyPhotosBtn: "回憶紀念冊",
+        scrollTip: "向下打開回憶紀念冊",
+        memoryLabel: "回憶紀念冊",
+        memoryTitle: "一個安放故事和照片的安靜空間",
+        memoryIntro: "這些回憶不會壓在墓碑下面，而是像一本溫柔的紀念冊，在拜訪花園之後慢慢打開。",
         storyTitle: "寵物故事",
         publicPhotosTitle: "公開回憶照片",
         privatePhotosTitle: "私密回憶照片",
