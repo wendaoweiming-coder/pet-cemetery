@@ -126,12 +126,30 @@
 
     .center-stone-shadow {
       position: absolute;
-      bottom: 6px;
-      width: 290px;
+      bottom: 18px;
+      width: 210px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.22);
+      filter: blur(16px);
+      z-index: 1;
+    }
+
+    .grass-touch {
+      position: absolute;
+      bottom: 4px;
+      width: 250px;
       height: 42px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.36);
-      filter: blur(14px);
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(84, 112, 71, 0.34) 0%,
+          rgba(84, 112, 71, 0.18) 42%,
+          rgba(84, 112, 71, 0) 72%
+        );
+      z-index: 1;
+      pointer-events: none;
     }
 
     .memorial-stone {
@@ -145,7 +163,7 @@
       box-shadow:
         inset 0 5px 12px rgba(255,255,255,0.34),
         inset 0 -8px 16px rgba(55,48,42,0.18),
-        0 26px 48px rgba(0,0,0,0.42);
+        0 18px 34px rgba(0,0,0,0.30);
       z-index: 2;
     }
 
@@ -186,19 +204,6 @@
 
     .memorial-stone-heart::before { left: 15px; }
     .memorial-stone-heart::after { right: 15px; }
-
-    .stone-base {
-      position: absolute;
-      bottom: 0;
-      width: 294px;
-      height: 38px;
-      border-radius: 20px 20px 10px 10px;
-      background: linear-gradient(180deg, #968d85, #665d56);
-      box-shadow:
-        inset 0 3px 6px rgba(255,255,255,0.14),
-        0 18px 34px rgba(0,0,0,0.32);
-      z-index: 1;
-    }
 
     .visibility-badge {
       display: inline-block;
@@ -354,6 +359,13 @@
       overflow: hidden;
       background: rgba(255, 250, 245, 0.08);
       border: 1px solid rgba(255, 250, 245, 0.12);
+      cursor: zoom-in;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .gallery-photo:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 250, 245, 0.34);
     }
 
     .gallery-photo img {
@@ -361,6 +373,46 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    .photo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(5, 7, 8, 0.86);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .photo-lightbox.show {
+      display: flex;
+    }
+
+    .photo-lightbox img {
+      max-width: min(92vw, 1100px);
+      max-height: 86vh;
+      object-fit: contain;
+      border-radius: 18px;
+      box-shadow: 0 26px 80px rgba(0,0,0,0.55);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 22px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(255,255,255,0.10);
+      color: #fffaf5;
+      border-radius: 50%;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 1000;
     }
 
     .gift-buttons {
@@ -487,6 +539,7 @@
           <div id="animals"></div>
 
           <div class="center-stone-wrap" id="stoneWrap">
+            <div class="grass-touch"></div>
             <div class="center-stone-shadow"></div>
 
             <div class="memorial-stone memorial-stone-rounded" id="memorialStone">
@@ -496,8 +549,6 @@
               <p class="stone-years" id="petYearsDisplay">---- — ----</p>
               <p class="stone-words" id="petMemoryDisplay">You are loved, always.</p>
             </div>
-
-            <div class="stone-base"></div>
           </div>
 
         </div>
@@ -557,6 +608,11 @@
     </section>
 
   </main>
+
+  <div class="photo-lightbox" id="photoLightbox" onclick="closePhotoLightbox()">
+    <button class="lightbox-close" onclick="closePhotoLightbox()">×</button>
+    <img id="lightboxImage" src="" alt="">
+  </div>
 
   <script src="script.js"></script>
 
@@ -644,64 +700,10 @@
         publicText: "公開",
         privateText: "私密",
         inviteText: "邀請可見"
-      },
-      ja: {
-        logo: "星眠ペット記念園",
-        editBtn: "情報を編集",
-        changeStoneBtn: "墓碑を変更",
-        storyPhotosBtn: "物語と写真",
-        scrollTip: "下にスクロールして物語と写真を見る",
-        storyTitle: "ペットの物語",
-        publicPhotosTitle: "公開思い出写真",
-        privatePhotosTitle: "非公開思い出写真",
-        privatePhotosDesc: "これらの写真は現在、このブラウザのデモ内だけで表示されます。",
-        giftTitle: "小さなお供えを置く",
-        giftCan: "缶詰を置く",
-        giftBall: "ボールを置く",
-        giftSeed: "餌を置く",
-        giftFlower: "花を置く",
-        animalStatus: "静かなお供えが、やさしい訪問者を呼ぶかもしれません。",
-        messageTitle: "メッセージを残す",
-        messagePlaceholder: "静かな言葉を少し書いてください...",
-        messageBtn: "メッセージを残す",
-        noStory: "まだ物語は書かれていません。",
-        noPhotos: "まだ写真はありません。",
-        defaultName: "ルナ",
-        defaultWords: "ずっと愛しています。",
-        publicText: "公開",
-        privateText: "非公開",
-        inviteText: "招待のみ"
-      },
-      ko: {
-        logo: "별잠 반려동물 추모정원",
-        editBtn: "정보 수정",
-        changeStoneBtn: "묘비 변경",
-        storyPhotosBtn: "이야기와 사진",
-        scrollTip: "아래로 내려 이야기와 사진 보기",
-        storyTitle: "반려동물 이야기",
-        publicPhotosTitle: "공개 추억 사진",
-        privatePhotosTitle: "비공개 추억 사진",
-        privatePhotosDesc: "이 사진들은 현재 브라우저 데모에서만 표시됩니다.",
-        giftTitle: "작은 선물 놓기",
-        giftCan: "캔 놓기",
-        giftBall: "공 놓기",
-        giftSeed: "먹이 놓기",
-        giftFlower: "꽃 놓기",
-        animalStatus: "조용한 선물은 다정한 방문자를 불러올 수 있습니다.",
-        messageTitle: "메시지 남기기",
-        messagePlaceholder: "조용한 말을 조금 남겨주세요...",
-        messageBtn: "메시지 남기기",
-        noStory: "아직 이야기가 작성되지 않았습니다.",
-        noPhotos: "아직 사진이 없습니다.",
-        defaultName: "루나",
-        defaultWords: "언제나 사랑해.",
-        publicText: "공개",
-        privateText: "비공개",
-        inviteText: "초대 전용"
       }
     };
 
-    ["es","fr","de","pt","it","th","vi","id","ms","hi","ar"].forEach(function(lang) {
+    ["ja","ko","es","fr","de","pt","it","th","vi","id","ms","hi","ar"].forEach(function(lang) {
       translations[lang] = translations.en;
     });
 
@@ -788,6 +790,9 @@
       photos.forEach(function(photo) {
         const box = document.createElement("div");
         box.className = "gallery-photo";
+        box.onclick = function() {
+          openPhotoLightbox(photo);
+        };
 
         const img = document.createElement("img");
         img.src = photo;
@@ -796,6 +801,34 @@
         container.appendChild(box);
       });
     }
+
+    function openPhotoLightbox(src) {
+      const lightbox = document.getElementById("photoLightbox");
+      const image = document.getElementById("lightboxImage");
+
+      if (!lightbox || !image) return;
+
+      image.src = src;
+      lightbox.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closePhotoLightbox() {
+      const lightbox = document.getElementById("photoLightbox");
+      const image = document.getElementById("lightboxImage");
+
+      if (!lightbox || !image) return;
+
+      lightbox.classList.remove("show");
+      image.src = "";
+      document.body.style.overflow = "";
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
+        closePhotoLightbox();
+      }
+    });
 
     function loadExtraMemorialInfo() {
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
