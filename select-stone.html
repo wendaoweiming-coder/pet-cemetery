@@ -75,23 +75,24 @@
       align-items: center;
     }
 
-    .back-link {
-      color: rgba(255, 244, 232, 0.78);
-      text-decoration: none;
-      font-size: 14px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
-    }
-
+    .soft-button,
     .language-select {
-      border: 1px solid rgba(255, 250, 245, 0.32);
-      background: rgba(255, 250, 245, 0.12);
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.08);
       color: #fffaf5;
-      padding: 8px 12px;
+      padding: 10px 16px;
       border-radius: 999px;
-      font-size: 13px;
+      text-decoration: none;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
+      font-size: 14px;
       cursor: pointer;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .soft-button:hover,
+    .language-select:hover {
+      background: rgba(255, 250, 245, 0.16);
     }
 
     .language-select option {
@@ -499,7 +500,7 @@
       <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
 
       <div class="top-actions">
-        <a href="create.html" class="back-link" data-key="backBtn">Back to edit</a>
+        <a href="create.html" class="soft-button" data-key="backBtn">Back to edit</a>
 
         <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
           <option value="en">English</option>
@@ -705,320 +706,12 @@
         publicText: "公開",
         privateText: "私密",
         inviteText: "邀請可見"
-      },
-      ja: {
-        logo: "星眠ペット記念園",
-        backBtn: "戻って編集",
-        panelTitle: "墓碑スタイル",
-        panelSubtitle: "墓碑を選ぶと、中央の大きな墓碑がすぐに変わります。",
-        title: "墓碑を選ぶ",
-        subtitle: "確認後、墓碑は最終位置まで小さくなります。",
-        confirmBtn: "この墓碑を使う",
-        roundedName: "丸い墓碑",
-        roundedDesc: "やさしく定番。",
-        squareName: "角丸墓碑",
-        squareDesc: "シンプルで静か。",
-        heartName: "ハート型",
-        heartDesc: "温かくやわらかい。",
-        archName: "高いアーチ型",
-        archDesc: "静かで厳か。",
-        smallName: "小さな墓碑",
-        smallDesc: "小さくやさしい。",
-        defaultName: "ルナ",
-        defaultWords: "ずっと愛しています。",
-        publicText: "公開",
-        privateText: "非公開",
-        inviteText: "招待のみ"
-      },
-      ko: {
-        logo: "별잠 반려동물 추모정원",
-        backBtn: "수정으로 돌아가기",
-        panelTitle: "묘비 스타일",
-        panelSubtitle: "묘비를 선택하면 가운데 큰 묘비가 바로 바뀝니다.",
-        title: "묘비 선택",
-        subtitle: "확인 후 묘비가 최종 위치로 작아집니다.",
-        confirmBtn: "이 묘비 사용",
-        roundedName: "둥근 묘비",
-        roundedDesc: "부드럽고 클래식.",
-        squareName: "부드러운 사각형",
-        squareDesc: "단순하고 조용함.",
-        heartName: "하트 스타일",
-        heartDesc: "따뜻하고 부드러움.",
-        archName: "높은 아치형",
-        archDesc: "차분하고 엄숙함.",
-        smallName: "작은 묘비",
-        smallDesc: "작고 다정함.",
-        defaultName: "루나",
-        defaultWords: "언제나 사랑해.",
-        publicText: "공개",
-        privateText: "비공개",
-        inviteText: "초대 전용"
-      },
-      es: {
-        logo: "Jardín Conmemorativo de Mascotas",
-        backBtn: "Volver a editar",
-        panelTitle: "Estilo de lápida",
-        panelSubtitle: "Elige una lápida. La piedra grande del centro cambiará al instante.",
-        title: "Elige una lápida",
-        subtitle: "Después de confirmar, la lápida se reducirá hasta su posición final.",
-        confirmBtn: "Usar esta lápida",
-        roundedName: "Parte superior redonda",
-        roundedDesc: "Suave y clásica.",
-        squareName: "Cuadrada suave",
-        squareDesc: "Simple y tranquila.",
-        heartName: "Estilo corazón",
-        heartDesc: "Cálida y tierna.",
-        archName: "Arco alto",
-        archDesc: "Calma y solemne.",
-        smallName: "Lápida pequeña",
-        smallDesc: "Pequeña y delicada.",
-        defaultName: "Luna",
-        defaultWords: "Siempre te amaremos.",
-        publicText: "Público",
-        privateText: "Privado",
-        inviteText: "Solo invitación"
-      },
-      fr: {
-        logo: "Jardin commémoratif pour animaux",
-        backBtn: "Retour à la modification",
-        panelTitle: "Style de pierre",
-        panelSubtitle: "Choisissez une pierre. La grande pierre au centre changera immédiatement.",
-        title: "Choisir une pierre",
-        subtitle: "Après confirmation, la pierre se réduira jusqu’à sa position finale.",
-        confirmBtn: "Utiliser cette pierre",
-        roundedName: "Sommet arrondi",
-        roundedDesc: "Doux et classique.",
-        squareName: "Carré doux",
-        squareDesc: "Simple et calme.",
-        heartName: "Forme de cœur",
-        heartDesc: "Chaleureux et tendre.",
-        archName: "Grande arche",
-        archDesc: "Calme et solennel.",
-        smallName: "Petite pierre",
-        smallDesc: "Petite et douce.",
-        defaultName: "Luna",
-        defaultWords: "Nous t’aimerons toujours.",
-        publicText: "Public",
-        privateText: "Privé",
-        inviteText: "Sur invitation"
-      },
-      de: {
-        logo: "Sternenruh Haustier-Gedenkgarten",
-        backBtn: "Zurück bearbeiten",
-        panelTitle: "Grabstein-Stil",
-        panelSubtitle: "Wähle einen Grabstein. Der große Stein in der Mitte ändert sich sofort.",
-        title: "Grabstein wählen",
-        subtitle: "Nach der Bestätigung wird der Stein auf seine endgültige Position verkleinert.",
-        confirmBtn: "Diesen Grabstein verwenden",
-        roundedName: "Runde Spitze",
-        roundedDesc: "Sanft und klassisch.",
-        squareName: "Weiches Quadrat",
-        squareDesc: "Einfach und ruhig.",
-        heartName: "Herzform",
-        heartDesc: "Warm und weich.",
-        archName: "Hoher Bogen",
-        archDesc: "Ruhig und feierlich.",
-        smallName: "Kleiner Haustierstein",
-        smallDesc: "Klein und sanft.",
-        defaultName: "Luna",
-        defaultWords: "Wir lieben dich für immer.",
-        publicText: "Öffentlich",
-        privateText: "Privat",
-        inviteText: "Nur Einladung"
-      },
-      pt: {
-        logo: "Jardim Memorial de Pets",
-        backBtn: "Voltar para editar",
-        panelTitle: "Estilo da lápide",
-        panelSubtitle: "Escolha uma lápide. A pedra grande no centro mudará imediatamente.",
-        title: "Escolha uma lápide",
-        subtitle: "Após confirmar, a lápide diminuirá até a posição final.",
-        confirmBtn: "Usar esta lápide",
-        roundedName: "Topo arredondado",
-        roundedDesc: "Suave e clássico.",
-        squareName: "Quadrada suave",
-        squareDesc: "Simples e tranquila.",
-        heartName: "Formato de coração",
-        heartDesc: "Quente e delicado.",
-        archName: "Arco alto",
-        archDesc: "Calmo e solene.",
-        smallName: "Lápide pequena",
-        smallDesc: "Pequena e suave.",
-        defaultName: "Luna",
-        defaultWords: "Sempre vamos te amar.",
-        publicText: "Público",
-        privateText: "Privado",
-        inviteText: "Só por convite"
-      },
-      it: {
-        logo: "Giardino commemorativo per animali",
-        backBtn: "Torna a modificare",
-        panelTitle: "Stile della lapide",
-        panelSubtitle: "Scegli una lapide. La grande pietra al centro cambierà subito.",
-        title: "Scegli una lapide",
-        subtitle: "Dopo la conferma, la lapide si ridurrà fino alla posizione finale.",
-        confirmBtn: "Usa questa lapide",
-        roundedName: "Parte superiore tonda",
-        roundedDesc: "Dolce e classica.",
-        squareName: "Quadrata morbida",
-        squareDesc: "Semplice e quieta.",
-        heartName: "Stile cuore",
-        heartDesc: "Calda e tenera.",
-        archName: "Arco alto",
-        archDesc: "Calma e solenne.",
-        smallName: "Piccola lapide",
-        smallDesc: "Piccola e gentile.",
-        defaultName: "Luna",
-        defaultWords: "Ti ameremo per sempre.",
-        publicText: "Pubblico",
-        privateText: "Privato",
-        inviteText: "Solo su invito"
-      },
-      th: {
-        logo: "สวนอนุสรณ์สัตว์เลี้ยง",
-        backBtn: "กลับไปแก้ไข",
-        panelTitle: "รูปแบบป้ายหลุมศพ",
-        panelSubtitle: "เลือกรูปแบบหนึ่ง ป้ายใหญ่ตรงกลางจะเปลี่ยนทันที",
-        title: "เลือกป้ายหลุมศพ",
-        subtitle: "หลังยืนยัน ป้ายจะย่อลงไปยังตำแหน่งสุดท้าย",
-        confirmBtn: "ใช้ป้ายนี้",
-        roundedName: "ยอดมน",
-        roundedDesc: "อ่อนโยนและคลาสสิก",
-        squareName: "สี่เหลี่ยมนุ่ม",
-        squareDesc: "เรียบง่ายและสงบ",
-        heartName: "รูปหัวใจ",
-        heartDesc: "อบอุ่นและอ่อนโยน",
-        archName: "ทรงโค้งสูง",
-        archDesc: "สงบและสำรวม",
-        smallName: "ป้ายเล็ก",
-        smallDesc: "เล็กและนุ่มนวล",
-        defaultName: "ลูน่า",
-        defaultWords: "รักเสมอและตลอดไป",
-        publicText: "สาธารณะ",
-        privateText: "ส่วนตัว",
-        inviteText: "เฉพาะผู้ได้รับเชิญ"
-      },
-      vi: {
-        logo: "Khu vườn tưởng niệm thú cưng",
-        backBtn: "Quay lại chỉnh sửa",
-        panelTitle: "Kiểu bia mộ",
-        panelSubtitle: "Chọn một kiểu. Bia lớn ở giữa sẽ thay đổi ngay.",
-        title: "Chọn bia mộ",
-        subtitle: "Sau khi xác nhận, bia sẽ thu nhỏ về vị trí cuối cùng.",
-        confirmBtn: "Dùng bia mộ này",
-        roundedName: "Đỉnh bo tròn",
-        roundedDesc: "Dịu dàng và cổ điển.",
-        squareName: "Vuông mềm",
-        squareDesc: "Đơn giản và yên tĩnh.",
-        heartName: "Hình trái tim",
-        heartDesc: "Ấm áp và mềm mại.",
-        archName: "Vòm cao",
-        archDesc: "Yên tĩnh và trang nghiêm.",
-        smallName: "Bia nhỏ",
-        smallDesc: "Nhỏ nhắn và dịu dàng.",
-        defaultName: "Luna",
-        defaultWords: "Mãi luôn yêu con.",
-        publicText: "Công khai",
-        privateText: "Riêng tư",
-        inviteText: "Chỉ mời"
-      },
-      id: {
-        logo: "Taman Kenangan Hewan Peliharaan",
-        backBtn: "Kembali mengedit",
-        panelTitle: "Gaya batu nisan",
-        panelSubtitle: "Pilih satu batu nisan. Batu besar di tengah akan langsung berubah.",
-        title: "Pilih batu nisan",
-        subtitle: "Setelah dikonfirmasi, batu akan mengecil ke posisi akhir.",
-        confirmBtn: "Gunakan batu nisan ini",
-        roundedName: "Atas membulat",
-        roundedDesc: "Lembut dan klasik.",
-        squareName: "Kotak lembut",
-        squareDesc: "Sederhana dan tenang.",
-        heartName: "Bentuk hati",
-        heartDesc: "Hangat dan lembut.",
-        archName: "Lengkung tinggi",
-        archDesc: "Tenang dan khidmat.",
-        smallName: "Batu kecil",
-        smallDesc: "Kecil dan lembut.",
-        defaultName: "Luna",
-        defaultWords: "Selalu kami sayangi.",
-        publicText: "Publik",
-        privateText: "Privat",
-        inviteText: "Hanya undangan"
-      },
-      ms: {
-        logo: "Taman Peringatan Haiwan Kesayangan",
-        backBtn: "Kembali mengedit",
-        panelTitle: "Gaya batu nisan",
-        panelSubtitle: "Pilih satu batu nisan. Batu besar di tengah akan berubah serta-merta.",
-        title: "Pilih batu nisan",
-        subtitle: "Selepas disahkan, batu akan mengecil ke kedudukan akhir.",
-        confirmBtn: "Gunakan batu nisan ini",
-        roundedName: "Atas bulat",
-        roundedDesc: "Lembut dan klasik.",
-        squareName: "Petak lembut",
-        squareDesc: "Ringkas dan tenang.",
-        heartName: "Bentuk hati",
-        heartDesc: "Hangat dan lembut.",
-        archName: "Lengkung tinggi",
-        archDesc: "Tenang dan khidmat.",
-        smallName: "Batu kecil",
-        smallDesc: "Kecil dan lembut.",
-        defaultName: "Luna",
-        defaultWords: "Kami sentiasa menyayangimu.",
-        publicText: "Awam",
-        privateText: "Peribadi",
-        inviteText: "Jemputan sahaja"
-      },
-      hi: {
-        logo: "पालतू स्मृति उद्यान",
-        backBtn: "संपादन पर लौटें",
-        panelTitle: "समाधि-पत्थर शैली",
-        panelSubtitle: "एक शैली चुनें। बीच का बड़ा पत्थर तुरंत बदल जाएगा।",
-        title: "समाधि-पत्थर चुनें",
-        subtitle: "पुष्टि के बाद पत्थर छोटा होकर अंतिम स्थान पर जाएगा।",
-        confirmBtn: "इस पत्थर का उपयोग करें",
-        roundedName: "गोल शीर्ष",
-        roundedDesc: "कोमल और पारंपरिक।",
-        squareName: "मुलायम चौकोर",
-        squareDesc: "सरल और शांत।",
-        heartName: "दिल आकार",
-        heartDesc: "गर्म और कोमल।",
-        archName: "ऊँचा मेहराब",
-        archDesc: "शांत और गंभीर।",
-        smallName: "छोटा पत्थर",
-        smallDesc: "छोटा और कोमल।",
-        defaultName: "लूना",
-        defaultWords: "हमेशा प्यार रहेगा।",
-        publicText: "सार्वजनिक",
-        privateText: "निजी",
-        inviteText: "केवल आमंत्रण"
-      },
-      ar: {
-        logo: "حديقة تذكارية للحيوانات الأليفة",
-        backBtn: "العودة للتعديل",
-        panelTitle: "نمط شاهد القبر",
-        panelSubtitle: "اختر شاهدًا واحدًا. سيتغير الحجر الكبير في الوسط فورًا.",
-        title: "اختر شاهد القبر",
-        subtitle: "بعد التأكيد، سيصغر الشاهد إلى موضعه النهائي.",
-        confirmBtn: "استخدم هذا الشاهد",
-        roundedName: "قمة مستديرة",
-        roundedDesc: "لطيف وكلاسيكي.",
-        squareName: "مربع ناعم",
-        squareDesc: "بسيط وهادئ.",
-        heartName: "شكل قلب",
-        heartDesc: "دافئ وناعم.",
-        archName: "قوس مرتفع",
-        archDesc: "هادئ ومهيب.",
-        smallName: "شاهد صغير",
-        smallDesc: "صغير ولطيف.",
-        defaultName: "لونا",
-        defaultWords: "سنحبك دائمًا.",
-        publicText: "عام",
-        privateText: "خاص",
-        inviteText: "للمدعوين فقط"
       }
     };
+
+    ["ja","ko","es","fr","de","pt","it","th","vi","id","ms","hi","ar"].forEach(function(lang) {
+      translations[lang] = translations.en;
+    });
 
     function getText() {
       return translations[currentLang] || translations.en;
