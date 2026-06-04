@@ -6,13 +6,9 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -22,15 +18,11 @@
       color: #fffaf5;
     }
 
-    .memorial-page {
-      min-height: 100vh;
-      background: #0f1411;
-    }
-
     .hero-stage {
       position: relative;
       min-height: 100vh;
       overflow: hidden;
+      background: #0f1411;
     }
 
     .hero-stage::before {
@@ -90,10 +82,6 @@
       cursor: pointer;
     }
 
-    .soft-button:hover {
-      background: rgba(255, 250, 245, 0.16);
-    }
-
     .stage-inner {
       position: relative;
       z-index: 5;
@@ -115,19 +103,14 @@
       position: absolute;
       left: 50%;
       top: 54%;
-      transform: translate(-50%, -50%);
       width: 360px;
       height: 480px;
       display: flex;
       align-items: end;
       justify-content: center;
       z-index: 10;
-
-      visibility: hidden;
-    }
-
-    .center-stone-wrap.ready {
-      visibility: visible;
+      transform-origin: center bottom;
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .center-stone-shadow {
@@ -145,13 +128,7 @@
       width: 230px;
       min-height: 300px;
       padding: 36px 24px 30px;
-      background:
-        linear-gradient(
-          180deg,
-          #ddd8cf 0%,
-          #b8afa5 52%,
-          #80776f 100%
-        );
+      background: linear-gradient(180deg, #ddd8cf 0%, #b8afa5 52%, #80776f 100%);
       color: #514941;
       text-align: center;
       box-shadow:
@@ -161,13 +138,8 @@
       z-index: 2;
     }
 
-    .memorial-stone-rounded {
-      border-radius: 115px 115px 26px 26px;
-    }
-
-    .memorial-stone-square {
-      border-radius: 28px;
-    }
+    .memorial-stone-rounded { border-radius: 115px 115px 26px 26px; }
+    .memorial-stone-square { border-radius: 28px; }
 
     .memorial-stone-arch {
       width: 238px;
@@ -195,25 +167,14 @@
       top: -56px;
       width: 112px;
       height: 112px;
-      background:
-        linear-gradient(
-          180deg,
-          #ddd8cf 0%,
-          #b8afa5 70%,
-          #9f968d 100%
-        );
+      background: linear-gradient(180deg, #ddd8cf 0%, #b8afa5 70%, #9f968d 100%);
       border-radius: 50%;
       z-index: -1;
       box-shadow: inset 0 5px 12px rgba(255,255,255,0.26);
     }
 
-    .memorial-stone-heart::before {
-      left: 15px;
-    }
-
-    .memorial-stone-heart::after {
-      right: 15px;
-    }
+    .memorial-stone-heart::before { left: 15px; }
+    .memorial-stone-heart::after { right: 15px; }
 
     .stone-base {
       position: absolute;
@@ -279,31 +240,16 @@
       color: #5f554e;
     }
 
-    #petals,
-    #traces,
-    #placedItems,
-    #animals {
+    #petals, #traces, #placedItems, #animals {
       position: absolute;
       inset: 0;
       pointer-events: none;
     }
 
-    #placedItems {
-      z-index: 12;
-    }
-
-    #animals {
-      z-index: 13;
-      pointer-events: auto;
-    }
-
-    #petals {
-      z-index: 14;
-    }
-
-    #traces {
-      z-index: 11;
-    }
+    #placedItems { z-index: 12; }
+    #animals { z-index: 13; pointer-events: auto; }
+    #petals { z-index: 14; }
+    #traces { z-index: 11; }
 
     .scene-item {
       position: absolute;
@@ -318,26 +264,6 @@
       pointer-events: auto;
       transition: 2.4s ease;
       filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.28));
-    }
-
-    .animal.resting {
-      animation: breathing 3s ease-in-out infinite;
-    }
-
-    .animal.touched {
-      animation: nuzzle 0.9s ease-in-out;
-    }
-
-    @keyframes breathing {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-    }
-
-    @keyframes nuzzle {
-      0% { transform: translateX(0) rotate(0); }
-      30% { transform: translateX(-8px) rotate(-5deg); }
-      60% { transform: translateX(8px) rotate(5deg); }
-      100% { transform: translateX(0) rotate(0); }
     }
 
     .petal {
@@ -363,7 +289,6 @@
       z-index: 16;
       color: rgba(255, 244, 232, 0.82);
       font-size: 13px;
-      letter-spacing: 0.4px;
       text-shadow: 0 2px 10px rgba(0,0,0,0.34);
     }
 
@@ -371,12 +296,7 @@
       position: relative;
       z-index: 3;
       padding: 44px 24px 80px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(13,18,15,0.96) 0%,
-          rgba(13,18,15,1) 100%
-        );
+      background: linear-gradient(180deg, rgba(13,18,15,0.96) 0%, rgba(13,18,15,1) 100%);
     }
 
     .details-inner {
@@ -473,10 +393,6 @@
       font-family: inherit;
     }
 
-    .message-box textarea::placeholder {
-      color: rgba(255, 244, 232, 0.44);
-    }
-
     .message-list {
       margin-top: 14px;
     }
@@ -494,15 +410,6 @@
         padding: 24px 20px 0;
       }
 
-      .header-actions {
-        gap: 8px;
-      }
-
-      .soft-button {
-        padding: 9px 12px;
-        font-size: 13px;
-      }
-
       .center-stone-wrap {
         top: 52%;
         transform: translate(-50%, -50%) scale(0.9);
@@ -512,35 +419,17 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
-
-    @media (max-width: 640px) {
-      .memorial-header {
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
-      }
-
-      .center-stone-wrap {
-        transform: translate(-50%, -50%) scale(0.8);
-      }
-
-      .photo-gallery {
-        grid-template-columns: 1fr;
-      }
-    }
   </style>
 </head>
 
 <body>
 
-  <main class="memorial-page">
+  <main>
 
     <section class="hero-stage">
 
       <header class="memorial-header">
-        <a href="index.html" class="memorial-logo">
-          Starlit Pet Memorial Garden
-        </a>
+        <a href="index.html" class="memorial-logo">Starlit Pet Memorial Garden</a>
 
         <div class="header-actions">
           <a href="create.html" class="soft-button">Edit Info</a>
@@ -551,21 +440,18 @@
 
       <div class="stage-inner">
         <div class="center-stage">
+
           <div id="petals"></div>
           <div id="traces"></div>
           <div id="placedItems"></div>
           <div id="animals"></div>
 
-          <div class="center-stone-wrap" id="finalStoneWrap">
+          <div class="center-stone-wrap" id="stoneWrap">
             <div class="center-stone-shadow"></div>
 
             <div class="memorial-stone memorial-stone-rounded" id="memorialStone">
               <div class="visibility-badge" id="visibilityDisplay">Public</div>
-
-              <div class="stone-photo" id="petPhotoDisplay">
-                🐾
-              </div>
-
+              <div class="stone-photo" id="petPhotoDisplay">🐾</div>
               <h1 class="stone-name" id="petNameDisplay">Luna</h1>
               <p class="stone-years" id="petYearsDisplay">---- — ----</p>
               <p class="stone-words" id="petMemoryDisplay">You are loved, always.</p>
@@ -573,10 +459,12 @@
 
             <div class="stone-base"></div>
           </div>
+
         </div>
       </div>
 
       <div class="scroll-tip">Scroll down to view story and photos</div>
+
     </section>
 
     <section class="details-section" id="details">
@@ -629,12 +517,11 @@
   </main>
 
   <script>
-    function renderMemorialImmediately() {
+    function renderStoneImmediately() {
       const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
 
-      const wrap = document.getElementById("finalStoneWrap");
       const stone = document.getElementById("memorialStone");
-      const petName = document.getElementById("petNameDisplay");
+      const name = document.getElementById("petNameDisplay");
       const years = document.getElementById("petYearsDisplay");
       const words = document.getElementById("petMemoryDisplay");
       const photo = document.getElementById("petPhotoDisplay");
@@ -642,54 +529,30 @@
 
       const style = data.tombstoneStyle || "rounded";
 
-      if (stone) {
-        stone.className = "memorial-stone memorial-stone-" + style;
+      stone.className = "memorial-stone memorial-stone-" + style;
+      name.textContent = data.name || "Luna";
+      years.textContent = (data.birthDate || "----") + " — " + (data.leaveDate || "----");
+      words.textContent = data.epitaph || data.memory || "You are loved, always.";
+
+      if (data.photo) {
+        photo.innerHTML = '<img src="' + data.photo + '">';
+      } else {
+        photo.textContent = "🐾";
       }
 
-      if (petName) {
-        petName.textContent = data.name || "Luna";
-      }
-
-      if (years) {
-        years.textContent = (data.birthDate || "----") + " — " + (data.leaveDate || "----");
-      }
-
-      if (words) {
-        words.textContent = data.epitaph || data.memory || "You are loved, always.";
-      }
-
-      if (photo) {
-        if (data.photo) {
-          photo.innerHTML = '<img src="' + data.photo + '">';
-        } else {
-          photo.textContent = "🐾";
-        }
-      }
-
-      if (visibility) {
-        if (data.visibility === "private") {
-          visibility.textContent = "Private";
-        } else if (data.visibility === "invite") {
-          visibility.textContent = "Invite only";
-        } else {
-          visibility.textContent = "Public";
-        }
-      }
-
-      if (wrap) {
-        wrap.classList.add("ready");
+      if (data.visibility === "private") {
+        visibility.textContent = "Private";
+      } else if (data.visibility === "invite") {
+        visibility.textContent = "Invite only";
+      } else {
+        visibility.textContent = "Public";
       }
     }
 
-    renderMemorialImmediately();
-  </script>
+    renderStoneImmediately();
 
-  <script src="script.js"></script>
-
-  <script>
     function showPhotos(containerId, photos) {
       const container = document.getElementById(containerId);
-
       if (!container) return;
 
       container.innerHTML = "";
@@ -734,6 +597,8 @@
       loadExtraMemorialInfo();
     });
   </script>
+
+  <script src="script.js"></script>
 
 </body>
 </html>
