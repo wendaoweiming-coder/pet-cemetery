@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Tombstone</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: #10140f;
+      color: #fffaf5;
+      overflow: hidden;
+    }
+
+    .stone-select-page {
+      min-height: 100vh;
+      position: relative;
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(6, 10, 18, 0.12) 0%,
+          rgba(6, 10, 18, 0.12) 42%,
+          rgba(6, 10, 18, 0.42) 100%
+        ),
+        url("cemetery-bg.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 28px 38px 30px;
+    }
+
+    .top-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      color: rgba(255, 250, 245, 0.92);
+      text-decoration: none;
+      font-size: 18px;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.3);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .soft-button {
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.08);
+      color: #fffaf5;
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .soft-button:hover {
+      background: rgba(255, 250, 245, 0.16);
+    }
+
+    .stage {
+      position: relative;
+      height: calc(100vh - 210px);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .instruction {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 5;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
+    }
+
+    .instruction h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      font-weight: 500;
+      color: #fff8ef;
+    }
+
+    .instruction p {
+      margin: 0;
+      color: rgba(255, 244, 232, 0.78);
+      font-size: 14px;
+    }
+
+    .center-stone-wrap {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: 320px;
+      height: 430px;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      z-index: 4;
+      transition: 0.35s ease;
+    }
+
+    .center-stone-wrap.changing {
+      transform: translateX(-50%) scale(0.96);
+      opacity: 0.72;
+    }
+
+    .center-stone-shadow {
+      position: absolute;
+      bottom: 6px;
+      width: 260px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.32);
+      filter: blur(14px);
+    }
+
+    .center-stone {
+      position: relative;
+      width: 210px;
+      min-height: 275px;
+      padding: 34px 24px 30px;
+      background:
+        linear-gradient(
+          180deg,
+          #ddd8cf 0%,
+          #b8afa5 52%,
+          #80776f 100%
+        );
+      color: #514941;
+      text-align: center;
+      box-shadow:
+        inset 0 5px 12px rgba(255,255,255,0.34),
+        inset 0 -8px 16px rgba(55,48,42,0.18),
+        0 26px 48px rgba(0,0,0,0.42);
+      z-index: 2;
+    }
+
+    .center-stone.rounded {
+      border-radius: 105px 105px 24px 24px;
+    }
+
+    .center-stone.square {
+      border-radius: 28px;
+    }
+
+    .center-stone.arch {
+      width: 220px;
+      min-height: 310px;
+      border-radius: 115px 115px 18px 18px;
+    }
+
+    .center-stone.heart {
+      width: 210px;
+      min-height: 250px;
+      border-radius: 34px 34px 24px 24px;
+      margin-top: 40px;
+    }
+
+    .center-stone.heart::before,
+    .center-stone.heart::after {
+      content: "";
+      position: absolute;
+      top: -52px;
+      width: 106px;
+      height: 106px;
+      background:
+        linear-gradient(
+          180deg,
+          #ddd8cf 0%,
+          #b8afa5 70%,
+          #9f968d 100%
+        );
+      border-radius: 50%;
+      z-index: -1;
+      box-shadow: inset 0 5px 12px rgba(255,255,255,0.26);
+    }
+
+    .center-stone.heart::before {
+      left: 14px;
+    }
+
+    .center-stone.heart::after {
+      right: 14px;
+    }
+
+    .center-stone.small {
+      width: 178px;
+      min-height: 230px;
+      border-radius: 88px 88px 22px 22px;
+    }
+
+    .stone-photo {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: rgba(255,250,245,0.58);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 30px;
+    }
+
+    .stone-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stone-name {
+      margin: 0 0 8px;
+      font-size: 28px;
+      font-weight: 500;
+      color: #4d453f;
+    }
+
+    .stone-years {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: #746b64;
+    }
+
+    .stone-words {
+      margin: 0 auto;
+      max-width: 160px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #5f554e;
+    }
+
+    .stone-base {
+      position: absolute;
+      bottom: 0;
+      width: 270px;
+      height: 36px;
+      border-radius: 20px 20px 10px 10px;
+      background:
+        linear-gradient(
+          180deg,
+          #968d85,
+          #665d56
+        );
+      box-shadow:
+        inset 0 3px 6px rgba(255,255,255,0.14),
+        0 18px 34px rgba(0,0,0,0.32);
+      z-index: 1;
+    }
+
+    .bottom-picker {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      padding: 18px 36px 24px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(8, 12, 16, 0),
+          rgba(8, 12, 16, 0.62)
+        );
+    }
+
+    .picker-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .picker-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .picker-title {
+      margin: 0;
+      color: rgba(255, 250, 245, 0.9);
+      font-size: 15px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
+    }
+
+    .confirm-button {
+      border: 1px solid rgba(255, 250, 245, 0.34);
+      background: rgba(255, 250, 245, 0.9);
+      color: #4b3d35;
+      padding: 11px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .stone-strip {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 2px 12px;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      cursor: grab;
+    }
+
+    .stone-strip:hover {
+      scroll-snap-type: x proximity;
+    }
+
+    .stone-strip::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .stone-strip::-webkit-scrollbar-track {
+      background: rgba(255, 250, 245, 0.08);
+      border-radius: 999px;
+    }
+
+    .stone-strip::-webkit-scrollbar-thumb {
+      background: rgba(255, 250, 245, 0.34);
+      border-radius: 999px;
+    }
+
+    .stone-option {
+      flex: 0 0 160px;
+      min-height: 174px;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 250, 245, 0.24);
+      background: rgba(255, 250, 245, 0.08);
+      color: #fffaf5;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: 0.22s ease;
+      scroll-snap-align: center;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stone-option:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 250, 245, 0.16);
+      border-color: rgba(255, 250, 245, 0.44);
+    }
+
+    .stone-option.active {
+      background: rgba(255, 250, 245, 0.24);
+      border-color: rgba(255, 250, 245, 0.72);
+      transform: translateY(-8px);
+    }
+
+    .mini-preview {
+      height: 96px;
+      display: flex;
+      justify-content: center;
+      align-items: end;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .mini-base {
+      position: absolute;
+      bottom: 0;
+      width: 80px;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #968d85, #625a53);
+    }
+
+    .mini-stone {
+      position: absolute;
+      bottom: 9px;
+      width: 58px;
+      height: 74px;
+      background: linear-gradient(180deg, #d7d1c9, #8c837b);
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.22);
+    }
+
+    .mini-rounded {
+      border-radius: 32px 32px 10px 10px;
+    }
+
+    .mini-square {
+      border-radius: 14px;
+    }
+
+    .mini-arch {
+      width: 62px;
+      height: 84px;
+      border-radius: 34px 34px 8px 8px;
+    }
+
+    .mini-small {
+      width: 50px;
+      height: 62px;
+      border-radius: 26px 26px 10px 10px;
+    }
+
+    .mini-heart {
+      width: 56px;
+      height: 60px;
+      border-radius: 16px 16px 10px 10px;
+    }
+
+    .mini-heart::before,
+    .mini-heart::after {
+      content: "";
+      position: absolute;
+      top: -18px;
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(180deg, #d7d1c9, #a49b93);
+      border-radius: 50%;
+    }
+
+    .mini-heart::before {
+      left: 1px;
+    }
+
+    .mini-heart::after {
+      right: 1px;
+    }
+
+    .option-name {
+      margin: 0;
+      font-size: 13px;
+      color: rgba(255, 250, 245, 0.92);
+    }
+
+    @media (max-width: 800px) {
+      body {
+        overflow: auto;
+      }
+
+      .stone-select-page {
+        min-height: 100vh;
+        padding: 24px;
+      }
+
+      .stage {
+        height: 560px;
+      }
+
+      .instruction h1 {
+        font-size: 26px;
+      }
+
+      .center-stone-wrap {
+        transform: translateX(-50%) scale(0.82);
+        bottom: 0;
+      }
+
+      .bottom-picker {
+        position: relative;
+        padding: 18px 0 0;
+        background: transparent;
+      }
+
+      .stone-option {
+        flex-basis: 138px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="stone-select-page">
+
+    <header class="top-bar">
+      <a href="index.html" class="logo">Starlit Pet Memorial Garden</a>
+
+      <div class="top-actions">
+        <a href="create.html" class="soft-button">Back to Edit</a>
+        <button class="soft-button" onclick="confirmStone()">Confirm</button>
+      </div>
+    </header>
+
+    <section class="stage">
+
+      <div class="instruction">
+        <h1>Choose a tombstone</h1>
+        <p>Click a style below. The tombstone in the garden will change immediately.</p>
+      </div>
+
+      <div class="center-stone-wrap" id="centerStoneWrap">
+        <div class="center-stone-shadow"></div>
+
+        <div class="center-stone rounded" id="centerStone">
+          <div class="stone-photo" id="stonePhoto">🐾</div>
+          <h2 class="stone-name" id="stoneName">Luna</h2>
+          <p class="stone-years" id="stoneYears">---- — ----</p>
+          <p class="stone-words" id="stoneWords">You are loved, always.</p>
+        </div>
+
+        <div class="stone-base"></div>
+      </div>
+
+    </section>
+
+    <section class="bottom-picker">
+      <div class="picker-inner">
+
+        <div class="picker-title-row">
+          <p class="picker-title">Tombstone styles</p>
+          <button class="confirm-button" onclick="confirmStone()">Use this tombstone</button>
+        </div>
+
+        <div class="stone-strip" id="stoneStrip">
+
+          <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
+            <div class="mini-preview">
+              <div class="mini-stone mini-rounded"></div>
+              <div class="mini-base"></div>
+            </div>
+            <p class="option-name">Rounded top</p>
+          </button>
+
+          <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
+            <div class="mini-preview">
+              <div class="mini-stone mini-square"></div>
+              <div class="mini-base"></div>
+            </div>
+            <p class="option-name">Soft square</p>
+          </button>
+
+          <button class="stone-option" data-style="heart" onclick="selectStone('heart', this)">
+            <div class="mini-preview">
+              <div class="mini-stone mini-heart"></div>
+              <div class="mini-base"></div>
+            </div>
+            <p class="option-name">Heart style</p>
+          </button>
+
+          <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
+            <div class="mini-preview">
+              <div class="mini-stone mini-arch"></div>
+              <div class="mini-base"></div>
+            </div>
+            <p class="option-name">Tall arch</p>
+          </button>
+
+          <button class="stone-option" data-style="small" onclick="selectStone('small', this)">
+            <div class="mini-preview">
+              <div class="mini-stone mini-small"></div>
+              <div class="mini-base"></div>
+            </div>
+            <p class="option-name">Small pet stone</p>
+          </button>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let selectedStoneStyle = "rounded";
+
+    function loadMemorialPreview() {
+      const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+
+      const stoneName = document.getElementById("stoneName");
+      const stoneYears = document.getElementById("stoneYears");
+      const stoneWords = document.getElementById("stoneWords");
+      const stonePhoto = document.getElementById("stonePhoto");
+
+      if (stoneName) {
+        stoneName.textContent = data.name || "Luna";
+      }
+
+      if (stoneYears) {
+        stoneYears.textContent =
+          (data.birthDate || "----") + " — " + (data.leaveDate || "----");
+      }
+
+      if (stoneWords) {
+        stoneWords.textContent = data.epitaph || data.memory || "You are loved, always.";
+      }
+
+      if (stonePhoto) {
+        if (data.photo) {
+          stonePhoto.innerHTML = '<img src="' + data.photo + '">';
+        } else {
+          stonePhoto.textContent = "🐾";
+        }
+      }
+
+      if (data.tombstoneStyle) {
+        selectedStoneStyle = data.tombstoneStyle;
+        applyStoneStyle(selectedStoneStyle);
+
+        const activeButton = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
+        if (activeButton) {
+          document.querySelectorAll(".stone-option").forEach(function(btn) {
+            btn.classList.remove("active");
+          });
+          activeButton.classList.add("active");
+        }
+      }
+    }
+
+    function applyStoneStyle(style) {
+      const centerStone = document.getElementById("centerStone");
+
+      if (!centerStone) return;
+
+      centerStone.className = "center-stone " + style;
+    }
+
+    function selectStone(style, button) {
+      const wrap = document.getElementById("centerStoneWrap");
+
+      selectedStoneStyle = style;
+
+      document.querySelectorAll(".stone-option").forEach(function(btn) {
+        btn.classList.remove("active");
+      });
+
+      if (button) {
+        button.classList.add("active");
+      }
+
+      if (wrap) {
+        wrap.classList.add("changing");
+
+        setTimeout(function() {
+          applyStoneStyle(style);
+          wrap.classList.remove("changing");
+        }, 150);
+      } else {
+        applyStoneStyle(style);
+      }
+    }
+
+    function confirmStone() {
+      const data = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+      data.tombstoneStyle = selectedStoneStyle;
+      localStorage.setItem("myPetMemorial", JSON.stringify(data));
+
+      window.location.href = "cemetery.html";
+    }
+
+    function setupHorizontalScroll() {
+      const strip = document.getElementById("stoneStrip");
+
+      if (!strip) return;
+
+      strip.addEventListener("wheel", function(event) {
+        if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+          event.preventDefault();
+          strip.scrollLeft += event.deltaY;
+        }
+      }, { passive: false });
+    }
+
+    window.addEventListener("load", function() {
+      loadMemorialPreview();
+      setupHorizontalScroll();
+    });
+  </script>
+
+</body>
+</html>
