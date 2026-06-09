@@ -295,7 +295,7 @@
     .bottom-dock {
       position: fixed;
       left: 50%;
-      bottom: 28px;
+      bottom: 26px;
       transform: translateX(-50%) translateY(24px);
       z-index: 40;
       display: flex;
@@ -338,9 +338,9 @@
 
     body.planting .scene-wrap,
     body.memorial-mode .scene-wrap {
-      width: min(390px, 48vw);
-      height: min(500px, 62vh);
-      transform: translateY(72px);
+      width: min(370px, 45vw);
+      height: min(470px, 58vh);
+      transform: translate(-42px, 26px);
     }
 
     .modal-layer {
@@ -596,9 +596,9 @@
 
       body.planting .scene-wrap,
       body.memorial-mode .scene-wrap {
-        width: min(90vw, 360px);
-        height: min(56vh, 440px);
-        transform: translateY(56px);
+        width: min(88vw, 350px);
+        height: min(54vh, 430px);
+        transform: translate(-18px, 22px);
       }
 
       .instruction h1 {
@@ -796,6 +796,13 @@
     let mainTextPlane = null;
 
     const miniScenes = [];
+
+    const FINAL_SCALE = 0.60;
+    const PREVIEW_SCALE = 0.72;
+    const FINAL_Y = -0.46;
+    const PREVIEW_Y = -0.18;
+    const FINAL_ANGLE = 0;
+    const PREVIEW_ANGLE = -0.16;
 
     const translations = {
       en: {
@@ -1003,24 +1010,24 @@
       ctx.fillStyle = baseColor;
       ctx.fillRect(0, 0, 512, 512);
 
-      for (let i = 0; i < 1600; i++) {
+      for (let i = 0; i < 1200; i++) {
         const x = Math.random() * 512;
         const y = Math.random() * 512;
-        const a = Math.random() * 0.045;
+        const a = Math.random() * 0.038;
         const light = Math.random() > 0.53 ? 255 : 0;
         ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, Math.random() * 1.5 + 0.4, Math.random() * 1.5 + 0.4);
+        ctx.fillRect(x, y, Math.random() * 1.3 + 0.35, Math.random() * 1.3 + 0.35);
       }
 
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 9; i++) {
         const x = Math.random() * 512;
         const y = Math.random() * 512;
-        const w = Math.random() * 150 + 40;
-        const h = Math.random() * 1.4 + 0.4;
+        const w = Math.random() * 130 + 35;
+        const h = Math.random() * 1.1 + 0.35;
         ctx.save();
         ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.65);
-        ctx.fillStyle = "rgba(255,255,255,0.022)";
+        ctx.rotate((Math.random() - 0.5) * 0.55);
+        ctx.fillStyle = "rgba(255,255,255,0.020)";
         ctx.fillRect(-w / 2, -h / 2, w, h);
         ctx.restore();
       }
@@ -1028,44 +1035,44 @@
       const texture = new THREE.CanvasTexture(canvas);
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1.08, 1.08);
+      texture.repeat.set(1.05, 1.05);
       texture.colorSpace = THREE.SRGBColorSpace;
       return texture;
     }
 
     function createStoneMaterial() {
-      const texture = createStoneTexture("#6b665f");
+      const texture = createStoneTexture("#847c72");
       return new THREE.MeshStandardMaterial({
-        color: 0x6b665f,
+        color: 0x847c72,
         map: texture,
         roughness: 1,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.024
+        bumpScale: 0.018
       });
     }
 
     function createSideMaterial() {
-      const texture = createStoneTexture("#57524c");
+      const texture = createStoneTexture("#71695f");
       return new THREE.MeshStandardMaterial({
-        color: 0x57524c,
+        color: 0x71695f,
         map: texture,
         roughness: 1,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.03
+        bumpScale: 0.022
       });
     }
 
     function createBaseMaterial() {
-      const texture = createStoneTexture("#5b554f");
+      const texture = createStoneTexture("#6d655d");
       return new THREE.MeshStandardMaterial({
-        color: 0x5b554f,
+        color: 0x6d655d,
         map: texture,
         roughness: 1,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.025
+        bumpScale: 0.018
       });
     }
 
@@ -1201,8 +1208,8 @@
       const ctx = canvas.getContext("2d");
 
       const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
-      gradient.addColorStop(0, "rgba(0,0,0,0.42)");
-      gradient.addColorStop(0.42, "rgba(0,0,0,0.22)");
+      gradient.addColorStop(0, "rgba(0,0,0,0.36)");
+      gradient.addColorStop(0.42, "rgba(0,0,0,0.18)");
       gradient.addColorStop(1, "rgba(0,0,0,0)");
 
       ctx.fillStyle = gradient;
@@ -1256,11 +1263,11 @@
         map: makeShadowTexture(),
         transparent: true,
         depthWrite: false,
-        opacity: 0.78
+        opacity: 0.72
       });
 
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.9, 1.24), shadowMat);
-      shadow.position.set(0, -1.95, -0.45);
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.65, 1.12), shadowMat);
+      shadow.position.set(0, -1.93, -0.45);
       group.add(shadow);
 
       if (showText) {
@@ -1281,7 +1288,7 @@
       }
 
       group.scale.set(scale, scale, scale);
-      group.position.y = -0.18;
+      group.position.y = PREVIEW_Y;
 
       group.userData.parts = {
         stoneMesh,
@@ -1320,20 +1327,20 @@
       container.innerHTML = "";
       container.appendChild(mainRenderer.domElement);
 
-      mainScene.add(new THREE.AmbientLight(0xffffff, 1.08));
+      mainScene.add(new THREE.AmbientLight(0xffffff, 1.18));
 
-      const hemi = new THREE.HemisphereLight(0xbfd0ff, 0x4e453d, 0.82);
+      const hemi = new THREE.HemisphereLight(0xcbd8ff, 0x6b584a, 0.90);
       mainScene.add(hemi);
 
-      const moonLight = new THREE.DirectionalLight(0xd4ddff, 1.12);
+      const moonLight = new THREE.DirectionalLight(0xd8e0ff, 1.18);
       moonLight.position.set(-4.2, 7.2, 6.2);
       mainScene.add(moonLight);
 
-      const warmLight = new THREE.PointLight(0xffd3a0, 1.15, 18, 2);
+      const warmLight = new THREE.PointLight(0xffd3a0, 1.28, 18, 2);
       warmLight.position.set(2.4, -0.9, 5.5);
       mainScene.add(warmLight);
 
-      const fill = new THREE.PointLight(0xffffff, 0.18, 18, 2);
+      const fill = new THREE.PointLight(0xffffff, 0.26, 18, 2);
       fill.position.set(-2.5, 1.0, 4.5);
       mainScene.add(fill);
 
@@ -1357,11 +1364,11 @@
 
       mainTextPlane = null;
 
-      const scale = finalMode ? 0.64 : 0.72;
-      const sideAngle = finalMode ? 0 : -0.16;
+      const scale = finalMode ? FINAL_SCALE : PREVIEW_SCALE;
+      const sideAngle = finalMode ? FINAL_ANGLE : PREVIEW_ANGLE;
 
       mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scale, sideAngle);
-      mainStoneGroup.position.y = finalMode ? -0.55 : -0.18;
+      mainStoneGroup.position.y = finalMode ? FINAL_Y : PREVIEW_Y;
 
       mainScene.add(mainStoneGroup);
 
@@ -1424,13 +1431,13 @@
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 1.08));
+      scene.add(new THREE.AmbientLight(0xffffff, 1.14));
 
-      const light = new THREE.DirectionalLight(0xd8e1ff, 1.08);
+      const light = new THREE.DirectionalLight(0xd8e1ff, 1.12);
       light.position.set(-3, 5, 5);
       scene.add(light);
 
-      const warm = new THREE.PointLight(0xffd2a0, 0.82, 12, 2);
+      const warm = new THREE.PointLight(0xffd2a0, 0.90, 12, 2);
       warm.position.set(2, -0.6, 4);
       scene.add(warm);
 
@@ -1497,13 +1504,6 @@
       const start = performance.now();
       const duration = 1300;
 
-      const startScale = 0.72;
-      const endScale = 0.64;
-      const startY = -0.18;
-      const endY = -0.55;
-      const startAngle = -0.16;
-      const endAngle = 0;
-
       function setAngle(angle) {
         if (parts.stoneMesh) parts.stoneMesh.rotation.y = angle;
         if (parts.backMesh) parts.backMesh.rotation.y = angle;
@@ -1516,9 +1516,9 @@
         const raw = Math.min((now - start) / duration, 1);
         const t = easeOutCubic(raw);
 
-        const scale = startScale + (endScale - startScale) * t;
-        const y = startY + (endY - startY) * t;
-        const angle = startAngle + (endAngle - startAngle) * t;
+        const scale = PREVIEW_SCALE + (FINAL_SCALE - PREVIEW_SCALE) * t;
+        const y = PREVIEW_Y + (FINAL_Y - PREVIEW_Y) * t;
+        const angle = PREVIEW_ANGLE + (FINAL_ANGLE - PREVIEW_ANGLE) * t;
 
         mainStoneGroup.scale.set(scale, scale, scale);
         mainStoneGroup.position.y = y;
