@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>选择墓碑</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     * { box-sizing: border-box; }
@@ -194,16 +194,12 @@
       border-color: rgba(255, 250, 245, 0.48);
     }
 
-    .mini-stone {
+    .mini-3d {
       width: 70px;
       height: 86px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       border-radius: 18px;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 70%);
-      font-size: 34px;
-      color: rgba(255,250,245,0.62);
+      overflow: hidden;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.06), transparent 70%);
     }
 
     .option-name {
@@ -290,17 +286,6 @@
       position: absolute;
       inset: 0;
       border-radius: 26px;
-    }
-
-    .model-loading {
-      position: absolute;
-      left: 50%;
-      top: 52%;
-      transform: translate(-50%, -50%);
-      color: rgba(255,250,245,0.72);
-      font-size: 14px;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.45);
-      pointer-events: none;
     }
 
     .right-spacer {
@@ -438,6 +423,7 @@
       overflow: hidden;
       background: rgba(120, 95, 70, 0.08);
       border: 1px solid rgba(134, 103, 75, 0.16);
+      cursor: zoom-in;
     }
 
     .gallery-photo img {
@@ -515,6 +501,43 @@
       line-height: 1.6;
       font-size: 14px;
     }
+
+    .photo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(5, 7, 8, 0.86);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .photo-lightbox.show { display: flex; }
+
+    .photo-lightbox img {
+      max-width: min(92vw, 1100px);
+      max-height: 86vh;
+      object-fit: contain;
+      border-radius: 18px;
+      box-shadow: 0 26px 80px rgba(0,0,0,0.55);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 22px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(255,255,255,0.10);
+      color: #fffaf5;
+      border-radius: 50%;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 210;
+    }
   </style>
 </head>
 
@@ -540,12 +563,12 @@
     <main class="main-layout">
       <aside class="left-panel">
         <h2 class="panel-title" data-key="panelTitle">墓碑样式</h2>
-        <p class="panel-subtitle" data-key="panelSubtitle">选择一个墓碑，中间预览会立刻变化。</p>
+        <p class="panel-subtitle" data-key="panelSubtitle">选择一个 3D 墓碑，中间预览会立刻变化。</p>
 
         <div class="stone-list">
           <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
             <div class="stone-option-inner">
-              <div class="mini-stone">▰</div>
+              <div class="mini-3d" id="miniRounded"></div>
               <div>
                 <p class="option-name" data-key="roundedName">圆顶墓碑</p>
                 <p class="option-desc" data-key="roundedDesc">经典、温柔。</p>
@@ -555,7 +578,7 @@
 
           <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
             <div class="stone-option-inner">
-              <div class="mini-stone">▰</div>
+              <div class="mini-3d" id="miniSquare"></div>
               <div>
                 <p class="option-name" data-key="squareName">方角墓碑</p>
                 <p class="option-desc" data-key="squareDesc">干净、安静。</p>
@@ -565,7 +588,7 @@
 
           <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
             <div class="stone-option-inner">
-              <div class="mini-stone">▰</div>
+              <div class="mini-3d" id="miniArch"></div>
               <div>
                 <p class="option-name" data-key="archName">高拱墓碑</p>
                 <p class="option-desc" data-key="archDesc">平静、庄重。</p>
@@ -585,7 +608,6 @@
 
         <div class="scene-wrap">
           <div id="mainStoneScene"></div>
-          <div id="modelLoading" class="model-loading">正在加载墓碑模型...</div>
         </div>
       </section>
 
@@ -650,29 +672,27 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <div class="photo-lightbox" id="photoLightbox" onclick="closePhotoLightbox()">
+    <button class="lightbox-close" onclick="closePhotoLightbox()">×</button>
+    <img id="lightboxImage" src="" alt="">
+  </div>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 
   <script>
     let currentLang = "zh";
     let selectedStoneStyle = "rounded";
     let isPlanting = false;
 
-    let scene, camera, renderer;
-    let stoneRoot = null;
-    let textPlane = null;
-    let shadowPlane = null;
+    let mainScene, mainCamera, mainRenderer, mainStoneGroup, mainTextPlane;
+    const miniScenes = [];
 
-    const MODEL_PATH = "assets/models/tombstone-v2.glb";
-
-    const PREVIEW_SCALE = 1.85;
-    const FINAL_SCALE = 1.30;
-
-    const PREVIEW_Y = -0.58;
-    const FINAL_Y = -0.72;
-
-    const PREVIEW_ANGLE = -0.22;
+    const FINAL_SCALE = 0.56;
+    const PREVIEW_SCALE = 0.72;
+    const FINAL_Y = -0.38;
+    const PREVIEW_Y = -0.18;
     const FINAL_ANGLE = 0;
+    const PREVIEW_ANGLE = -0.16;
 
     const translations = {
       zh: {
@@ -680,7 +700,7 @@
         backBtn: "返回修改",
         changeStoneBtn: "更换墓碑",
         panelTitle: "墓碑样式",
-        panelSubtitle: "选择一个墓碑，中间预览会立刻变化。",
+        panelSubtitle: "选择一个 3D 墓碑，中间预览会立刻变化。",
         title: "选择墓碑",
         subtitle: "墓碑会慢慢转正，并安静地落到纪念园中。",
         confirmBtn: "使用这个墓碑",
@@ -713,6 +733,9 @@
         noMessages: "还没有留言。",
         defaultName: "露娜",
         defaultWords: "永远爱你。",
+        publicText: "公开",
+        privateText: "私密",
+        inviteText: "邀请可见",
         placedCan: "已放置罐头",
         placedBall: "已放置球",
         placedSeed: "已放置鸟食",
@@ -723,7 +746,7 @@
         backBtn: "返回修改",
         changeStoneBtn: "更換墓碑",
         panelTitle: "墓碑樣式",
-        panelSubtitle: "選擇一個墓碑，中間預覽會立刻變化。",
+        panelSubtitle: "選擇一個 3D 墓碑，中間預覽會立刻變化。",
         title: "選擇墓碑",
         subtitle: "墓碑會慢慢轉正，並安靜地落到紀念園中。",
         confirmBtn: "使用這個墓碑",
@@ -756,6 +779,9 @@
         noMessages: "還沒有留言。",
         defaultName: "露娜",
         defaultWords: "永遠愛你。",
+        publicText: "公開",
+        privateText: "私密",
+        inviteText: "邀請可見",
         placedCan: "已放置罐頭",
         placedBall: "已放置球",
         placedSeed: "已放置鳥食",
@@ -766,7 +792,7 @@
         backBtn: "Back to edit",
         changeStoneBtn: "Change Stone",
         panelTitle: "Tombstone style",
-        panelSubtitle: "Choose a tombstone. The center preview will update immediately.",
+        panelSubtitle: "Choose a 3D tombstone. The center preview will update immediately.",
         title: "Choose a tombstone",
         subtitle: "The stone will gently turn forward and settle into the memorial garden.",
         confirmBtn: "Use this tombstone",
@@ -799,6 +825,9 @@
         noMessages: "No messages yet.",
         defaultName: "Luna",
         defaultWords: "You are loved, always.",
+        publicText: "Public",
+        privateText: "Private",
+        inviteText: "Invite only",
         placedCan: "Can placed",
         placedBall: "Ball placed",
         placedSeed: "Seeds placed",
@@ -816,6 +845,19 @@
 
     function saveMemorialData(data) {
       localStorage.setItem("myPetMemorial", JSON.stringify(data));
+    }
+
+    function getVisibilityText(value) {
+      const text = getText();
+      if (value === "private") return text.privateText;
+      if (value === "invite") return text.inviteText;
+      return text.publicText;
+    }
+
+    function normalizeStyle(style) {
+      if (style === "square") return "square";
+      if (style === "arch") return "arch";
+      return "rounded";
     }
 
     function changeLanguage(lang) {
@@ -837,199 +879,116 @@
         if (text[key]) el.placeholder = text[key];
       });
 
-      updateStoneText();
+      rebuildMainTextTexture();
       loadExtraMemorialInfo();
       renderPlacedItems();
     }
 
-    function initScene() {
-      const container = document.getElementById("mainStoneScene");
-
-      scene = new THREE.Scene();
-
-      camera = new THREE.PerspectiveCamera(
-        32,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      camera.position.set(0, 0.32, 7.6);
-
-      renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true
-      });
-
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.outputEncoding = THREE.sRGBEncoding;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 0.92;
-
-      container.innerHTML = "";
-      container.appendChild(renderer.domElement);
-
-      scene.add(new THREE.AmbientLight(0xc9c9bd, 0.72));
-
-      const moonLight = new THREE.DirectionalLight(0xcbd9ff, 1.55);
-      moonLight.position.set(-4.6, 6.6, 5.2);
-      scene.add(moonLight);
-
-      const warmLamp = new THREE.PointLight(0xffbd76, 1.05, 16, 2);
-      warmLamp.position.set(-3.8, -1.4, 4.2);
-      scene.add(warmLamp);
-
-      const rightFill = new THREE.PointLight(0xffd2a0, 0.30, 16, 2);
-      rightFill.position.set(3.0, -0.9, 4.0);
-      scene.add(rightFill);
-
-      const blueFill = new THREE.PointLight(0x8fa8da, 0.20, 18, 2);
-      blueFill.position.set(2.5, 2.2, 5.0);
-      scene.add(blueFill);
-
-      createGroundShadow();
-      loadTombstoneModel();
-
-      window.addEventListener("resize", resizeScene);
-      animate();
-    }
-
-    function createGroundShadow() {
+    function createStoneTexture(baseColor) {
       const canvas = document.createElement("canvas");
       canvas.width = 512;
       canvas.height = 512;
       const ctx = canvas.getContext("2d");
 
-      const g = ctx.createRadialGradient(256, 256, 10, 256, 256, 220);
-      g.addColorStop(0, "rgba(0,0,0,0.42)");
-      g.addColorStop(0.42, "rgba(0,0,0,0.22)");
-      g.addColorStop(0.75, "rgba(0,0,0,0.07)");
-      g.addColorStop(1, "rgba(0,0,0,0)");
-
-      ctx.fillStyle = g;
+      ctx.fillStyle = baseColor;
       ctx.fillRect(0, 0, 512, 512);
 
-      const texture = new THREE.CanvasTexture(canvas);
-
-      const mat = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        depthWrite: false,
-        opacity: 0.82
-      });
-
-      shadowPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 1.25), mat);
-      shadowPlane.position.set(0, -1.72, -0.48);
-      scene.add(shadowPlane);
-    }
-
-    function loadTombstoneModel() {
-      const loading = document.getElementById("modelLoading");
-      const loader = new THREE.GLTFLoader();
-
-      loader.load(
-        MODEL_PATH,
-        function(gltf) {
-          stoneRoot = new THREE.Group();
-
-          const model = gltf.scene;
-
-          model.traverse(function(child) {
-            if (child.isMesh) {
-              child.castShadow = false;
-              child.receiveShadow = false;
-
-              if (child.material) {
-                child.material.roughness = 0.96;
-                child.material.metalness = 0;
-                child.material.needsUpdate = true;
-              }
-            }
-          });
-
-          normalizeModel(model);
-
-          stoneRoot.add(model);
-          stoneRoot.scale.setScalar(PREVIEW_SCALE);
-          stoneRoot.position.set(0, PREVIEW_Y, 0);
-          stoneRoot.rotation.y = PREVIEW_ANGLE;
-
-          scene.add(stoneRoot);
-
-          addStoneText();
-          applySavedState();
-
-          if (loading) loading.style.display = "none";
-        },
-        function(xhr) {
-          if (loading && xhr.total) {
-            const percent = Math.round((xhr.loaded / xhr.total) * 100);
-            loading.textContent = "正在加载墓碑模型..." + percent + "%";
-          }
-        },
-        function(error) {
-          console.error(error);
-          if (loading) {
-            loading.textContent = "模型加载失败，请检查 assets/models/tombstone-v2.glb";
-          }
-        }
-      );
-    }
-
-    function normalizeModel(model) {
-      const box = new THREE.Box3().setFromObject(model);
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-
-      box.getSize(size);
-      box.getCenter(center);
-
-      model.position.x -= center.x;
-      model.position.y -= center.y;
-      model.position.z -= center.z;
-
-      const maxSide = Math.max(size.x, size.y, size.z);
-      const target = 2.35;
-      const scale = target / maxSide;
-
-      model.scale.setScalar(scale);
-
-      const newBox = new THREE.Box3().setFromObject(model);
-      model.position.y -= newBox.min.y;
-      model.position.y -= 1.72;
-    }
-
-    function addStoneText() {
-      if (!stoneRoot) return;
-
-      const texture = createTextTexture();
-      const mat = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        depthWrite: false,
-        opacity: 0.58
-      });
-
-      textPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.36, 1.80), mat);
-      textPlane.position.set(0, -0.15, 0.73);
-      stoneRoot.add(textPlane);
-    }
-
-    function updateStoneText() {
-      if (!textPlane || !textPlane.material) return;
-
-      if (textPlane.material.map) {
-        textPlane.material.map.dispose();
+      for (let i = 0; i < 1600; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const a = Math.random() * 0.045;
+        const light = Math.random() > 0.53 ? 255 : 0;
+        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
+        ctx.fillRect(x, y, Math.random() * 1.4 + 0.35, Math.random() * 1.4 + 0.35);
       }
 
-      textPlane.material.map = createTextTexture();
-      textPlane.material.needsUpdate = true;
+      for (let i = 0; i < 32; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const w = Math.random() * 150 + 40;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate((Math.random() - 0.5) * 0.5);
+        ctx.fillStyle = "rgba(255,255,255,0.018)";
+        ctx.fillRect(-w / 2, 0, w, 1);
+        ctx.restore();
+      }
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(1.05, 1.05);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
     }
 
-    function createTextTexture() {
-      const memorial = getMemorialData();
-      const text = getText();
+    function createStoneMaterial() {
+      const texture = createStoneTexture("#7d756b");
+      return new THREE.MeshStandardMaterial({
+        color: 0x81786e,
+        map: texture,
+        roughness: 1,
+        metalness: 0,
+        bumpMap: texture,
+        bumpScale: 0.012
+      });
+    }
 
+    function createBaseMaterial() {
+      const texture = createStoneTexture("#655d55");
+      return new THREE.MeshStandardMaterial({
+        color: 0x6c635b,
+        map: texture,
+        roughness: 1,
+        metalness: 0,
+        bumpMap: texture,
+        bumpScale: 0.010
+      });
+    }
+
+    function buildRoundedShape() {
+      const s = new THREE.Shape();
+      s.moveTo(-1.14, -1.72);
+      s.lineTo(-1.14, 0.58);
+      s.bezierCurveTo(-1.14, 1.32, -0.68, 1.66, 0, 1.66);
+      s.bezierCurveTo(0.68, 1.66, 1.14, 1.32, 1.14, 0.58);
+      s.lineTo(1.14, -1.72);
+      s.closePath();
+      return s;
+    }
+
+    function buildSquareShape() {
+      const s = new THREE.Shape();
+      s.moveTo(-1.20, -1.72);
+      s.lineTo(-1.20, 1.34);
+      s.quadraticCurveTo(-1.20, 1.64, -0.90, 1.64);
+      s.lineTo(0.90, 1.64);
+      s.quadraticCurveTo(1.20, 1.64, 1.20, 1.34);
+      s.lineTo(1.20, -1.72);
+      s.closePath();
+      return s;
+    }
+
+    function buildArchShape() {
+      const s = new THREE.Shape();
+      s.moveTo(-1.18, -1.75);
+      s.lineTo(-1.18, 0.38);
+      s.bezierCurveTo(-1.18, 1.34, -0.64, 1.78, 0, 1.78);
+      s.bezierCurveTo(0.64, 1.78, 1.18, 1.34, 1.18, 0.38);
+      s.lineTo(1.18, -1.75);
+      s.closePath();
+      return s;
+    }
+
+    function buildTombstoneShape(style) {
+      const normalized = normalizeStyle(style);
+      if (normalized === "square") return buildSquareShape();
+      if (normalized === "arch") return buildArchShape();
+      return buildRoundedShape();
+    }
+
+    function createTextTexture(memorial) {
+      const text = getText();
       const canvas = document.createElement("canvas");
       canvas.width = 1024;
       canvas.height = 1024;
@@ -1039,27 +998,27 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillStyle = "rgba(20, 17, 15, 0.18)";
-      ctx.font = "600 42px Arial";
-      ctx.fillText("🐾", 512, 180);
+      ctx.fillStyle = "rgba(18, 15, 13, 0.16)";
+      ctx.font = "600 44px Arial";
+      ctx.fillText("🐾", 512, 178);
 
-      ctx.fillStyle = "rgba(18, 15, 13, 0.46)";
-      ctx.font = "500 72px 'Microsoft YaHei', Arial";
-      ctx.fillText(memorial.name || text.defaultName, 512, 408);
+      ctx.fillStyle = "rgba(16, 13, 11, 0.48)";
+      ctx.font = "500 76px 'Microsoft YaHei', Arial";
+      ctx.fillText(memorial.name || text.defaultName, 512, 420);
 
-      ctx.fillStyle = "rgba(18, 15, 13, 0.34)";
-      ctx.font = "400 32px 'Microsoft YaHei', Arial";
+      ctx.fillStyle = "rgba(16, 13, 11, 0.34)";
+      ctx.font = "400 34px 'Microsoft YaHei', Arial";
       const birth = memorial.birthDate || "----";
       const leave = memorial.leaveDate || "----";
-      ctx.fillText(birth + " — " + leave, 512, 510);
+      ctx.fillText(birth + " — " + leave, 512, 520);
 
-      ctx.fillStyle = "rgba(18, 15, 13, 0.28)";
-      ctx.font = "italic 30px 'Microsoft YaHei', Arial";
-      drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 635, 500, 42, 3);
+      ctx.fillStyle = "rgba(16, 13, 11, 0.31)";
+      ctx.font = "italic 32px 'Microsoft YaHei', Arial";
+      drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 650, 460, 44, 3);
 
       const texture = new THREE.CanvasTexture(canvas);
-      texture.encoding = THREE.sRGBEncoding;
       texture.needsUpdate = true;
+      texture.colorSpace = THREE.SRGBColorSpace;
       return texture;
     }
 
@@ -1081,31 +1040,268 @@
       if (current) lines.push(current);
 
       const finalLines = lines.slice(0, maxLines);
+      if (lines.length > maxLines && finalLines.length) {
+        finalLines[finalLines.length - 1] = finalLines[finalLines.length - 1].slice(0, -1) + "…";
+      }
+
       finalLines.forEach(function(line, index) {
         ctx.fillText(line, x, y + index * lineHeight);
       });
     }
 
-    function resizeScene() {
-      const container = document.getElementById("mainStoneScene");
-      if (!container || !renderer || !camera) return;
+    function makeShadowTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext("2d");
 
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
+      const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
+      gradient.addColorStop(0, "rgba(0,0,0,0.42)");
+      gradient.addColorStop(0.45, "rgba(0,0,0,0.22)");
+      gradient.addColorStop(0.72, "rgba(0,0,0,0.07)");
+      gradient.addColorStop(1, "rgba(0,0,0,0)");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 512, 512);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
     }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      if (renderer && scene && camera) {
-        renderer.render(scene, camera);
+    function createStoneGroup(style, showText, scale, sideAngle) {
+      const group = new THREE.Group();
+      const normalized = normalizeStyle(style);
+
+      const shape = buildTombstoneShape(normalized);
+      const geometry = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.42,
+        bevelEnabled: true,
+        bevelThickness: 0.050,
+        bevelSize: 0.050,
+        bevelSegments: 12,
+        curveSegments: 72
+      });
+
+      geometry.center();
+      geometry.computeVertexNormals();
+
+      const stoneMesh = new THREE.Mesh(geometry, createStoneMaterial());
+      stoneMesh.position.y = 0.30;
+      stoneMesh.rotation.y = sideAngle;
+      group.add(stoneMesh);
+
+      const baseMesh = new THREE.Mesh(new THREE.BoxGeometry(3.24, 0.34, 1.02), createBaseMaterial());
+      baseMesh.position.set(0, -1.78, -0.02);
+      baseMesh.rotation.y = sideAngle;
+      group.add(baseMesh);
+
+      const lipMesh = new THREE.Mesh(new THREE.BoxGeometry(2.88, 0.15, 0.86), createBaseMaterial());
+      lipMesh.position.set(0, -1.49, 0.02);
+      lipMesh.rotation.y = sideAngle;
+      group.add(lipMesh);
+
+      const shadowMat = new THREE.MeshBasicMaterial({
+        map: makeShadowTexture(),
+        transparent: true,
+        depthWrite: false,
+        opacity: 0.86
+      });
+
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.80, 1.18), shadowMat);
+      shadow.position.set(0, -1.95, -0.50);
+      group.add(shadow);
+
+      if (showText) {
+        const memorial = getMemorialData();
+        const textTexture = createTextTexture(memorial);
+
+        const textMat = new THREE.MeshBasicMaterial({
+          map: textTexture,
+          transparent: true,
+          depthWrite: false,
+          opacity: 0.62
+        });
+
+        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.14, 2.74), textMat);
+        mainTextPlane.position.set(0, 0.26, 0.248);
+        mainTextPlane.rotation.y = sideAngle;
+        group.add(mainTextPlane);
       }
+
+      group.scale.set(scale, scale, scale);
+      group.position.y = PREVIEW_Y;
+
+      group.userData.parts = {
+        stoneMesh,
+        baseMesh,
+        lipMesh,
+        textPlane: mainTextPlane
+      };
+
+      return group;
+    }
+
+    function initMainScene() {
+      const container = document.getElementById("mainStoneScene");
+      if (!container || !window.THREE) return;
+
+      mainScene = new THREE.Scene();
+
+      mainCamera = new THREE.PerspectiveCamera(
+        30,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        100
+      );
+      mainCamera.position.set(0, 0.08, 7.7);
+
+      mainRenderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true
+      });
+
+      mainRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      mainRenderer.setSize(container.clientWidth, container.clientHeight);
+      mainRenderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      container.innerHTML = "";
+      container.appendChild(mainRenderer.domElement);
+
+      mainScene.add(new THREE.AmbientLight(0xd7d6d0, 0.82));
+
+      const hemi = new THREE.HemisphereLight(0xb9c9f0, 0x3b2e24, 0.82);
+      mainScene.add(hemi);
+
+      const moonLight = new THREE.DirectionalLight(0xcbd8ff, 1.08);
+      moonLight.position.set(-5.1, 7.8, 5.7);
+      mainScene.add(moonLight);
+
+      const warmRight = new THREE.PointLight(0xffc98b, 0.82, 18, 2);
+      warmRight.position.set(2.8, -1.0, 5.0);
+      mainScene.add(warmRight);
+
+      const warmLeft = new THREE.PointLight(0xffd29a, 0.34, 14, 2);
+      warmLeft.position.set(-3.1, -1.2, 4.6);
+      mainScene.add(warmLeft);
+
+      const data = getMemorialData();
+      const confirmed = data.tombstoneConfirmed === true;
+      buildMainStone(selectedStoneStyle, confirmed);
+
+      renderMainScene();
+      window.addEventListener("resize", resizeMainScene);
+    }
+
+    function buildMainStone(style, finalMode) {
+      selectedStoneStyle = normalizeStyle(style);
+
+      if (!mainScene) return;
+
+      if (mainStoneGroup) {
+        mainScene.remove(mainStoneGroup);
+      }
+
+      mainTextPlane = null;
+
+      const scale = finalMode ? FINAL_SCALE : PREVIEW_SCALE;
+      const sideAngle = finalMode ? FINAL_ANGLE : PREVIEW_ANGLE;
+
+      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scale, sideAngle);
+      mainStoneGroup.position.y = finalMode ? FINAL_Y : PREVIEW_Y;
+
+      mainScene.add(mainStoneGroup);
+      renderMainScene();
+    }
+
+    function renderMainScene() {
+      if (!mainRenderer || !mainScene || !mainCamera) return;
+      mainRenderer.render(mainScene, mainCamera);
+    }
+
+    function resizeMainScene() {
+      const container = document.getElementById("mainStoneScene");
+      if (!container || !mainRenderer || !mainCamera) return;
+
+      mainRenderer.setSize(container.clientWidth, container.clientHeight);
+      mainCamera.aspect = container.clientWidth / container.clientHeight;
+      mainCamera.updateProjectionMatrix();
+      renderMainScene();
+    }
+
+    function rebuildMainTextTexture() {
+      if (!mainTextPlane) return;
+
+      const texture = createTextTexture(getMemorialData());
+
+      if (mainTextPlane.material.map) {
+        mainTextPlane.material.map.dispose();
+      }
+
+      mainTextPlane.material.map = texture;
+      mainTextPlane.material.needsUpdate = true;
+      renderMainScene();
+    }
+
+    function initMiniScene(containerId, style) {
+      const container = document.getElementById(containerId);
+      if (!container || !window.THREE) return;
+
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(
+        32,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        100
+      );
+      camera.position.set(0, 0.08, 7.2);
+
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true
+      });
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      container.innerHTML = "";
+      container.appendChild(renderer.domElement);
+
+      scene.add(new THREE.AmbientLight(0xd7d6d0, 0.86));
+
+      const light = new THREE.DirectionalLight(0xcbd8ff, 0.96);
+      light.position.set(-3, 5, 5);
+      scene.add(light);
+
+      const warm = new THREE.PointLight(0xffcf92, 0.44, 12, 2);
+      warm.position.set(2, -0.6, 4);
+      scene.add(warm);
+
+      const group = createStoneGroup(style, false, 0.65, -0.18);
+      group.position.y = -0.26;
+      scene.add(group);
+
+      renderer.render(scene, camera);
+      miniScenes.push({ container, renderer, camera, scene });
+    }
+
+    function resizeMiniScenes() {
+      miniScenes.forEach(function(item) {
+        const width = item.container.clientWidth;
+        const height = item.container.clientHeight;
+        item.renderer.setSize(width, height);
+        item.camera.aspect = width / height;
+        item.camera.updateProjectionMatrix();
+        item.renderer.render(item.scene, item.camera);
+      });
     }
 
     function selectStone(style, button) {
       if (isPlanting) return;
 
-      selectedStoneStyle = style;
+      selectedStoneStyle = normalizeStyle(style);
 
       const data = getMemorialData();
       data.tombstoneStyle = selectedStoneStyle;
@@ -1120,33 +1316,56 @@
 
       if (button) button.classList.add("active");
 
-      if (stoneRoot) {
-        stoneRoot.scale.setScalar(PREVIEW_SCALE);
-        stoneRoot.position.y = PREVIEW_Y;
-        stoneRoot.rotation.y = PREVIEW_ANGLE;
-      }
-    }
-
-    function applySavedState() {
-      const data = getMemorialData();
-
-      if (data.tombstoneConfirmed === true) {
-        document.body.classList.add("memorial-mode");
-
-        if (stoneRoot) {
-          stoneRoot.scale.setScalar(FINAL_SCALE);
-          stoneRoot.position.y = FINAL_Y;
-          stoneRoot.rotation.y = FINAL_ANGLE;
-        }
-      }
+      buildMainStone(selectedStoneStyle, false);
     }
 
     function easeOutCubic(t) {
       return 1 - Math.pow(1 - t, 3);
     }
 
+    function animateStoneToFinal(callback) {
+      if (!mainStoneGroup) {
+        callback();
+        return;
+      }
+
+      const parts = mainStoneGroup.userData.parts || {};
+      const start = performance.now();
+      const duration = 1300;
+
+      function setAngle(angle) {
+        if (parts.stoneMesh) parts.stoneMesh.rotation.y = angle;
+        if (parts.baseMesh) parts.baseMesh.rotation.y = angle;
+        if (parts.lipMesh) parts.lipMesh.rotation.y = angle;
+        if (parts.textPlane) parts.textPlane.rotation.y = angle;
+      }
+
+      function frame(now) {
+        const raw = Math.min((now - start) / duration, 1);
+        const t = easeOutCubic(raw);
+
+        const scale = PREVIEW_SCALE + (FINAL_SCALE - PREVIEW_SCALE) * t;
+        const y = PREVIEW_Y + (FINAL_Y - PREVIEW_Y) * t;
+        const angle = PREVIEW_ANGLE + (FINAL_ANGLE - PREVIEW_ANGLE) * t;
+
+        mainStoneGroup.scale.set(scale, scale, scale);
+        mainStoneGroup.position.y = y;
+        setAngle(angle);
+
+        renderMainScene();
+
+        if (raw < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          callback();
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
     function confirmStone() {
-      if (isPlanting || !stoneRoot) return;
+      if (isPlanting) return;
 
       isPlanting = true;
 
@@ -1157,33 +1376,13 @@
 
       document.body.classList.add("planting");
 
-      const start = performance.now();
-      const duration = 1300;
-
-      function frame(now) {
-        const raw = Math.min((now - start) / duration, 1);
-        const t = easeOutCubic(raw);
-
-        const scale = PREVIEW_SCALE + (FINAL_SCALE - PREVIEW_SCALE) * t;
-        const y = PREVIEW_Y + (FINAL_Y - PREVIEW_Y) * t;
-        const angle = PREVIEW_ANGLE + (FINAL_ANGLE - PREVIEW_ANGLE) * t;
-
-        stoneRoot.scale.setScalar(scale);
-        stoneRoot.position.y = y;
-        stoneRoot.rotation.y = angle;
-
-        if (raw < 1) {
-          requestAnimationFrame(frame);
-        } else {
-          document.body.classList.remove("planting");
-          document.body.classList.add("memorial-mode");
-          isPlanting = false;
-          loadExtraMemorialInfo();
-          renderPlacedItems();
-        }
-      }
-
-      requestAnimationFrame(frame);
+      animateStoneToFinal(function() {
+        document.body.classList.remove("planting");
+        document.body.classList.add("memorial-mode");
+        isPlanting = false;
+        loadExtraMemorialInfo();
+        renderPlacedItems();
+      });
     }
 
     function editStoneAgain() {
@@ -1194,11 +1393,23 @@
       saveMemorialData(data);
 
       document.body.classList.remove("memorial-mode", "planting");
+      buildMainStone(selectedStoneStyle, false);
+    }
 
-      if (stoneRoot) {
-        stoneRoot.scale.setScalar(PREVIEW_SCALE);
-        stoneRoot.position.y = PREVIEW_Y;
-        stoneRoot.rotation.y = PREVIEW_ANGLE;
+    function initFromSavedData() {
+      const data = getMemorialData();
+      selectedStoneStyle = normalizeStyle(data.tombstoneStyle || "rounded");
+
+      const activeButton = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
+      if (activeButton) {
+        document.querySelectorAll(".stone-option").forEach(function(btn) {
+          btn.classList.remove("active");
+        });
+        activeButton.classList.add("active");
+      }
+
+      if (data.tombstoneConfirmed === true) {
+        document.body.classList.add("memorial-mode");
       }
     }
 
@@ -1235,6 +1446,7 @@
       photos.forEach(function(photo) {
         const box = document.createElement("div");
         box.className = "gallery-photo";
+        box.onclick = function() { openPhotoLightbox(photo); };
 
         const img = document.createElement("img");
         img.src = photo;
@@ -1242,6 +1454,24 @@
         box.appendChild(img);
         container.appendChild(box);
       });
+    }
+
+    function openPhotoLightbox(src) {
+      const lightbox = document.getElementById("photoLightbox");
+      const image = document.getElementById("lightboxImage");
+      if (!lightbox || !image) return;
+
+      image.src = src;
+      lightbox.classList.add("show");
+    }
+
+    function closePhotoLightbox() {
+      const lightbox = document.getElementById("photoLightbox");
+      const image = document.getElementById("lightboxImage");
+      if (!lightbox || !image) return;
+
+      lightbox.classList.remove("show");
+      image.src = "";
     }
 
     function loadExtraMemorialInfo() {
@@ -1343,17 +1573,29 @@
 
     document.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
+        closePhotoLightbox();
         closeAllPanels();
       }
     });
 
     window.addEventListener("DOMContentLoaded", function() {
+      initFromSavedData();
+
+      initMainScene();
+      initMiniScene("miniRounded", "rounded");
+      initMiniScene("miniSquare", "square");
+      initMiniScene("miniArch", "arch");
+
       const savedLanguage = localStorage.getItem("siteLanguage") || "zh";
       changeLanguage(savedLanguage);
 
-      initScene();
       loadExtraMemorialInfo();
       renderPlacedItems();
+
+      window.addEventListener("resize", function() {
+        resizeMiniScenes();
+        resizeMainScene();
+      });
     });
   </script>
 </body>
