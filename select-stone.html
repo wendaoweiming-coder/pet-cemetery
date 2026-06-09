@@ -651,8 +651,8 @@
     </div>
   </div>
 
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
     let currentLang = "zh";
@@ -663,7 +663,6 @@
     let stoneRoot = null;
     let textPlane = null;
     let shadowPlane = null;
-    let modelLoaded = false;
 
     const MODEL_PATH = "assets/models/tombstone.glb";
 
@@ -829,13 +828,6 @@
       localStorage.setItem("myPetMemorial", JSON.stringify(data));
     }
 
-    function getVisibilityText(value) {
-      const text = getText();
-      if (value === "private") return text.privateText;
-      if (value === "invite") return text.inviteText;
-      return text.publicText;
-    }
-
     function changeLanguage(lang) {
       currentLang = translations[lang] ? lang : "zh";
       localStorage.setItem("siteLanguage", currentLang);
@@ -871,7 +863,6 @@
         0.1,
         100
       );
-
       camera.position.set(0, 0.32, 7.6);
 
       renderer = new THREE.WebGLRenderer({
@@ -881,15 +872,14 @@
 
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 0.92;
 
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      const ambient = new THREE.AmbientLight(0xc9c9bd, 0.75);
-      scene.add(ambient);
+      scene.add(new THREE.AmbientLight(0xc9c9bd, 0.75));
 
       const moonLight = new THREE.DirectionalLight(0xcbd9ff, 1.65);
       moonLight.position.set(-4.6, 6.6, 5.2);
@@ -953,6 +943,7 @@
           stoneRoot = new THREE.Group();
 
           const model = gltf.scene;
+
           model.traverse(function(child) {
             if (child.isMesh) {
               child.castShadow = false;
@@ -978,10 +969,14 @@
           addStoneText();
           applySavedState();
 
-          modelLoaded = true;
           if (loading) loading.style.display = "none";
         },
-        undefined,
+        function(xhr) {
+          if (loading && xhr.total) {
+            const percent = Math.round((xhr.loaded / xhr.total) * 100);
+            loading.textContent = "正在加载墓碑模型..." + percent + "%";
+          }
+        },
         function(error) {
           console.error(error);
           if (loading) {
@@ -1073,7 +1068,7 @@
       drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 635, 500, 42, 3);
 
       const texture = new THREE.CanvasTexture(canvas);
-      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.encoding = THREE.sRGBEncoding;
       texture.needsUpdate = true;
       return texture;
     }
