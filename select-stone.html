@@ -1001,66 +1001,107 @@
       renderPlacedItems();
     }
 
-    function createStoneTexture(baseColor) {
+    function makeSoftStoneTexture(baseHex, seedStart) {
       const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
+      canvas.width = 768;
+      canvas.height = 768;
       const ctx = canvas.getContext("2d");
 
-      ctx.fillStyle = baseColor;
-      ctx.fillRect(0, 0, 512, 512);
-
-      for (let i = 0; i < 1200; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const a = Math.random() * 0.038;
-        const light = Math.random() > 0.53 ? 255 : 0;
-        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, Math.random() * 1.3 + 0.35, Math.random() * 1.3 + 0.35);
+      let seed = seedStart || 17;
+      function rnd() {
+        seed = (seed * 9301 + 49297) % 233280;
+        return seed / 233280;
       }
 
-      for (let i = 0; i < 9; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const w = Math.random() * 130 + 35;
-        const h = Math.random() * 1.1 + 0.35;
+      function hexToRgb(hex) {
+        const n = parseInt(hex.replace("#", ""), 16);
+        return {
+          r: (n >> 16) & 255,
+          g: (n >> 8) & 255,
+          b: n & 255
+        };
+      }
+
+      const base = hexToRgb(baseHex);
+
+      const bg = ctx.createLinearGradient(0, 0, 768, 768);
+      bg.addColorStop(0, "rgb(" + Math.min(base.r + 14, 255) + "," + Math.min(base.g + 14, 255) + "," + Math.min(base.b + 14, 255) + ")");
+      bg.addColorStop(0.45, baseHex);
+      bg.addColorStop(1, "rgb(" + Math.max(base.r - 16, 0) + "," + Math.max(base.g - 16, 0) + "," + Math.max(base.b - 16, 0) + ")");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, 768, 768);
+
+      for (let i = 0; i < 4200; i++) {
+        const x = rnd() * 768;
+        const y = rnd() * 768;
+        const radius = rnd() * 1.15 + 0.25;
+        const delta = Math.floor((rnd() - 0.5) * 18);
+        const r = Math.max(0, Math.min(255, base.r + delta));
+        const g = Math.max(0, Math.min(255, base.g + delta));
+        const b = Math.max(0, Math.min(255, base.b + delta));
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (rnd() * 0.10 + 0.025) + ")";
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (let i = 0; i < 24; i++) {
+        const x = rnd() * 768;
+        const y = rnd() * 768;
+        const w = rnd() * 140 + 60;
+        const h = rnd() * 1.2 + 0.3;
         ctx.save();
         ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.55);
-        ctx.fillStyle = "rgba(255,255,255,0.020)";
+        ctx.rotate((rnd() - 0.5) * 0.65);
+        ctx.fillStyle = "rgba(255,255,255,0.018)";
         ctx.fillRect(-w / 2, -h / 2, w, h);
         ctx.restore();
       }
 
+      const moonWash = ctx.createRadialGradient(180, 70, 20, 180, 70, 520);
+      moonWash.addColorStop(0, "rgba(185,205,240,0.075)");
+      moonWash.addColorStop(0.55, "rgba(185,205,240,0.018)");
+      moonWash.addColorStop(1, "rgba(185,205,240,0)");
+      ctx.fillStyle = moonWash;
+      ctx.fillRect(0, 0, 768, 768);
+
+      const warmWash = ctx.createRadialGradient(620, 650, 10, 620, 650, 420);
+      warmWash.addColorStop(0, "rgba(255,204,145,0.060)");
+      warmWash.addColorStop(0.55, "rgba(255,204,145,0.016)");
+      warmWash.addColorStop(1, "rgba(255,204,145,0)");
+      ctx.fillStyle = warmWash;
+      ctx.fillRect(0, 0, 768, 768);
+
       const texture = new THREE.CanvasTexture(canvas);
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1.05, 1.05);
+      texture.repeat.set(1, 1);
       texture.colorSpace = THREE.SRGBColorSpace;
+      texture.needsUpdate = true;
       return texture;
     }
 
     function createStoneMaterial() {
-      const texture = createStoneTexture("#847c72");
+      const texture = makeSoftStoneTexture("#5f5a52", 21);
       return new THREE.MeshStandardMaterial({
-        color: 0x847c72,
+        color: 0x777169,
         map: texture,
         roughness: 1,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.018
+        bumpScale: 0.010
       });
     }
 
     function createBaseMaterial() {
-      const texture = createStoneTexture("#6d655d");
+      const texture = makeSoftStoneTexture("#4f4942", 47);
       return new THREE.MeshStandardMaterial({
-        color: 0x6d655d,
+        color: 0x625b53,
         map: texture,
         roughness: 1,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.018
+        bumpScale: 0.009
       });
     }
 
@@ -1115,30 +1156,30 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillStyle = "rgba(17, 15, 14, 0.20)";
+      ctx.fillStyle = "rgba(22, 19, 17, 0.18)";
       ctx.font = "600 44px Arial";
       ctx.fillText("🐾", 512, 178);
 
-      ctx.fillStyle = "rgba(19, 17, 15, 0.20)";
+      ctx.fillStyle = "rgba(22, 19, 17, 0.16)";
       ctx.beginPath();
       roundRect(ctx, 400, 238, 224, 52, 26);
       ctx.fill();
 
-      ctx.fillStyle = "rgba(15, 13, 12, 0.38)";
+      ctx.fillStyle = "rgba(20, 17, 15, 0.34)";
       ctx.font = "500 26px 'Microsoft YaHei', Arial";
       ctx.fillText(getVisibilityText(memorial.visibility), 512, 264);
 
-      ctx.fillStyle = "rgba(14, 12, 11, 0.60)";
+      ctx.fillStyle = "rgba(18, 15, 13, 0.54)";
       ctx.font = "500 76px 'Microsoft YaHei', Arial";
       ctx.fillText(memorial.name || text.defaultName, 512, 440);
 
-      ctx.fillStyle = "rgba(16, 14, 13, 0.46)";
+      ctx.fillStyle = "rgba(18, 15, 13, 0.40)";
       ctx.font = "400 34px 'Microsoft YaHei', Arial";
       const birth = memorial.birthDate || "----";
       const leave = memorial.leaveDate || "----";
       ctx.fillText(birth + " — " + leave, 512, 540);
 
-      ctx.fillStyle = "rgba(16, 14, 13, 0.44)";
+      ctx.fillStyle = "rgba(18, 15, 13, 0.36)";
       ctx.font = "italic 32px 'Microsoft YaHei', Arial";
       drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 660, 460, 44, 3);
 
@@ -1196,8 +1237,8 @@
       const ctx = canvas.getContext("2d");
 
       const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
-      gradient.addColorStop(0, "rgba(0,0,0,0.36)");
-      gradient.addColorStop(0.42, "rgba(0,0,0,0.18)");
+      gradient.addColorStop(0, "rgba(0,0,0,0.34)");
+      gradient.addColorStop(0.42, "rgba(0,0,0,0.17)");
       gradient.addColorStop(1, "rgba(0,0,0,0)");
 
       ctx.fillStyle = gradient;
@@ -1245,7 +1286,7 @@
         map: makeShadowTexture(),
         transparent: true,
         depthWrite: false,
-        opacity: 0.72
+        opacity: 0.78
       });
 
       const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.65, 1.12), shadowMat);
@@ -1260,7 +1301,7 @@
           map: textTexture,
           transparent: true,
           depthWrite: false,
-          opacity: 0.76
+          opacity: 0.72
         });
 
         mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.28, 2.88), textMat);
@@ -1308,22 +1349,26 @@
       container.innerHTML = "";
       container.appendChild(mainRenderer.domElement);
 
-      mainScene.add(new THREE.AmbientLight(0xffffff, 1.18));
+      mainScene.add(new THREE.AmbientLight(0xd9dddf, 0.78));
 
-      const hemi = new THREE.HemisphereLight(0xcbd8ff, 0x6b584a, 0.90);
+      const hemi = new THREE.HemisphereLight(0xb9c8e6, 0x3f332c, 0.62);
       mainScene.add(hemi);
 
-      const moonLight = new THREE.DirectionalLight(0xd8e0ff, 1.18);
-      moonLight.position.set(-4.2, 7.2, 6.2);
+      const moonLight = new THREE.DirectionalLight(0xcbd8ff, 0.98);
+      moonLight.position.set(-4.8, 7.5, 5.8);
       mainScene.add(moonLight);
 
-      const warmLight = new THREE.PointLight(0xffd3a0, 1.28, 18, 2);
-      warmLight.position.set(2.4, -0.9, 5.5);
-      mainScene.add(warmLight);
+      const warmLightRight = new THREE.PointLight(0xffc98c, 0.82, 18, 2);
+      warmLightRight.position.set(2.8, -1.0, 5.0);
+      mainScene.add(warmLightRight);
 
-      const fill = new THREE.PointLight(0xffffff, 0.26, 18, 2);
-      fill.position.set(-2.5, 1.0, 4.5);
-      mainScene.add(fill);
+      const warmLightLeft = new THREE.PointLight(0xffcf92, 0.36, 14, 2);
+      warmLightLeft.position.set(-2.8, -1.2, 4.4);
+      mainScene.add(warmLightLeft);
+
+      const softFill = new THREE.PointLight(0x9fb4d8, 0.20, 18, 2);
+      softFill.position.set(-2.2, 1.1, 4.5);
+      mainScene.add(softFill);
 
       const data = getMemorialData();
       const confirmed = data.tombstoneConfirmed === true;
@@ -1412,13 +1457,13 @@
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 1.14));
+      scene.add(new THREE.AmbientLight(0xd9dddf, 0.82));
 
-      const light = new THREE.DirectionalLight(0xd8e1ff, 1.12);
+      const light = new THREE.DirectionalLight(0xcbd8ff, 0.86);
       light.position.set(-3, 5, 5);
       scene.add(light);
 
-      const warm = new THREE.PointLight(0xffd2a0, 0.90, 12, 2);
+      const warm = new THREE.PointLight(0xffcf92, 0.42, 12, 2);
       warm.position.set(2, -0.6, 4);
       scene.add(warm);
 
