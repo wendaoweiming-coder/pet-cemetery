@@ -412,6 +412,11 @@
       font-size: 15px;
     }
 
+    .empty-text {
+      color: rgba(75, 61, 53, 0.46);
+      font-size: 14px;
+    }
+
     .photo-block { margin-bottom: 26px; }
 
     .photo-block h3 {
@@ -433,7 +438,6 @@
       overflow: hidden;
       background: rgba(120, 95, 70, 0.08);
       border: 1px solid rgba(134, 103, 75, 0.16);
-      cursor: zoom-in;
     }
 
     .gallery-photo img {
@@ -441,11 +445,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-
-    .empty-text {
-      color: rgba(75, 61, 53, 0.46);
-      font-size: 14px;
     }
 
     .gift-buttons {
@@ -664,7 +663,7 @@
     let textPlane = null;
     let shadowPlane = null;
 
-    const MODEL_PATH = "assets/models/tombstone.glb";
+    const MODEL_PATH = "assets/models/tombstone-v2.glb";
 
     const PREVIEW_SCALE = 1.85;
     const FINAL_SCALE = 1.30;
@@ -714,9 +713,6 @@
         noMessages: "还没有留言。",
         defaultName: "露娜",
         defaultWords: "永远爱你。",
-        publicText: "公开",
-        privateText: "私密",
-        inviteText: "邀请可见",
         placedCan: "已放置罐头",
         placedBall: "已放置球",
         placedSeed: "已放置鸟食",
@@ -760,9 +756,6 @@
         noMessages: "還沒有留言。",
         defaultName: "露娜",
         defaultWords: "永遠愛你。",
-        publicText: "公開",
-        privateText: "私密",
-        inviteText: "邀請可見",
         placedCan: "已放置罐頭",
         placedBall: "已放置球",
         placedSeed: "已放置鳥食",
@@ -806,9 +799,6 @@
         noMessages: "No messages yet.",
         defaultName: "Luna",
         defaultWords: "You are loved, always.",
-        publicText: "Public",
-        privateText: "Private",
-        inviteText: "Invite only",
         placedCan: "Can placed",
         placedBall: "Ball placed",
         placedSeed: "Seeds placed",
@@ -879,21 +869,21 @@
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      scene.add(new THREE.AmbientLight(0xc9c9bd, 0.75));
+      scene.add(new THREE.AmbientLight(0xc9c9bd, 0.72));
 
-      const moonLight = new THREE.DirectionalLight(0xcbd9ff, 1.65);
+      const moonLight = new THREE.DirectionalLight(0xcbd9ff, 1.55);
       moonLight.position.set(-4.6, 6.6, 5.2);
       scene.add(moonLight);
 
-      const warmLamp = new THREE.PointLight(0xffbd76, 1.15, 16, 2);
+      const warmLamp = new THREE.PointLight(0xffbd76, 1.05, 16, 2);
       warmLamp.position.set(-3.8, -1.4, 4.2);
       scene.add(warmLamp);
 
-      const rightFill = new THREE.PointLight(0xffd2a0, 0.36, 16, 2);
+      const rightFill = new THREE.PointLight(0xffd2a0, 0.30, 16, 2);
       rightFill.position.set(3.0, -0.9, 4.0);
       scene.add(rightFill);
 
-      const blueFill = new THREE.PointLight(0x8fa8da, 0.22, 18, 2);
+      const blueFill = new THREE.PointLight(0x8fa8da, 0.20, 18, 2);
       blueFill.position.set(2.5, 2.2, 5.0);
       scene.add(blueFill);
 
@@ -950,7 +940,7 @@
               child.receiveShadow = false;
 
               if (child.material) {
-                child.material.roughness = 0.94;
+                child.material.roughness = 0.96;
                 child.material.metalness = 0;
                 child.material.needsUpdate = true;
               }
@@ -980,7 +970,7 @@
         function(error) {
           console.error(error);
           if (loading) {
-            loading.textContent = "模型加载失败，请检查 assets/models/tombstone.glb";
+            loading.textContent = "模型加载失败，请检查 assets/models/tombstone-v2.glb";
           }
         }
       );
@@ -1017,11 +1007,11 @@
         map: texture,
         transparent: true,
         depthWrite: false,
-        opacity: 0.66
+        opacity: 0.58
       });
 
       textPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.36, 1.80), mat);
-      textPlane.position.set(0, -0.15, 0.72);
+      textPlane.position.set(0, -0.15, 0.73);
       stoneRoot.add(textPlane);
     }
 
