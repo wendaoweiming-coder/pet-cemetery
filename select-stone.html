@@ -30,7 +30,7 @@
       background:
         linear-gradient(
           180deg,
-          rgba(6, 10, 18, 0.06) 0%,
+          rgba(6, 10, 18, 0.05) 0%,
           rgba(6, 10, 18, 0.12) 46%,
           rgba(6, 10, 18, 0.30) 100%
         ),
@@ -45,8 +45,8 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at center 55%, rgba(255, 231, 190, 0.08), transparent 24%),
-        radial-gradient(circle at center 58%, rgba(255, 255, 255, 0.05), transparent 36%);
+        radial-gradient(circle at center 60%, rgba(255, 231, 190, 0.08), transparent 22%),
+        radial-gradient(circle at center 63%, rgba(255, 255, 255, 0.04), transparent 34%);
       pointer-events: none;
     }
 
@@ -249,6 +249,7 @@
       z-index: 10;
       pointer-events: none;
       text-shadow: 0 3px 18px rgba(0,0,0,0.36);
+      transition: opacity 0.35s ease;
     }
 
     .instruction h1 {
@@ -272,6 +273,10 @@
       min-width: 320px;
       min-height: 430px;
       margin-top: 42px;
+      transition:
+        width 1.15s cubic-bezier(0.22, 0.82, 0.22, 1),
+        height 1.15s cubic-bezier(0.22, 0.82, 0.22, 1),
+        transform 1.15s cubic-bezier(0.22, 0.82, 0.22, 1);
     }
 
     #mainStoneScene {
@@ -290,8 +295,8 @@
       z-index: 80;
       opacity: 0;
       pointer-events: none;
-      background: rgba(5, 8, 7, 0.16);
-      transition: opacity 0.5s ease;
+      background: rgba(5, 8, 7, 0.12);
+      transition: opacity 0.45s ease;
     }
 
     body.planting .planting-mask {
@@ -308,8 +313,9 @@
     }
 
     body.planting .scene-wrap {
-      transform: scale(0.84);
-      transition: transform 0.9s cubic-bezier(0.22, 0.82, 0.22, 1);
+      width: min(390px, 48vw);
+      height: min(500px, 62vh);
+      transform: translateY(72px);
     }
 
     @media (max-width: 980px) {
@@ -357,6 +363,12 @@
         width: min(92vw, 440px);
         height: 500px;
         margin-top: 70px;
+      }
+
+      body.planting .scene-wrap {
+        width: min(90vw, 360px);
+        height: min(56vh, 440px);
+        transform: translateY(56px);
       }
 
       .instruction h1 {
@@ -445,10 +457,10 @@
       <section class="center-area">
         <div class="instruction">
           <h1 data-key="title">Choose a tombstone</h1>
-          <p data-key="subtitle">This is a 3D preview. The final memorial will use the same style.</p>
+          <p data-key="subtitle">The stone will gently turn forward and settle into the memorial garden.</p>
         </div>
 
-        <div class="scene-wrap">
+        <div class="scene-wrap" id="sceneWrap">
           <div id="mainStoneScene"></div>
         </div>
       </section>
@@ -462,6 +474,7 @@
   <script>
     let currentLang = "en";
     let selectedStoneStyle = "rounded";
+    let isPlanting = false;
 
     let mainScene = null;
     let mainCamera = null;
@@ -478,7 +491,7 @@
         panelTitle: "Tombstone style",
         panelSubtitle: "Choose a 3D tombstone. The center preview will update immediately.",
         title: "Choose a tombstone",
-        subtitle: "This is a 3D preview. The final memorial will use the same style.",
+        subtitle: "The stone will gently turn forward and settle into the memorial garden.",
         confirmBtn: "Use this tombstone",
         roundedName: "Rounded stone",
         roundedDesc: "Classic and gentle.",
@@ -498,7 +511,7 @@
         panelTitle: "墓碑样式",
         panelSubtitle: "选择一个 3D 墓碑，中间预览会立刻变化。",
         title: "选择墓碑",
-        subtitle: "这里是 3D 预览，最终纪念页会使用同一种样式。",
+        subtitle: "墓碑会慢慢转正，并安静地落到纪念园中。",
         confirmBtn: "使用这个墓碑",
         roundedName: "圆顶墓碑",
         roundedDesc: "经典、温柔。",
@@ -518,7 +531,7 @@
         panelTitle: "墓碑樣式",
         panelSubtitle: "選擇一個 3D 墓碑，中間預覽會立刻變化。",
         title: "選擇墓碑",
-        subtitle: "這裡是 3D 預覽，最終紀念頁會使用同一種樣式。",
+        subtitle: "墓碑會慢慢轉正，並安靜地落到紀念園中。",
         confirmBtn: "使用這個墓碑",
         roundedName: "圓頂墓碑",
         roundedDesc: "經典、溫柔。",
@@ -548,7 +561,6 @@
 
     function getVisibilityText(value) {
       const text = getText();
-
       if (value === "private") return text.privateText;
       if (value === "invite") return text.inviteText;
       return text.publicText;
@@ -580,35 +592,110 @@
       return "rounded";
     }
 
+    function createStoneTexture(baseColor) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = baseColor;
+      ctx.fillRect(0, 0, 512, 512);
+
+      for (let i = 0; i < 2200; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const a = Math.random() * 0.06;
+        const light = Math.random() > 0.53 ? 255 : 0;
+        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
+        ctx.fillRect(x, y, Math.random() * 1.8 + 0.4, Math.random() * 1.8 + 0.4);
+      }
+
+      for (let i = 0; i < 18; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const w = Math.random() * 160 + 50;
+        const h = Math.random() * 1.5 + 0.5;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate((Math.random() - 0.5) * 0.7);
+        ctx.fillStyle = "rgba(255,255,255,0.03)";
+        ctx.fillRect(-w / 2, -h / 2, w, h);
+        ctx.restore();
+      }
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(1.15, 1.15);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    function createStoneMaterial() {
+      const texture = createStoneTexture("#706a64");
+      return new THREE.MeshStandardMaterial({
+        color: 0x706a64,
+        map: texture,
+        roughness: 0.99,
+        metalness: 0,
+        bumpMap: texture,
+        bumpScale: 0.032
+      });
+    }
+
+    function createSideMaterial() {
+      const texture = createStoneTexture("#5b5650");
+      return new THREE.MeshStandardMaterial({
+        color: 0x5b5650,
+        map: texture,
+        roughness: 0.99,
+        metalness: 0,
+        bumpMap: texture,
+        bumpScale: 0.04
+      });
+    }
+
+    function createBaseMaterial() {
+      const texture = createStoneTexture("#5f5a54");
+      return new THREE.MeshStandardMaterial({
+        color: 0x5f5a54,
+        map: texture,
+        roughness: 0.99,
+        metalness: 0,
+        bumpMap: texture,
+        bumpScale: 0.035
+      });
+    }
+
     function buildRoundedShape() {
       const s = new THREE.Shape();
-      s.moveTo(-1.18, -1.75);
-      s.lineTo(-1.18, 0.62);
-      s.quadraticCurveTo(-1.18, 1.72, 0, 1.72);
-      s.quadraticCurveTo(1.18, 1.72, 1.18, 0.62);
-      s.lineTo(1.18, -1.75);
+      s.moveTo(-1.14, -1.72);
+      s.lineTo(-1.14, 0.58);
+      s.quadraticCurveTo(-1.14, 1.66, 0, 1.66);
+      s.quadraticCurveTo(1.14, 1.66, 1.14, 0.58);
+      s.lineTo(1.14, -1.72);
       s.closePath();
       return s;
     }
 
     function buildSquareShape() {
       const s = new THREE.Shape();
-      s.moveTo(-1.24, -1.75);
-      s.lineTo(-1.24, 1.45);
-      s.quadraticCurveTo(-1.24, 1.72, -0.98, 1.72);
-      s.lineTo(0.98, 1.72);
-      s.quadraticCurveTo(1.24, 1.72, 1.24, 1.45);
-      s.lineTo(1.24, -1.75);
+      s.moveTo(-1.20, -1.72);
+      s.lineTo(-1.20, 1.38);
+      s.quadraticCurveTo(-1.20, 1.64, -0.96, 1.64);
+      s.lineTo(0.96, 1.64);
+      s.quadraticCurveTo(1.20, 1.64, 1.20, 1.38);
+      s.lineTo(1.20, -1.72);
       s.closePath();
       return s;
     }
 
     function buildArchShape() {
       const s = new THREE.Shape();
-      s.moveTo(-1.22, -1.78);
-      s.lineTo(-1.22, 0.45);
-      s.absarc(0, 0.45, 1.22, Math.PI, 0, true);
-      s.lineTo(1.22, -1.78);
+      s.moveTo(-1.18, -1.75);
+      s.lineTo(-1.18, 0.42);
+      s.absarc(0, 0.42, 1.18, Math.PI, 0, true);
+      s.lineTo(1.18, -1.75);
       s.closePath();
       return s;
     }
@@ -620,33 +707,8 @@
       return buildRoundedShape();
     }
 
-    function createStoneMaterial() {
-      return new THREE.MeshStandardMaterial({
-        color: 0x8d8780,
-        roughness: 0.96,
-        metalness: 0.0
-      });
-    }
-
-    function createSideMaterial() {
-      return new THREE.MeshStandardMaterial({
-        color: 0x6f6963,
-        roughness: 0.98,
-        metalness: 0.0
-      });
-    }
-
-    function createBaseMaterial() {
-      return new THREE.MeshStandardMaterial({
-        color: 0x777069,
-        roughness: 0.98,
-        metalness: 0.0
-      });
-    }
-
     function createTextTexture(memorial) {
       const text = getText();
-
       const canvas = document.createElement("canvas");
       canvas.width = 1024;
       canvas.height = 1024;
@@ -656,40 +718,32 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillStyle = "rgba(56, 52, 48, 0.30)";
-      ctx.font = "600 46px Arial";
-      ctx.fillText("🐾", 512, 180);
+      ctx.fillStyle = "rgba(22, 19, 17, 0.22)";
+      ctx.font = "600 44px Arial";
+      ctx.fillText("🐾", 512, 178);
 
-      ctx.fillStyle = "rgba(58, 53, 48, 0.35)";
+      ctx.fillStyle = "rgba(24, 21, 19, 0.22)";
       ctx.beginPath();
-      roundRect(ctx, 400, 240, 224, 52, 26);
+      roundRect(ctx, 400, 238, 224, 52, 26);
       ctx.fill();
 
-      ctx.fillStyle = "rgba(45, 40, 36, 0.55)";
+      ctx.fillStyle = "rgba(18, 16, 14, 0.43)";
       ctx.font = "500 26px 'Microsoft YaHei', Arial";
-      ctx.fillText(getVisibilityText(memorial.visibility), 512, 266);
+      ctx.fillText(getVisibilityText(memorial.visibility), 512, 264);
 
-      ctx.fillStyle = "rgba(44, 40, 36, 0.78)";
-      ctx.font = "500 78px 'Microsoft YaHei', Arial";
+      ctx.fillStyle = "rgba(16, 14, 13, 0.66)";
+      ctx.font = "500 76px 'Microsoft YaHei', Arial";
       ctx.fillText(memorial.name || text.defaultName, 512, 440);
 
-      ctx.fillStyle = "rgba(48, 44, 40, 0.62)";
+      ctx.fillStyle = "rgba(20, 18, 16, 0.50)";
       ctx.font = "400 34px 'Microsoft YaHei', Arial";
       const birth = memorial.birthDate || "----";
       const leave = memorial.leaveDate || "----";
       ctx.fillText(birth + " — " + leave, 512, 540);
 
-      ctx.fillStyle = "rgba(50, 46, 42, 0.58)";
+      ctx.fillStyle = "rgba(20, 18, 16, 0.48)";
       ctx.font = "italic 32px 'Microsoft YaHei', Arial";
-      drawWrappedText(
-        ctx,
-        memorial.epitaph || memorial.memory || text.defaultWords,
-        512,
-        660,
-        460,
-        44,
-        3
-      );
+      drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 660, 460, 44, 3);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.needsUpdate = true;
@@ -712,8 +766,7 @@
     }
 
     function drawWrappedText(ctx, value, x, y, maxWidth, lineHeight, maxLines) {
-      const text = String(value || "");
-      const chars = text.split("");
+      const chars = String(value || "").split("");
       const lines = [];
       let current = "";
 
@@ -739,35 +792,15 @@
       });
     }
 
-    function makeGlowTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-
-      const ctx = canvas.getContext("2d");
-      const gradient = ctx.createRadialGradient(256, 270, 10, 256, 270, 220);
-
-      gradient.addColorStop(0, "rgba(255, 224, 180, 0.25)");
-      gradient.addColorStop(0.36, "rgba(255, 224, 180, 0.12)");
-      gradient.addColorStop(1, "rgba(255, 224, 180, 0)");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
     function makeShadowTexture() {
       const canvas = document.createElement("canvas");
       canvas.width = 512;
       canvas.height = 512;
-
       const ctx = canvas.getContext("2d");
-      const gradient = ctx.createRadialGradient(256, 256, 20, 256, 256, 220);
 
-      gradient.addColorStop(0, "rgba(0,0,0,0.32)");
+      const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
+      gradient.addColorStop(0, "rgba(0,0,0,0.42)");
+      gradient.addColorStop(0.42, "rgba(0,0,0,0.22)");
       gradient.addColorStop(1, "rgba(0,0,0,0)");
 
       ctx.fillStyle = gradient;
@@ -778,68 +811,55 @@
       return texture;
     }
 
-    function createStoneGroup(style, showText, scale) {
+    function createStoneGroup(style, showText, scale, sideAngle) {
       const group = new THREE.Group();
       const normalized = normalizeStyle(style);
 
       const shape = buildTombstoneShape(normalized);
       const geometry = new THREE.ExtrudeGeometry(shape, {
-        depth: 0.46,
+        depth: 0.42,
         bevelEnabled: true,
-        bevelThickness: 0.045,
-        bevelSize: 0.045,
+        bevelThickness: 0.042,
+        bevelSize: 0.042,
         bevelSegments: 4,
-        curveSegments: 28
+        curveSegments: 30
       });
 
       geometry.center();
 
       const stoneMesh = new THREE.Mesh(geometry, createStoneMaterial());
-      stoneMesh.castShadow = false;
-      stoneMesh.receiveShadow = false;
-      stoneMesh.position.y = 0.28;
-      stoneMesh.rotation.y = -0.08;
+      stoneMesh.position.y = 0.30;
+      stoneMesh.rotation.y = sideAngle;
       group.add(stoneMesh);
 
-      const sideGeo = new THREE.BoxGeometry(2.55, 3.32, 0.18);
-      const sideMesh = new THREE.Mesh(sideGeo, createSideMaterial());
-      sideMesh.position.set(0.1, 0.28, -0.33);
-      sideMesh.rotation.y = -0.08;
-      group.add(sideMesh);
+      const backGeo = new THREE.BoxGeometry(2.50, 3.28, 0.16);
+      const backMesh = new THREE.Mesh(backGeo, createSideMaterial());
+      backMesh.position.set(0, 0.30, -0.31);
+      backMesh.rotation.y = sideAngle;
+      group.add(backMesh);
 
-      const baseGeo = new THREE.BoxGeometry(3.35, 0.38, 1.14);
+      const baseGeo = new THREE.BoxGeometry(3.28, 0.38, 1.08);
       const baseMesh = new THREE.Mesh(baseGeo, createBaseMaterial());
-      baseMesh.position.set(0, -1.78, -0.04);
-      baseMesh.rotation.y = -0.08;
+      baseMesh.position.set(0, -1.78, -0.02);
+      baseMesh.rotation.y = sideAngle;
       group.add(baseMesh);
 
-      const lipGeo = new THREE.BoxGeometry(3.05, 0.18, 0.96);
+      const lipGeo = new THREE.BoxGeometry(2.95, 0.16, 0.92);
       const lipMesh = new THREE.Mesh(lipGeo, createBaseMaterial());
-      lipMesh.position.set(0, -1.50, 0.02);
-      lipMesh.rotation.y = -0.08;
+      lipMesh.position.set(0, -1.49, 0.02);
+      lipMesh.rotation.y = sideAngle;
       group.add(lipMesh);
 
       const shadowMat = new THREE.MeshBasicMaterial({
         map: makeShadowTexture(),
         transparent: true,
         depthWrite: false,
-        opacity: 0.72
+        opacity: 0.78
       });
 
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(4.7, 1.8), shadowMat);
-      shadow.position.set(0, -2.05, -0.55);
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.9, 1.24), shadowMat);
+      shadow.position.set(0, -1.95, -0.45);
       group.add(shadow);
-
-      const glowMat = new THREE.MeshBasicMaterial({
-        map: makeGlowTexture(),
-        transparent: true,
-        depthWrite: false,
-        opacity: 0.45
-      });
-
-      const glow = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 4.4), glowMat);
-      glow.position.set(0, -0.16, -0.82);
-      group.add(glow);
 
       if (showText) {
         const memorial = getMemorialData();
@@ -849,16 +869,25 @@
           map: textTexture,
           transparent: true,
           depthWrite: false,
-          opacity: 0.86
+          opacity: 0.78
         });
 
-        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.32, 2.92), textMat);
-        mainTextPlane.position.set(0, 0.24, 0.27);
-        mainTextPlane.rotation.y = -0.08;
+        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.28, 2.88), textMat);
+        mainTextPlane.position.set(0, 0.26, 0.245);
+        mainTextPlane.rotation.y = sideAngle;
         group.add(mainTextPlane);
       }
 
       group.scale.set(scale, scale, scale);
+      group.position.y = -0.18;
+
+      group.userData.parts = {
+        stoneMesh,
+        backMesh,
+        baseMesh,
+        lipMesh,
+        textPlane: mainTextPlane
+      };
 
       return group;
     }
@@ -875,7 +904,7 @@
         0.1,
         100
       );
-      mainCamera.position.set(0, 0.16, 8.8);
+      mainCamera.position.set(0, 0.08, 7.7);
 
       mainRenderer = new THREE.WebGLRenderer({
         alpha: true,
@@ -889,31 +918,31 @@
       container.innerHTML = "";
       container.appendChild(mainRenderer.domElement);
 
-      const ambient = new THREE.AmbientLight(0xffffff, 1.42);
+      const ambient = new THREE.AmbientLight(0xffffff, 1.12);
       mainScene.add(ambient);
 
-      const hemi = new THREE.HemisphereLight(0xcbd8ff, 0x5d5146, 0.92);
+      const hemi = new THREE.HemisphereLight(0xbfd0ff, 0x4e453d, 0.86);
       mainScene.add(hemi);
 
-      const moonLight = new THREE.DirectionalLight(0xd4ddff, 1.25);
-      moonLight.position.set(-4, 7, 6);
+      const moonLight = new THREE.DirectionalLight(0xd4ddff, 1.18);
+      moonLight.position.set(-4.2, 7.2, 6.2);
       mainScene.add(moonLight);
 
-      const warmLight = new THREE.PointLight(0xffd3a0, 1.65, 18, 2);
-      warmLight.position.set(2.4, -0.7, 5.6);
+      const warmLight = new THREE.PointLight(0xffd3a0, 1.25, 18, 2);
+      warmLight.position.set(2.4, -0.9, 5.5);
       mainScene.add(warmLight);
 
-      const fill = new THREE.PointLight(0xffffff, 0.35, 18, 2);
+      const fill = new THREE.PointLight(0xffffff, 0.22, 18, 2);
       fill.position.set(-2.5, 1.0, 4.5);
       mainScene.add(fill);
 
-      buildMainStone(selectedStoneStyle);
+      buildMainStone(selectedStoneStyle, false);
       renderMainScene();
 
       window.addEventListener("resize", resizeMainScene);
     }
 
-    function buildMainStone(style) {
+    function buildMainStone(style, finalMode) {
       selectedStoneStyle = normalizeStyle(style);
 
       if (!mainScene) return;
@@ -923,8 +952,13 @@
       }
 
       mainTextPlane = null;
-      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, 0.78);
-      mainStoneGroup.position.y = -0.15;
+
+      const scale = finalMode ? 0.64 : 0.72;
+      const sideAngle = finalMode ? 0 : -0.16;
+
+      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scale, sideAngle);
+      mainStoneGroup.position.y = finalMode ? -0.55 : -0.18;
+
       mainScene.add(mainStoneGroup);
 
       renderMainScene();
@@ -986,18 +1020,18 @@
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 1.38));
+      scene.add(new THREE.AmbientLight(0xffffff, 1.15));
 
-      const light = new THREE.DirectionalLight(0xd8e1ff, 1.2);
+      const light = new THREE.DirectionalLight(0xd8e1ff, 1.18);
       light.position.set(-3, 5, 5);
       scene.add(light);
 
-      const warm = new THREE.PointLight(0xffd2a0, 1.2, 12, 2);
+      const warm = new THREE.PointLight(0xffd2a0, 0.95, 12, 2);
       warm.position.set(2, -0.6, 4);
       scene.add(warm);
 
-      const group = createStoneGroup(style, false, 0.70);
-      group.position.y = -0.18;
+      const group = createStoneGroup(style, false, 0.65, -0.18);
+      group.position.y = -0.26;
       scene.add(group);
 
       renderer.render(scene, camera);
@@ -1023,6 +1057,8 @@
     }
 
     function selectStone(style, button) {
+      if (isPlanting) return;
+
       selectedStoneStyle = normalizeStyle(style);
 
       document.querySelectorAll(".stone-option").forEach(function(btn) {
@@ -1033,19 +1069,80 @@
         button.classList.add("active");
       }
 
-      buildMainStone(selectedStoneStyle);
+      buildMainStone(selectedStoneStyle, false);
+    }
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function animateStoneToFinal(callback) {
+      if (!mainStoneGroup) {
+        callback();
+        return;
+      }
+
+      const parts = mainStoneGroup.userData.parts || {};
+      const start = performance.now();
+      const duration = 1200;
+
+      const startScale = 0.72;
+      const endScale = 0.64;
+
+      const startY = -0.18;
+      const endY = -0.55;
+
+      const startAngle = -0.16;
+      const endAngle = 0;
+
+      function setAngle(angle) {
+        if (parts.stoneMesh) parts.stoneMesh.rotation.y = angle;
+        if (parts.backMesh) parts.backMesh.rotation.y = angle;
+        if (parts.baseMesh) parts.baseMesh.rotation.y = angle;
+        if (parts.lipMesh) parts.lipMesh.rotation.y = angle;
+        if (parts.textPlane) parts.textPlane.rotation.y = angle;
+      }
+
+      function frame(now) {
+        const raw = Math.min((now - start) / duration, 1);
+        const t = easeOutCubic(raw);
+
+        const scale = startScale + (endScale - startScale) * t;
+        const y = startY + (endY - startY) * t;
+        const angle = startAngle + (endAngle - startAngle) * t;
+
+        mainStoneGroup.scale.set(scale, scale, scale);
+        mainStoneGroup.position.y = y;
+        setAngle(angle);
+
+        renderMainScene();
+
+        if (raw < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          callback();
+        }
+      }
+
+      requestAnimationFrame(frame);
     }
 
     function confirmStone() {
+      if (isPlanting) return;
+
+      isPlanting = true;
+
       const data = getMemorialData();
       data.tombstoneStyle = selectedStoneStyle;
       localStorage.setItem("myPetMemorial", JSON.stringify(data));
 
       document.body.classList.add("planting");
 
-      setTimeout(function() {
-        window.location.replace("cemetery.html");
-      }, 850);
+      animateStoneToFinal(function() {
+        setTimeout(function() {
+          window.location.replace("cemetery.html");
+        }, 220);
+      });
     }
 
     function initFromSavedData() {
