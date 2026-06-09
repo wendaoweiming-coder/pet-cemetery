@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>选择墓碑</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>选择墓碑</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -12,141 +12,123 @@
       height: 100%;
       overflow: hidden;
       font-family: "Microsoft YaHei", Arial, sans-serif;
-      color: #fffaf5;
-      background: #0b1015;
+      background: #081018;
+      color: #fffaf4;
     }
 
     button, select, textarea {
       font-family: inherit;
       outline: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    .bg {
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      z-index: 0;
       background:
-        linear-gradient(180deg, rgba(6,10,18,0.08) 0%, rgba(6,10,18,0.18) 52%, rgba(6,10,18,0.34) 100%),
+        linear-gradient(180deg, rgba(4,8,12,0.08) 0%, rgba(4,8,12,0.22) 65%, rgba(4,8,12,0.35) 100%),
         url("cemetery-bg.png") center center / cover no-repeat;
-      transform: scale(1.08);
+      z-index: 0;
+      transform: scale(1.06);
       transform-origin: center center;
     }
 
-    .bg::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 50% 58%, rgba(255,240,205,0.07), transparent 22%),
-        radial-gradient(circle at 50% 68%, rgba(255,255,255,0.03), transparent 36%);
-      pointer-events: none;
-    }
-
-    .shell {
+    .page {
       position: relative;
       z-index: 2;
       width: 100%;
       height: 100%;
-      display: flex;
-      flex-direction: column;
     }
 
     .topbar {
-      width: 100%;
-      max-width: 1320px;
+      position: absolute;
+      top: 28px;
+      left: 0;
+      right: 0;
+      width: min(1380px, calc(100% - 48px));
       margin: 0 auto;
-      padding: 28px 34px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      z-index: 20;
+      z-index: 50;
     }
 
-    .logo {
-      font-size: 17px;
-      color: rgba(255,250,245,0.96);
+    .brand {
+      font-size: 18px;
+      color: rgba(255,250,244,0.96);
       text-decoration: none;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.35);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.36);
     }
 
-    .top-actions {
+    .top-right {
       display: flex;
       gap: 12px;
       align-items: center;
     }
 
-    .soft-btn,
+    .ghost-btn,
     .lang-select,
-    .dock-btn,
-    .confirm-btn {
+    .main-confirm-btn,
+    .dock-btn {
+      border: 1px solid rgba(255,250,244,0.24);
+      background: rgba(255,250,244,0.08);
+      color: #fffaf4;
       border-radius: 999px;
-      border: 1px solid rgba(255,250,245,0.26);
-      background: rgba(255,250,245,0.08);
-      color: #fffaf5;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       cursor: pointer;
       transition: 0.25s ease;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.22);
     }
 
-    .soft-btn,
+    .ghost-btn,
     .lang-select {
       padding: 10px 16px;
       font-size: 14px;
     }
 
-    .soft-btn:hover,
+    .ghost-btn:hover,
     .lang-select:hover,
+    .main-confirm-btn:hover,
     .dock-btn:hover {
-      background: rgba(255,250,245,0.15);
-      border-color: rgba(255,250,245,0.42);
+      background: rgba(255,250,244,0.14);
+      border-color: rgba(255,250,244,0.42);
     }
 
     .lang-select {
-      min-width: 150px;
+      min-width: 154px;
     }
 
     .lang-select option {
-      background: #fffaf5;
-      color: #382f28;
-    }
-
-    .layout {
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
-      flex: 1;
-      display: grid;
-      grid-template-columns: 280px 1fr 260px;
-      gap: 24px;
-      align-items: center;
-      padding: 18px 34px 116px;
-      position: relative;
+      color: #40352d;
+      background: #fffaf4;
     }
 
     .left-panel {
-      position: relative;
-      z-index: 15;
-      transition: opacity 0.45s ease, transform 0.45s ease;
+      position: absolute;
+      left: 34px;
+      top: 118px;
+      width: 280px;
+      z-index: 30;
+      opacity: 1;
+      transform: translateX(0);
+      transition: 0.45s ease;
     }
 
-    .left-title {
+    .panel-title {
       margin: 0 0 10px;
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 500;
-      color: rgba(255,250,245,0.96);
-      text-shadow: 0 3px 16px rgba(0,0,0,0.34);
+      color: rgba(255,250,244,0.98);
+      text-shadow: 0 2px 14px rgba(0,0,0,0.36);
     }
 
-    .left-subtitle {
-      margin: 0 0 20px;
-      color: rgba(255,243,231,0.74);
+    .panel-subtitle {
+      margin: 0 0 18px;
       font-size: 13px;
-      line-height: 1.75;
-      text-shadow: 0 3px 16px rgba(0,0,0,0.26);
+      line-height: 1.8;
+      color: rgba(255,244,232,0.74);
+      text-shadow: 0 2px 14px rgba(0,0,0,0.30);
     }
 
     .stone-list {
@@ -155,225 +137,598 @@
       gap: 12px;
     }
 
-    .stone-item {
-      border: none;
-      background: transparent;
-      padding: 0;
-      cursor: pointer;
-      text-align: left;
-      color: #fffaf5;
-    }
-
-    .stone-item-inner {
-      display: grid;
-      grid-template-columns: 78px 1fr;
-      gap: 13px;
-      align-items: center;
+    .stone-card {
+      width: 100%;
       padding: 12px;
       border-radius: 24px;
-      background: rgba(255,250,245,0.05);
-      border: 1px solid rgba(255,250,245,0.14);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,250,244,0.14);
+      background: rgba(255,250,244,0.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
       transition: 0.22s ease;
     }
 
-    .stone-item:hover .stone-item-inner {
-      background: rgba(255,250,245,0.1);
-      border-color: rgba(255,250,245,0.28);
-      transform: translateX(5px);
+    .stone-card:hover {
+      transform: translateX(4px);
+      background: rgba(255,250,244,0.10);
+      border-color: rgba(255,250,244,0.28);
     }
 
-    .stone-item.active .stone-item-inner {
-      background: rgba(255,250,245,0.16);
-      border-color: rgba(255,250,245,0.46);
+    .stone-card.active {
+      background: rgba(255,250,244,0.16);
+      border-color: rgba(255,250,244,0.42);
     }
 
-    .mini-scene {
-      width: 70px;
-      height: 86px;
+    .stone-thumb {
+      width: 72px;
+      height: 84px;
       border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at 50% 36%, rgba(255,255,255,0.10), transparent 52%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.10));
       overflow: hidden;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 72%);
+      position: relative;
+    }
+
+    .thumb-shape {
+      position: relative;
+      transform: perspective(300px) rotateY(-18deg);
+      transform-style: preserve-3d;
+    }
+
+    .thumb-stone-front,
+    .thumb-stone-side,
+    .thumb-base-front,
+    .thumb-base-side {
+      position: absolute;
+    }
+
+    .thumb.rounded .thumb-shape {
+      width: 30px;
+      height: 46px;
+    }
+
+    .thumb.rounded .thumb-stone-front {
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 46px;
+      border-radius: 15px 15px 6px 6px;
+      background:
+        linear-gradient(180deg, rgba(240,237,231,0.18), rgba(173,166,156,0.18) 22%, rgba(58,52,47,0.12) 100%),
+        linear-gradient(115deg, #8a8177 0%, #7e756b 30%, #948b82 58%, #736a62 100%);
+      box-shadow:
+        inset -12px 0 16px rgba(34,28,24,0.18),
+        inset 0 12px 14px rgba(255,255,255,0.08),
+        0 6px 12px rgba(0,0,0,0.18);
+    }
+
+    .thumb.rounded .thumb-stone-side {
+      right: -7px;
+      top: 4px;
+      width: 8px;
+      height: 42px;
+      border-radius: 0 10px 4px 0;
+      background: linear-gradient(180deg, #6c655d 0%, #5d5650 100%);
+      opacity: 0.85;
+    }
+
+    .thumb.rounded .thumb-base-front {
+      left: -7px;
+      bottom: -10px;
+      width: 44px;
+      height: 10px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #796f66 0%, #615951 100%);
+      box-shadow: 0 5px 9px rgba(0,0,0,0.18);
+    }
+
+    .thumb.rounded .thumb-base-side {
+      right: -10px;
+      bottom: -8px;
+      width: 10px;
+      height: 8px;
+      border-radius: 0 3px 3px 0;
+      background: #514b44;
+    }
+
+    .thumb.square .thumb-shape {
+      width: 30px;
+      height: 46px;
+    }
+
+    .thumb.square .thumb-stone-front {
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 46px;
+      border-radius: 5px;
+      background:
+        linear-gradient(180deg, rgba(240,237,231,0.14), rgba(173,166,156,0.12) 20%, rgba(58,52,47,0.10) 100%),
+        linear-gradient(115deg, #8a8177 0%, #7e756b 30%, #968d84 58%, #746b63 100%);
+      box-shadow:
+        inset -12px 0 16px rgba(34,28,24,0.18),
+        inset 0 12px 14px rgba(255,255,255,0.08),
+        0 6px 12px rgba(0,0,0,0.18);
+    }
+
+    .thumb.square .thumb-stone-side {
+      right: -7px;
+      top: 2px;
+      width: 8px;
+      height: 44px;
+      border-radius: 0 4px 4px 0;
+      background: linear-gradient(180deg, #6c655d 0%, #5d5650 100%);
+      opacity: 0.85;
+    }
+
+    .thumb.square .thumb-base-front {
+      left: -7px;
+      bottom: -10px;
+      width: 44px;
+      height: 10px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #796f66 0%, #615951 100%);
+      box-shadow: 0 5px 9px rgba(0,0,0,0.18);
+    }
+
+    .thumb.square .thumb-base-side {
+      right: -10px;
+      bottom: -8px;
+      width: 10px;
+      height: 8px;
+      border-radius: 0 3px 3px 0;
+      background: #514b44;
+    }
+
+    .thumb.arch .thumb-shape {
+      width: 30px;
+      height: 46px;
+    }
+
+    .thumb.arch .thumb-stone-front {
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 46px;
+      border-radius: 15px 15px 4px 4px / 18px 18px 4px 4px;
+      background:
+        linear-gradient(180deg, rgba(240,237,231,0.16), rgba(173,166,156,0.12) 20%, rgba(58,52,47,0.10) 100%),
+        linear-gradient(115deg, #867d73 0%, #7b7368 30%, #938981 58%, #716860 100%);
+      box-shadow:
+        inset -12px 0 16px rgba(34,28,24,0.18),
+        inset 0 12px 14px rgba(255,255,255,0.08),
+        0 6px 12px rgba(0,0,0,0.18);
+    }
+
+    .thumb.arch .thumb-stone-side {
+      right: -7px;
+      top: 4px;
+      width: 8px;
+      height: 42px;
+      border-radius: 0 10px 4px 0;
+      background: linear-gradient(180deg, #6c655d 0%, #5d5650 100%);
+      opacity: 0.85;
+    }
+
+    .thumb.arch .thumb-base-front {
+      left: -7px;
+      bottom: -10px;
+      width: 44px;
+      height: 10px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #796f66 0%, #615951 100%);
+      box-shadow: 0 5px 9px rgba(0,0,0,0.18);
+    }
+
+    .thumb.arch .thumb-base-side {
+      right: -10px;
+      bottom: -8px;
+      width: 10px;
+      height: 8px;
+      border-radius: 0 3px 3px 0;
+      background: #514b44;
     }
 
     .stone-name {
-      margin: 0 0 5px;
-      font-size: 14px;
-      color: rgba(255,250,245,0.95);
+      margin: 0 0 6px;
+      font-size: 15px;
+      color: rgba(255,250,244,0.96);
     }
 
     .stone-desc {
       margin: 0;
       font-size: 12px;
       line-height: 1.5;
-      color: rgba(255,243,231,0.62);
+      color: rgba(255,243,232,0.68);
     }
 
-    .confirm-btn {
-      margin-top: 22px;
+    .main-confirm-btn {
       width: 100%;
-      padding: 13px 18px;
+      margin-top: 18px;
+      padding: 13px 16px;
+      background: rgba(255,250,244,0.92);
+      color: #514339;
       font-size: 14px;
-      background: rgba(255,250,245,0.92);
-      color: #4c3d34;
-      border: 1px solid rgba(255,250,245,0.58);
-      box-shadow: 0 14px 28px rgba(0,0,0,0.18);
-    }
-
-    .confirm-btn:hover {
-      background: rgba(255,250,245,0.98);
-      transform: translateY(-1px);
-    }
-
-    .center-area {
-      position: relative;
-      min-height: 650px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
     }
 
     .headline {
       position: absolute;
-      top: 8px;
+      top: 32px;
       left: 50%;
       transform: translateX(-50%);
-      width: min(720px, 90%);
       text-align: center;
-      z-index: 10;
-      pointer-events: none;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
-      transition: opacity 0.45s ease, transform 0.45s ease;
+      width: min(760px, calc(100% - 640px));
+      z-index: 18;
+      opacity: 1;
+      transition: 0.45s ease;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.34);
     }
 
     .headline h1 {
       margin: 0 0 8px;
       font-size: 34px;
       font-weight: 500;
-      color: rgba(255,248,239,0.98);
+      color: rgba(255,250,244,0.98);
     }
 
     .headline p {
       margin: 0;
       font-size: 14px;
       line-height: 1.7;
-      color: rgba(255,243,231,0.76);
+      color: rgba(255,244,232,0.76);
     }
 
-    .scene-wrap {
-      position: relative;
-      width: min(520px, 56vw);
-      height: min(590px, 70vh);
-      min-width: 330px;
-      min-height: 440px;
-      margin-top: 44px;
+    .memorial-stage {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 560px;
+      height: 540px;
+      transform: translate(-50%, -50%);
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .stone-wrap {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-48%, -24%);
+      width: 250px;
+      height: 330px;
+      transition:
+        transform 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
+        width 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
+        height 1.25s cubic-bezier(0.22, 0.82, 0.22, 1);
+      pointer-events: none;
+    }
+
+    .stone-wrap.final {
+      width: 186px;
+      height: 246px;
+      transform: translate(-50%, -5%);
+    }
+
+    .stone-3d {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transform: perspective(1100px) rotateY(-18deg);
+      transition: transform 1.25s cubic-bezier(0.22, 0.82, 0.22, 1);
+    }
+
+    .stone-wrap.final .stone-3d {
+      transform: perspective(1100px) rotateY(0deg);
+    }
+
+    .stone-face,
+    .stone-side,
+    .stone-base-front,
+    .stone-base-side,
+    .stone-plinth-front,
+    .stone-plinth-side {
+      position: absolute;
+    }
+
+    .stone-face {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 80%;
+      overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.14),
+        inset -26px 0 30px rgba(38,33,29,0.18),
+        inset 0 -14px 18px rgba(36,31,27,0.12),
+        0 18px 26px rgba(0,0,0,0.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 16%, rgba(0,0,0,0.06) 100%),
+        radial-gradient(circle at 20% 12%, rgba(255,255,255,0.11), transparent 22%),
+        radial-gradient(circle at 62% 66%, rgba(255,224,180,0.05), transparent 38%),
+        linear-gradient(110deg, #8b8278 0%, #7d746a 22%, #938a81 48%, #847b72 64%, #716860 100%);
+    }
+
+    .stone-face::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(rgba(255,255,255,0.04) 0.9px, transparent 1.1px),
+        radial-gradient(rgba(0,0,0,0.05) 0.8px, transparent 1px),
+        linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.03) 48%, transparent 100%);
+      background-size: 10px 10px, 14px 14px, 100% 100%;
+      background-position: 0 0, 3px 5px, 0 0;
+      mix-blend-mode: soft-light;
+      opacity: 0.78;
+      pointer-events: none;
+    }
+
+    .stone-face::after {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 7%;
+      bottom: 7%;
+      border-radius: inherit;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.05),
+        inset 0 16px 18px rgba(255,255,255,0.04),
+        inset 0 -12px 16px rgba(0,0,0,0.04);
+      pointer-events: none;
+    }
+
+    .stone-side {
+      top: 5px;
+      right: -16px;
+      width: 17px;
+      height: calc(80% - 8px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.10)),
+        linear-gradient(180deg, #6f675f 0%, #625b54 100%);
+      opacity: 0.96;
+      box-shadow: inset 2px 0 4px rgba(255,255,255,0.04);
+    }
+
+    .stone-base-front {
+      left: -18px;
+      bottom: 28px;
+      width: calc(100% + 24px);
+      height: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.10)),
+        linear-gradient(180deg, #7a7168 0%, #625a53 100%);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.16);
+    }
+
+    .stone-base-side {
+      right: -24px;
+      bottom: 30px;
+      width: 24px;
+      height: 20px;
+      background: linear-gradient(180deg, #5b544d 0%, #4e4842 100%);
+    }
+
+    .stone-plinth-front {
+      left: -30px;
+      bottom: 0;
+      width: calc(100% + 40px);
+      height: 30px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.12)),
+        linear-gradient(180deg, #736a61 0%, #5e5750 100%);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+    }
+
+    .stone-plinth-side {
+      right: -40px;
+      bottom: 2px;
+      width: 40px;
+      height: 28px;
+      background: linear-gradient(180deg, #59534d 0%, #4a4540 100%);
+    }
+
+    .stone-shape-rounded .stone-face {
+      border-radius: 36px 36px 8px 8px;
+    }
+
+    .stone-shape-rounded .stone-side {
+      border-radius: 0 30px 6px 0;
+    }
+
+    .stone-shape-square .stone-face {
+      border-radius: 8px;
+    }
+
+    .stone-shape-square .stone-side {
+      border-radius: 0 6px 6px 0;
+    }
+
+    .stone-shape-arch .stone-face {
+      border-radius: 42px 42px 8px 8px / 50px 50px 8px 8px;
+    }
+
+    .stone-shape-arch .stone-side {
+      border-radius: 0 24px 6px 0;
+    }
+
+    .engraving {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      width: 78%;
+      height: calc(80% - 34px);
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 8px;
+      text-align: center;
+      pointer-events: none;
+      color: rgba(68,58,50,0.54);
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.12),
+        0 -1px 0 rgba(0,0,0,0.06);
+    }
+
+    .paw {
+      font-size: 20px;
+      opacity: 0.32;
+      margin-bottom: 8px;
+    }
+
+    .visibility-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 74px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: rgba(79,67,58,0.54);
+      background: rgba(79,67,58,0.08);
+      margin-bottom: 16px;
+    }
+
+    .pet-photo {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.14),
+        0 8px 16px rgba(0,0,0,0.10);
+      opacity: 0.95;
+      display: none;
+    }
+
+    .pet-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pet-name {
+      font-size: 22px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      color: rgba(69,58,50,0.62);
+      font-weight: 500;
+    }
+
+    .pet-dates {
+      font-size: 11px;
+      line-height: 1.55;
+      color: rgba(80,69,60,0.48);
+      margin-bottom: 12px;
+      max-width: 92%;
+      word-break: break-word;
+    }
+
+    .pet-epitaph {
+      font-size: 10px;
+      line-height: 1.7;
+      color: rgba(82,70,61,0.42);
+      max-width: 94%;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ground-shadow {
+      position: absolute;
+      left: 50%;
+      bottom: -2px;
+      width: 280px;
+      height: 48px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.14) 40%, rgba(0,0,0,0.03) 72%, rgba(0,0,0,0) 100%);
+      filter: blur(6px);
       transition:
         width 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
-        height 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
         transform 1.25s cubic-bezier(0.22, 0.82, 0.22, 1);
     }
 
-    #mainScene {
-      position: absolute;
-      inset: 0;
-      border-radius: 24px;
-    }
-
-    .right-space {
-      min-height: 1px;
+    .stone-wrap.final .ground-shadow {
+      width: 206px;
+      transform: translateX(-50%) translateY(-2px);
     }
 
     .dock {
-      position: fixed;
+      position: absolute;
       left: 50%;
-      bottom: 26px;
-      transform: translateX(-50%) translateY(24px);
+      bottom: 24px;
+      transform: translateX(-50%);
       z-index: 40;
       display: flex;
       gap: 12px;
       padding: 12px;
       border-radius: 999px;
-      background: rgba(20,22,20,0.34);
-      border: 1px solid rgba(255,250,245,0.16);
+      background: rgba(22,22,18,0.32);
+      border: 1px solid rgba(255,250,244,0.14);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.24);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.55s ease, transform 0.55s ease;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.24);
     }
 
     .dock-btn {
       padding: 10px 18px;
       font-size: 14px;
-      background: rgba(255,250,245,0.06);
     }
 
-    body.memorial-mode .dock {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    body.planting .left-panel,
-    body.memorial-mode .left-panel {
-      opacity: 0;
-      transform: translateX(-16px);
-      pointer-events: none;
-    }
-
-    body.planting .headline,
-    body.memorial-mode .headline {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-10px);
-    }
-
-    body.planting .scene-wrap,
-    body.memorial-mode .scene-wrap {
-      width: min(350px, 43vw);
-      height: min(445px, 55vh);
-      transform: translate(-20px, 8px);
-    }
-
-    .modal-layer {
+    .modal {
       position: fixed;
       inset: 0;
-      z-index: 100;
       display: none;
       align-items: center;
       justify-content: center;
+      background: rgba(5,8,10,0.64);
+      z-index: 100;
       padding: 26px;
-      background: rgba(5,7,8,0.64);
     }
 
-    .modal-layer.show { display: flex; }
+    .modal.show {
+      display: flex;
+    }
 
     .modal-card {
       position: relative;
       width: min(760px, 92vw);
       max-height: 82vh;
       overflow-y: auto;
-      padding: 30px;
-      border-radius: 30px;
-      background: rgba(255,250,245,0.95);
-      color: #4c3d34;
-      box-shadow: 0 26px 80px rgba(0,0,0,0.45);
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255,250,244,0.96);
+      color: #4c3e34;
+      box-shadow: 0 26px 70px rgba(0,0,0,0.42);
     }
 
     .modal-close {
       position: absolute;
-      top: 18px;
-      right: 18px;
+      right: 16px;
+      top: 14px;
+      border: none;
       width: 38px;
       height: 38px;
-      border: none;
       border-radius: 50%;
-      background: rgba(76,61,52,0.1);
-      color: #4c3d34;
-      font-size: 26px;
-      line-height: 1;
+      background: rgba(76,62,52,0.10);
+      color: #4c3e34;
       cursor: pointer;
+      font-size: 24px;
     }
 
     .modal-card h2 {
@@ -383,137 +738,137 @@
     }
 
     .modal-card p {
-      margin: 0;
       line-height: 1.8;
-      color: rgba(76,61,52,0.75);
+      color: rgba(76,62,52,0.76);
       font-size: 15px;
+      margin: 0;
     }
 
-    .photo-block { margin-bottom: 26px; }
+    .photo-block {
+      margin-bottom: 24px;
+    }
+
     .photo-block h3 {
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       font-size: 18px;
       font-weight: 500;
-      color: #4c3d34;
     }
 
-    .photo-gallery {
+    .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
     }
 
-    .gallery-photo {
+    .gallery-item {
       aspect-ratio: 1 / 1;
       border-radius: 18px;
       overflow: hidden;
       background: rgba(120,95,70,0.08);
-      border: 1px solid rgba(134,103,75,0.16);
+      border: 1px solid rgba(120,95,70,0.12);
       cursor: zoom-in;
     }
 
-    .gallery-photo img {
+    .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .empty-text {
-      color: rgba(76,61,52,0.46);
-      font-size: 14px;
-    }
-
-    .gift-buttons {
+    .gift-row {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
     }
 
-    .gift-buttons button,
+    .gift-row button,
     .message-box button {
       border: none;
-      background: #715843;
-      color: #fffaf5;
-      padding: 11px 16px;
+      background: #705843;
+      color: #fffaf4;
       border-radius: 999px;
+      padding: 11px 16px;
       cursor: pointer;
       font-size: 14px;
     }
 
-    .animal-status {
-      margin-top: 14px;
-      padding: 13px 15px;
+    .gift-status {
+      margin-top: 16px;
+      padding: 14px 16px;
       border-radius: 18px;
-      background: rgba(118,91,66,0.08);
-      color: rgba(76,61,52,0.66);
+      background: rgba(112,88,67,0.08);
+      color: rgba(76,62,52,0.72);
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
-    .placed-items {
-      margin-top: 14px;
+    .placed-list {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
-      min-height: 28px;
+      gap: 10px;
+      margin-top: 14px;
+      min-height: 30px;
     }
 
-    .placed-item-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+    .placed-item {
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(113,88,67,0.10);
-      color: rgba(76,61,52,0.72);
+      background: rgba(112,88,67,0.08);
+      color: rgba(76,62,52,0.74);
       font-size: 13px;
     }
 
     .message-box textarea {
       width: 100%;
-      height: 108px;
-      border: 1px solid rgba(134,103,75,0.22);
-      background: rgba(255,255,255,0.72);
-      color: #4c3d34;
-      padding: 14px;
+      height: 110px;
+      border: 1px solid rgba(120,95,70,0.18);
       border-radius: 18px;
-      font-size: 14px;
+      background: rgba(255,255,255,0.76);
+      padding: 14px;
       resize: none;
+      font-size: 14px;
+      color: #4c3e34;
     }
 
     .message-list {
-      margin-top: 14px;
+      margin-top: 16px;
     }
 
     .message-item {
       padding: 12px 0;
-      border-bottom: 1px solid rgba(134,103,75,0.14);
-      color: rgba(76,61,52,0.72);
-      line-height: 1.6;
+      border-bottom: 1px solid rgba(120,95,70,0.12);
+      color: rgba(76,62,52,0.74);
+      line-height: 1.7;
       font-size: 14px;
     }
 
-    .photo-lightbox {
+    .empty-text {
+      color: rgba(76,62,52,0.46);
+      font-size: 14px;
+    }
+
+    .lightbox {
       position: fixed;
       inset: 0;
-      z-index: 200;
-      background: rgba(5,7,8,0.86);
       display: none;
       align-items: center;
       justify-content: center;
+      background: rgba(5,8,10,0.86);
+      z-index: 200;
       padding: 28px;
     }
 
-    .photo-lightbox.show { display: flex; }
+    .lightbox.show {
+      display: flex;
+    }
 
-    .photo-lightbox img {
+    .lightbox img {
       max-width: min(92vw, 1100px);
       max-height: 86vh;
       object-fit: contain;
       border-radius: 18px;
-      box-shadow: 0 26px 80px rgba(0,0,0,0.55);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.52);
     }
 
     .lightbox-close {
@@ -523,100 +878,93 @@
       width: 42px;
       height: 42px;
       border: 1px solid rgba(255,255,255,0.32);
-      background: rgba(255,255,255,0.10);
-      color: #fffaf5;
       border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      color: #fffaf4;
       font-size: 26px;
-      line-height: 1;
       cursor: pointer;
       z-index: 210;
+    }
+
+    body.final-mode .left-panel,
+    body.final-mode .headline {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-14px);
     }
 
     @media (max-width: 980px) {
       html, body {
         overflow: auto;
-        min-height: 100%;
-      }
-
-      .shell {
-        min-height: 100vh;
-        height: auto;
       }
 
       .topbar {
-        padding: 22px 18px 0;
-        align-items: flex-start;
+        top: 20px;
+        width: calc(100% - 24px);
       }
 
-      .top-actions {
-        flex-direction: column;
-        align-items: flex-end;
-      }
-
-      .layout {
-        grid-template-columns: 1fr;
-        padding: 22px 18px 100px;
+      .top-right {
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
       .left-panel {
-        max-width: 460px;
-        margin: 0 auto;
-        order: 2;
+        left: 12px;
+        top: 104px;
+        width: 240px;
       }
 
-      .center-area {
-        min-height: 540px;
-        order: 1;
+      .headline {
+        width: calc(100% - 300px);
+        top: 38px;
       }
 
-      .right-space {
-        display: none;
+      .headline h1 {
+        font-size: 28px;
       }
 
-      .scene-wrap {
-        width: min(92vw, 440px);
-        height: 500px;
-        margin-top: 70px;
+      .memorial-stage {
+        width: 100%;
+        left: 0;
+        top: 0;
+        height: 100%;
+        transform: none;
       }
 
-      body.planting .scene-wrap,
-      body.memorial-mode .scene-wrap {
-        width: min(86vw, 335px);
-        height: min(52vh, 410px);
-        transform: translate(-10px, 8px);
+      .stone-wrap {
+        left: 58%;
+        top: 53%;
       }
 
-      .headline h1 { font-size: 28px; }
+      .stone-wrap.final {
+        transform: translate(-50%, -5%);
+      }
 
       .dock {
-        width: calc(100vw - 24px);
-        justify-content: center;
+        width: calc(100% - 24px);
         flex-wrap: wrap;
+        justify-content: center;
         border-radius: 28px;
-        bottom: 18px;
       }
 
-      .photo-gallery {
+      .gallery {
         grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-
-  <div class="shell">
+  <div class="page">
     <div class="topbar">
-      <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
+      <a href="index.html" class="brand" data-key="logo">Starlit Pet Memorial Garden</a>
 
-      <div class="top-actions">
-        <a href="create.html" class="soft-btn" data-key="backBtn">Back to edit</a>
-        <button class="soft-btn" onclick="editStoneAgain()" data-key="changeStoneBtn">Change Stone</button>
-
-        <select id="languageSelect" class="lang-select" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
+      <div class="top-right">
+        <a href="create.html" class="ghost-btn" data-key="backBtn">Back to edit</a>
+        <button class="ghost-btn" id="changeStoneBtn" data-key="changeStoneBtn">Change Stone</button>
+        <select class="lang-select" id="languageSelect">
           <option value="zh">简体中文</option>
           <option value="zh-TW">繁體中文</option>
+          <option value="en">English</option>
           <option value="ja">日本語</option>
           <option value="ko">한국어</option>
           <option value="es">Español</option>
@@ -634,175 +982,185 @@
       </div>
     </div>
 
-    <div class="layout">
-      <aside class="left-panel">
-        <h2 class="left-title" data-key="panelTitle">Tombstone style</h2>
-        <p class="left-subtitle" data-key="panelSubtitle">
-          Choose a 3D tombstone. The center preview will update immediately.
-        </p>
+    <aside class="left-panel" id="leftPanel">
+      <h2 class="panel-title" data-key="panelTitle">Tombstone style</h2>
+      <p class="panel-subtitle" data-key="panelSubtitle">Choose a tombstone. The center preview will update immediately.</p>
 
-        <div class="stone-list">
-          <button class="stone-item active" data-style="rounded" onclick="selectStone('rounded', this)">
-            <div class="stone-item-inner">
-              <div class="mini-scene" id="miniRounded"></div>
-              <div>
-                <p class="stone-name" data-key="roundedName">Rounded stone</p>
-                <p class="stone-desc" data-key="roundedDesc">Classic and gentle.</p>
+      <div class="stone-list">
+        <div class="stone-card active" data-style="rounded">
+          <div class="stone-thumb">
+            <div class="thumb rounded">
+              <div class="thumb-shape">
+                <div class="thumb-stone-front"></div>
+                <div class="thumb-stone-side"></div>
+                <div class="thumb-base-front"></div>
+                <div class="thumb-base-side"></div>
               </div>
             </div>
-          </button>
+          </div>
+          <div>
+            <p class="stone-name" data-key="roundedName">Rounded stone</p>
+            <p class="stone-desc" data-key="roundedDesc">Classic and gentle.</p>
+          </div>
+        </div>
 
-          <button class="stone-item" data-style="square" onclick="selectStone('square', this)">
-            <div class="stone-item-inner">
-              <div class="mini-scene" id="miniSquare"></div>
-              <div>
-                <p class="stone-name" data-key="squareName">Soft square</p>
-                <p class="stone-desc" data-key="squareDesc">Clean and quiet.</p>
+        <div class="stone-card" data-style="square">
+          <div class="stone-thumb">
+            <div class="thumb square">
+              <div class="thumb-shape">
+                <div class="thumb-stone-front"></div>
+                <div class="thumb-stone-side"></div>
+                <div class="thumb-base-front"></div>
+                <div class="thumb-base-side"></div>
               </div>
             </div>
-          </button>
+          </div>
+          <div>
+            <p class="stone-name" data-key="squareName">Soft square</p>
+            <p class="stone-desc" data-key="squareDesc">Clean and quiet.</p>
+          </div>
+        </div>
 
-          <button class="stone-item" data-style="arch" onclick="selectStone('arch', this)">
-            <div class="stone-item-inner">
-              <div class="mini-scene" id="miniArch"></div>
-              <div>
-                <p class="stone-name" data-key="archName">Tall arch</p>
-                <p class="stone-desc" data-key="archDesc">Calm and solemn.</p>
+        <div class="stone-card" data-style="arch">
+          <div class="stone-thumb">
+            <div class="thumb arch">
+              <div class="thumb-shape">
+                <div class="thumb-stone-front"></div>
+                <div class="thumb-stone-side"></div>
+                <div class="thumb-base-front"></div>
+                <div class="thumb-base-side"></div>
               </div>
             </div>
-          </button>
+          </div>
+          <div>
+            <p class="stone-name" data-key="archName">Tall arch</p>
+            <p class="stone-desc" data-key="archDesc">Calm and solemn.</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="main-confirm-btn" id="confirmStoneBtn" data-key="confirmBtn">Use this tombstone</button>
+    </aside>
+
+    <div class="headline" id="headline">
+      <h1 data-key="title">Choose a tombstone</h1>
+      <p data-key="subtitle">The stone will gently turn forward and settle into the memorial garden.</p>
+    </div>
+
+    <div class="memorial-stage">
+      <div class="stone-wrap" id="stoneWrap">
+        <div class="stone-3d stone-shape-rounded" id="stone3d">
+          <div class="stone-face" id="stoneFace"></div>
+          <div class="stone-side"></div>
+          <div class="stone-base-front"></div>
+          <div class="stone-base-side"></div>
+          <div class="stone-plinth-front"></div>
+          <div class="stone-plinth-side"></div>
+
+          <div class="engraving">
+            <div class="paw">🐾</div>
+            <div class="visibility-badge" id="visibilityBadge">Public</div>
+            <div class="pet-photo" id="petPhotoBox">
+              <img id="petPhoto" src="" alt="">
+            </div>
+            <div class="pet-name" id="petName">Luna</div>
+            <div class="pet-dates" id="petDates">---- — ----</div>
+            <div class="pet-epitaph" id="petEpitaph">You are loved, always.</div>
+          </div>
         </div>
 
-        <button class="confirm-btn" onclick="confirmStone()" data-key="confirmBtn">Use this tombstone</button>
-      </aside>
+        <div class="ground-shadow"></div>
+      </div>
+    </div>
 
-      <section class="center-area">
-        <div class="headline">
-          <h1 data-key="title">Choose a tombstone</h1>
-          <p data-key="subtitle">The stone will gently turn forward and settle into the memorial garden.</p>
-        </div>
-
-        <div class="scene-wrap" id="sceneWrap">
-          <div id="mainScene"></div>
-        </div>
-      </section>
-
-      <div class="right-space"></div>
+    <div class="dock">
+      <button class="dock-btn" data-panel="storyModal" data-key="storyBtn">Story</button>
+      <button class="dock-btn" data-panel="photosModal" data-key="photosBtn">Photos</button>
+      <button class="dock-btn" data-panel="giftModal" data-key="giftBtn">Gift</button>
+      <button class="dock-btn" data-panel="messageModal" data-key="messageBtn">Messages</button>
     </div>
   </div>
 
-  <div class="dock">
-    <button class="dock-btn" onclick="openPanel('storyPanel')" data-key="storyBtn">Story</button>
-    <button class="dock-btn" onclick="openPanel('photosPanel')" data-key="photosBtn">Photos</button>
-    <button class="dock-btn" onclick="openPanel('giftPanel')" data-key="giftBtn">Gift</button>
-    <button class="dock-btn" onclick="openPanel('messagePanel')" data-key="messageBtnShort">Messages</button>
-  </div>
-
-  <div class="modal-layer" id="storyPanel" onclick="closePanels(event)">
+  <div class="modal" id="storyModal">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
+      <button class="modal-close">×</button>
       <h2 data-key="storyTitle">Pet Story</h2>
-      <p id="petStoryDisplay" class="empty-text">No story has been written yet.</p>
+      <p id="storyText" class="empty-text">No story has been written yet.</p>
     </div>
   </div>
 
-  <div class="modal-layer" id="photosPanel" onclick="closePanels(event)">
+  <div class="modal" id="photosModal">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
+      <button class="modal-close">×</button>
       <h2 data-key="photosTitle">Memory Photos</h2>
 
       <div class="photo-block">
         <h3 data-key="publicPhotosTitle">Public Memory Photos</h3>
-        <div id="publicPhotosDisplay" class="photo-gallery"></div>
+        <div class="gallery" id="publicGallery"></div>
       </div>
 
       <div class="photo-block">
         <h3 data-key="privatePhotosTitle">Private Memory Photos</h3>
-        <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">
-          These photos are currently shown only in your browser demo.
-        </p>
-        <div id="privatePhotosDisplay" class="photo-gallery"></div>
+        <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">These photos are currently shown only in your browser demo.</p>
+        <div class="gallery" id="privateGallery"></div>
       </div>
     </div>
   </div>
 
-  <div class="modal-layer" id="giftPanel" onclick="closePanels(event)">
+  <div class="modal" id="giftModal">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
+      <button class="modal-close">×</button>
       <h2 data-key="giftTitle">Offer a small gift</h2>
 
-      <div class="gift-buttons">
+      <div class="gift-row">
         <button onclick="placeGift('can')" data-key="giftCan">Place a can</button>
         <button onclick="placeGift('ball')" data-key="giftBall">Place a ball</button>
         <button onclick="placeGift('seed')" data-key="giftSeed">Place seeds</button>
         <button onclick="placeGift('flower')" data-key="giftFlower">Place flowers</button>
       </div>
 
-      <div class="animal-status" id="animalStatus" data-key="animalStatus">
-        Quiet gifts may bring gentle visitors.
-      </div>
-
-      <div class="placed-items" id="placedItemsList"></div>
+      <div class="gift-status" id="giftStatus" data-key="giftStatus">Quiet gifts may bring gentle visitors.</div>
+      <div class="placed-list" id="placedList"></div>
     </div>
   </div>
 
-  <div class="modal-layer" id="messagePanel" onclick="closePanels(event)">
+  <div class="modal" id="messageModal">
     <div class="modal-card message-box">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
+      <button class="modal-close">×</button>
       <h2 data-key="messageTitle">Leave a message</h2>
       <textarea id="messageInput" data-placeholder-key="messagePlaceholder" placeholder="Write a few quiet words..."></textarea>
       <br><br>
       <button onclick="addMessage()" data-key="messageSendBtn">Leave message</button>
-      <div id="messageList" class="message-list"></div>
+      <div class="message-list" id="messageList"></div>
     </div>
   </div>
 
-  <div class="photo-lightbox" id="photoLightbox" onclick="closePhotoLightbox()">
-    <button class="lightbox-close" onclick="closePhotoLightbox()">×</button>
-    <img id="lightboxImage" src="" alt="">
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close">×</button>
+    <img id="lightboxImg" src="" alt="">
   </div>
 
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script>
-    let currentLang = "en";
-    let selectedStoneStyle = "rounded";
-    let isPlanting = false;
-
-    let mainScene = null;
-    let mainCamera = null;
-    let mainRenderer = null;
-    let mainStoneGroup = null;
-    let mainTextPlane = null;
-
-    const miniScenes = [];
-
-    const PREVIEW_SCALE = 0.78;
-    const FINAL_SCALE = 0.57;
-    const PREVIEW_Y = -0.10;
-    const FINAL_Y = -0.36;
-    const PREVIEW_ANGLE = -0.28;
-    const FINAL_ANGLE = 0;
-
     const translations = {
       en: {
         logo: "Starlit Pet Memorial Garden",
         backBtn: "Back to edit",
         changeStoneBtn: "Change Stone",
         panelTitle: "Tombstone style",
-        panelSubtitle: "Choose a 3D tombstone. The center preview will update immediately.",
+        panelSubtitle: "Choose a tombstone. The center preview will update immediately.",
         title: "Choose a tombstone",
         subtitle: "The stone will gently turn forward and settle into the memorial garden.",
-        confirmBtn: "Use this tombstone",
         roundedName: "Rounded stone",
         roundedDesc: "Classic and gentle.",
         squareName: "Soft square",
         squareDesc: "Clean and quiet.",
         archName: "Tall arch",
         archDesc: "Calm and solemn.",
+        confirmBtn: "Use this tombstone",
         storyBtn: "Story",
         photosBtn: "Photos",
         giftBtn: "Gift",
-        messageBtnShort: "Messages",
+        messageBtn: "Messages",
         storyTitle: "Pet Story",
         photosTitle: "Memory Photos",
         publicPhotosTitle: "Public Memory Photos",
@@ -813,7 +1171,7 @@
         giftBall: "Place a ball",
         giftSeed: "Place seeds",
         giftFlower: "Place flowers",
-        animalStatus: "Quiet gifts may bring gentle visitors.",
+        giftStatus: "Quiet gifts may bring gentle visitors.",
         messageTitle: "Leave a message",
         messagePlaceholder: "Write a few quiet words...",
         messageSendBtn: "Leave message",
@@ -835,20 +1193,20 @@
         backBtn: "返回修改",
         changeStoneBtn: "更换墓碑",
         panelTitle: "墓碑样式",
-        panelSubtitle: "选择一个 3D 墓碑，中间预览会立刻变化。",
+        panelSubtitle: "选择一个墓碑，中间预览会立刻变化。",
         title: "选择墓碑",
         subtitle: "墓碑会慢慢转正，并安静地落到纪念园中。",
-        confirmBtn: "使用这个墓碑",
         roundedName: "圆顶墓碑",
         roundedDesc: "经典、温柔。",
         squareName: "方角墓碑",
         squareDesc: "干净、安静。",
         archName: "高拱墓碑",
         archDesc: "平静、庄重。",
+        confirmBtn: "使用这个墓碑",
         storyBtn: "故事",
         photosBtn: "相册",
         giftBtn: "礼物",
-        messageBtnShort: "留言",
+        messageBtn: "留言",
         storyTitle: "宠物故事",
         photosTitle: "回忆相册",
         publicPhotosTitle: "公开回忆照片",
@@ -859,15 +1217,15 @@
         giftBall: "放一个球",
         giftSeed: "放一些鸟食",
         giftFlower: "放一些花",
-        animalStatus: "安静的小礼物，可能会吸引温柔的访客。",
+        giftStatus: "安静的小礼物，可能会吸引温柔的访客。",
         messageTitle: "留言",
         messagePlaceholder: "写几句安静的话...",
         messageSendBtn: "留下留言",
         noStory: "还没有写下故事。",
         noPhotos: "还没有照片。",
         noMessages: "还没有留言。",
-        defaultName: "露娜",
-        defaultWords: "永远爱你。",
+        defaultName: "猫宝",
+        defaultWords: "谢谢你陪我们走过那么多温柔的日子。",
         publicText: "公开",
         privateText: "私密",
         inviteText: "邀请可见",
@@ -881,20 +1239,20 @@
         backBtn: "返回修改",
         changeStoneBtn: "更換墓碑",
         panelTitle: "墓碑樣式",
-        panelSubtitle: "選擇一個 3D 墓碑，中間預覽會立刻變化。",
+        panelSubtitle: "選擇一個墓碑，中間預覽會立刻變化。",
         title: "選擇墓碑",
         subtitle: "墓碑會慢慢轉正，並安靜地落到紀念園中。",
-        confirmBtn: "使用這個墓碑",
         roundedName: "圓頂墓碑",
         roundedDesc: "經典、溫柔。",
         squareName: "方角墓碑",
         squareDesc: "乾淨、安靜。",
         archName: "高拱墓碑",
         archDesc: "平靜、莊重。",
+        confirmBtn: "使用這個墓碑",
         storyBtn: "故事",
         photosBtn: "相冊",
         giftBtn: "禮物",
-        messageBtnShort: "留言",
+        messageBtn: "留言",
         storyTitle: "寵物故事",
         photosTitle: "回憶相冊",
         publicPhotosTitle: "公開回憶照片",
@@ -905,15 +1263,15 @@
         giftBall: "放一個球",
         giftSeed: "放一些鳥食",
         giftFlower: "放一些花",
-        animalStatus: "安靜的小禮物，可能會吸引溫柔的訪客。",
+        giftStatus: "安靜的小禮物，可能會吸引溫柔的訪客。",
         messageTitle: "留言",
         messagePlaceholder: "寫幾句安靜的話...",
         messageSendBtn: "留下留言",
         noStory: "還沒有寫下故事。",
         noPhotos: "還沒有照片。",
         noMessages: "還沒有留言。",
-        defaultName: "露娜",
-        defaultWords: "永遠愛你。",
+        defaultName: "貓寶",
+        defaultWords: "謝謝你陪我們走過那麼多溫柔的日子。",
         publicText: "公開",
         privateText: "私密",
         inviteText: "邀請可見",
@@ -924,9 +1282,16 @@
       }
     };
 
-    ["ja","ko","es","fr","de","pt","it","th","vi","id","ms","hi","ar"].forEach(function(lang) {
+    ["ja","ko","es","fr","de","pt","it","th","vi","id","ms","hi","ar"].forEach(function(lang){
       translations[lang] = translations.en;
     });
+
+    let currentLang = localStorage.getItem("siteLanguage") || "zh";
+    let selectedStyle = "rounded";
+
+    const stoneWrap = document.getElementById("stoneWrap");
+    const stone3d = document.getElementById("stone3d");
+    const languageSelect = document.getElementById("languageSelect");
 
     function getText() {
       return translations[currentLang] || translations.en;
@@ -941,760 +1306,135 @@
     }
 
     function getVisibilityText(value) {
-      const text = getText();
-      if (value === "private") return text.privateText;
-      if (value === "invite") return text.inviteText;
-      return text.publicText;
+      const t = getText();
+      if (value === "private") return t.privateText;
+      if (value === "invite") return t.inviteText;
+      return t.publicText;
     }
 
-    function normalizeStyle(style) {
-      if (style === "square") return "square";
-      if (style === "arch") return "arch";
-      return "rounded";
-    }
-
-    function changeLanguage(lang) {
-      currentLang = translations[lang] ? lang : "en";
+    function applyLanguage(lang) {
+      currentLang = translations[lang] ? lang : "zh";
       localStorage.setItem("siteLanguage", currentLang);
+      languageSelect.value = currentLang;
 
-      document.documentElement.lang = currentLang;
-      document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+      const t = getText();
 
-      const select = document.getElementById("languageSelect");
-      if (select) select.value = currentLang;
-
-      const text = getText();
-
-      document.querySelectorAll("[data-key]").forEach(function(el) {
+      document.querySelectorAll("[data-key]").forEach(function(el){
         const key = el.getAttribute("data-key");
-        if (text[key]) el.textContent = text[key];
+        if (t[key]) el.textContent = t[key];
       });
 
-      document.querySelectorAll("[data-placeholder-key]").forEach(function(el) {
+      document.querySelectorAll("[data-placeholder-key]").forEach(function(el){
         const key = el.getAttribute("data-placeholder-key");
-        if (text[key]) el.placeholder = text[key];
+        if (t[key]) el.placeholder = t[key];
       });
 
-      rebuildMainTextTexture();
-      loadExtraMemorialInfo();
+      renderStoneInfo();
+      renderStory();
+      renderPhotos();
+      renderMessages();
       renderPlacedItems();
     }
 
-    function createStoneMaps(baseHex, seedStart) {
-      const size = 1024;
-      const colorCanvas = document.createElement("canvas");
-      const bumpCanvas = document.createElement("canvas");
-      colorCanvas.width = size;
-      colorCanvas.height = size;
-      bumpCanvas.width = size;
-      bumpCanvas.height = size;
-
-      const cctx = colorCanvas.getContext("2d");
-      const bctx = bumpCanvas.getContext("2d");
-
-      function hexToRgb(hex) {
-        const clean = hex.replace("#", "");
-        const n = parseInt(clean, 16);
-        return {
-          r: (n >> 16) & 255,
-          g: (n >> 8) & 255,
-          b: n & 255
-        };
-      }
-
-      let seed = seedStart || 13;
-      function rnd() {
-        seed = (seed * 9301 + 49297) % 233280;
-        return seed / 233280;
-      }
-
-      const base = hexToRgb(baseHex);
-      cctx.fillStyle = baseHex;
-      cctx.fillRect(0, 0, size, size);
-
-      const grad = cctx.createLinearGradient(0, 0, size, size);
-      grad.addColorStop(0, "rgba(255,255,255,0.04)");
-      grad.addColorStop(0.5, "rgba(255,255,255,0.00)");
-      grad.addColorStop(1, "rgba(0,0,0,0.06)");
-      cctx.fillStyle = grad;
-      cctx.fillRect(0, 0, size, size);
-
-      bctx.fillStyle = "rgb(128,128,128)";
-      bctx.fillRect(0, 0, size, size);
-
-      for (let i = 0; i < 12000; i++) {
-        const x = rnd() * size;
-        const y = rnd() * size;
-        const r = rnd() * 1.5 + 0.2;
-        const delta = Math.floor((rnd() - 0.5) * 24);
-        const rr = Math.max(0, Math.min(255, base.r + delta));
-        const gg = Math.max(0, Math.min(255, base.g + delta));
-        const bb = Math.max(0, Math.min(255, base.b + delta));
-        cctx.fillStyle = "rgba(" + rr + "," + gg + "," + bb + "," + (rnd() * 0.08 + 0.03) + ")";
-        cctx.beginPath();
-        cctx.arc(x, y, r, 0, Math.PI * 2);
-        cctx.fill();
-
-        const light = Math.floor(128 + (rnd() - 0.5) * 20);
-        bctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + (rnd() * 0.10 + 0.05) + ")";
-        bctx.beginPath();
-        bctx.arc(x, y, r * 1.2, 0, Math.PI * 2);
-        bctx.fill();
-      }
-
-      for (let i = 0; i < 26; i++) {
-        const startX = rnd() * size;
-        const startY = rnd() * size;
-        const len = rnd() * 160 + 60;
-        cctx.save();
-        cctx.translate(startX, startY);
-        cctx.rotate((rnd() - 0.5) * 0.9);
-        cctx.fillStyle = "rgba(255,255,255,0.025)";
-        cctx.fillRect(-len / 2, -0.8, len, rnd() * 1.6 + 0.4);
-        cctx.restore();
-
-        bctx.save();
-        bctx.translate(startX, startY);
-        bctx.rotate((rnd() - 0.5) * 0.9);
-        bctx.fillStyle = "rgba(138,138,138,0.07)";
-        bctx.fillRect(-len / 2, -0.8, len, rnd() * 1.6 + 0.4);
-        bctx.restore();
-      }
-
-      const colorMap = new THREE.CanvasTexture(colorCanvas);
-      const bumpMap = new THREE.CanvasTexture(bumpCanvas);
-      colorMap.colorSpace = THREE.SRGBColorSpace;
-      colorMap.needsUpdate = true;
-      bumpMap.needsUpdate = true;
-
-      return { colorMap, bumpMap };
-    }
-
-    function createStoneMaterial(baseHex, seedStart) {
-      const maps = createStoneMaps(baseHex, seedStart);
-      return new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        map: maps.colorMap,
-        bumpMap: maps.bumpMap,
-        bumpScale: 0.018,
-        roughness: 0.98,
-        metalness: 0.0
+    function setStyle(style) {
+      selectedStyle = style;
+      stone3d.className = "stone-3d stone-shape-" + style;
+      document.querySelectorAll(".stone-card").forEach(function(card){
+        card.classList.toggle("active", card.dataset.style === style);
       });
-    }
-
-    function createInsetTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 1024;
-      canvas.height = 1024;
-      const ctx = canvas.getContext("2d");
-
-      ctx.clearRect(0, 0, 1024, 1024);
-
-      const grad = ctx.createLinearGradient(0, 0, 0, 1024);
-      grad.addColorStop(0, "rgba(255,255,255,0.05)");
-      grad.addColorStop(0.5, "rgba(255,255,255,0.01)");
-      grad.addColorStop(1, "rgba(0,0,0,0.05)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 1024, 1024);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
-    function createShadowTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 1024;
-      canvas.height = 1024;
-      const ctx = canvas.getContext("2d");
-
-      const grad = ctx.createRadialGradient(512, 512, 20, 512, 512, 420);
-      grad.addColorStop(0, "rgba(0,0,0,0.32)");
-      grad.addColorStop(0.42, "rgba(0,0,0,0.18)");
-      grad.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 1024, 1024);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
-    function buildRoundedShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.12, -1.72);
-      s.lineTo(-1.12, 0.48);
-      s.quadraticCurveTo(-1.12, 1.62, 0, 1.62);
-      s.quadraticCurveTo(1.12, 1.62, 1.12, 0.48);
-      s.lineTo(1.12, -1.72);
-      s.closePath();
-      return s;
-    }
-
-    function buildSquareShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.18, -1.72);
-      s.lineTo(-1.18, 1.28);
-      s.quadraticCurveTo(-1.18, 1.58, -0.92, 1.58);
-      s.lineTo(0.92, 1.58);
-      s.quadraticCurveTo(1.18, 1.58, 1.18, 1.28);
-      s.lineTo(1.18, -1.72);
-      s.closePath();
-      return s;
-    }
-
-    function buildArchShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.16, -1.74);
-      s.lineTo(-1.16, 0.34);
-      s.absarc(0, 0.34, 1.16, Math.PI, 0, true);
-      s.lineTo(1.16, -1.74);
-      s.closePath();
-      return s;
-    }
-
-    function buildTombstoneShape(style) {
-      style = normalizeStyle(style);
-      if (style === "square") return buildSquareShape();
-      if (style === "arch") return buildArchShape();
-      return buildRoundedShape();
-    }
-
-    function createTextTexture(memorial) {
-      const text = getText();
-      const canvas = document.createElement("canvas");
-      canvas.width = 1024;
-      canvas.height = 1024;
-
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, 1024, 1024);
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      ctx.fillStyle = "rgba(255,250,240,0.05)";
-      ctx.font = "600 40px Arial";
-      ctx.fillText("🐾", 513, 178);
-
-      ctx.fillStyle = "rgba(30,26,23,0.18)";
-      ctx.beginPath();
-      roundRect(ctx, 406, 240, 212, 48, 24);
-      ctx.fill();
-
-      ctx.fillStyle = "rgba(245,240,232,0.10)";
-      ctx.font = "500 24px 'Microsoft YaHei', Arial";
-      ctx.fillText(getVisibilityText(memorial.visibility), 513, 263);
-      ctx.fillStyle = "rgba(42,35,30,0.36)";
-      ctx.fillText(getVisibilityText(memorial.visibility), 512, 264);
-
-      drawEngravedText(ctx, memorial.name || text.defaultName, 512, 438, "500 72px 'Microsoft YaHei', Arial", 0.50);
-      drawEngravedText(ctx, (memorial.birthDate || "----") + " — " + (memorial.leaveDate || "----"), 512, 535, "400 32px 'Microsoft YaHei', Arial", 0.38);
-      drawWrappedEngravedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 650, 460, 42, 3);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      texture.colorSpace = THREE.SRGBColorSpace;
-      return texture;
-    }
-
-    function drawEngravedText(ctx, value, x, y, font, darkAlpha) {
-      ctx.font = font;
-      ctx.fillStyle = "rgba(255,250,240,0.08)";
-      ctx.fillText(value, x + 1.2, y + 1.2);
-      ctx.fillStyle = "rgba(45,38,33," + darkAlpha + ")";
-      ctx.fillText(value, x, y);
-    }
-
-    function drawWrappedEngravedText(ctx, value, x, y, maxWidth, lineHeight, maxLines) {
-      const chars = String(value || "").split("");
-      const lines = [];
-      let current = "";
-
-      for (let i = 0; i < chars.length; i++) {
-        const test = current + chars[i];
-        if (ctx.measureText(test).width > maxWidth && current) {
-          lines.push(current);
-          current = chars[i];
-        } else {
-          current = test;
-        }
-      }
-
-      if (current) lines.push(current);
-
-      const finalLines = lines.slice(0, maxLines);
-      if (lines.length > maxLines && finalLines.length) {
-        finalLines[finalLines.length - 1] = finalLines[finalLines.length - 1].slice(0, -1) + "…";
-      }
-
-      finalLines.forEach(function(line, index) {
-        drawEngravedText(ctx, line, x, y + index * lineHeight, "italic 30px 'Microsoft YaHei', Arial", 0.34);
-      });
-    }
-
-    function roundRect(ctx, x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
-
-    function createStoneGroup(style, showText, scaleValue, sideAngle) {
-      const group = new THREE.Group();
-      style = normalizeStyle(style);
-
-      const shape = buildTombstoneShape(style);
-      const geometry = new THREE.ExtrudeGeometry(shape, {
-        depth: 0.38,
-        bevelEnabled: true,
-        bevelThickness: 0.045,
-        bevelSize: 0.04,
-        bevelSegments: 8,
-        curveSegments: 42
-      });
-      geometry.center();
-
-      const mainMat = createStoneMaterial("#8c857a", 21);
-      const body = new THREE.Mesh(geometry, mainMat);
-      body.position.y = 0.28;
-      body.rotation.y = sideAngle;
-      group.add(body);
-
-      const rearMat = createStoneMaterial("#756d63", 39);
-      const rear = new THREE.Mesh(new THREE.BoxGeometry(2.42, 3.20, 0.09), rearMat);
-      rear.position.set(0, 0.28, -0.25);
-      rear.rotation.y = sideAngle;
-      group.add(rear);
-
-      const insetGeo = new THREE.ShapeGeometry(shape);
-      const insetMat = new THREE.MeshBasicMaterial({
-        map: createInsetTexture(),
-        transparent: true,
-        opacity: 0.22,
-        depthWrite: false
-      });
-      const inset = new THREE.Mesh(insetGeo, insetMat);
-      inset.scale.set(0.82, 0.78, 1);
-      inset.position.set(0, 0.24, 0.23);
-      inset.rotation.y = sideAngle;
-      group.add(inset);
-
-      const baseMat = createStoneMaterial("#787166", 55);
-
-      const baseMain = new THREE.Mesh(new THREE.BoxGeometry(3.26, 0.30, 1.06), baseMat);
-      baseMain.position.set(0, -1.73, -0.03);
-      baseMain.rotation.y = sideAngle;
-      group.add(baseMain);
-
-      const baseTop = new THREE.Mesh(new THREE.BoxGeometry(2.95, 0.14, 0.92), baseMat);
-      baseTop.position.set(0, -1.50, 0.00);
-      baseTop.rotation.y = sideAngle;
-      group.add(baseTop);
-
-      const baseFront = new THREE.Mesh(new THREE.BoxGeometry(3.42, 0.12, 0.18), baseMat);
-      baseFront.position.set(0, -1.86, 0.45);
-      baseFront.rotation.y = sideAngle;
-      group.add(baseFront);
-
-      const shadowMat = new THREE.MeshBasicMaterial({
-        map: createShadowTexture(),
-        transparent: true,
-        depthWrite: false,
-        opacity: 0.82
-      });
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 1.18), shadowMat);
-      shadow.position.set(0, -1.93, -0.48);
-      group.add(shadow);
-
-      if (showText) {
-        const memorial = getMemorialData();
-        const textTexture = createTextTexture(memorial);
-        const textMat = new THREE.MeshBasicMaterial({
-          map: textTexture,
-          transparent: true,
-          opacity: 0.80,
-          depthWrite: false
-        });
-        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.18, 2.78), textMat);
-        mainTextPlane.position.set(0, 0.25, 0.238);
-        mainTextPlane.rotation.y = sideAngle;
-        group.add(mainTextPlane);
-      }
-
-      group.scale.set(scaleValue, scaleValue, scaleValue);
-      group.position.y = PREVIEW_Y;
-
-      group.userData.parts = {
-        body,
-        rear,
-        inset,
-        baseMain,
-        baseTop,
-        baseFront,
-        textPlane: mainTextPlane
-      };
-
-      return group;
-    }
-
-    function initMainScene() {
-      const container = document.getElementById("mainScene");
-      if (!container || !window.THREE) return;
-
-      mainScene = new THREE.Scene();
-
-      mainCamera = new THREE.PerspectiveCamera(
-        30,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      mainCamera.position.set(0, 0.0, 7.5);
-
-      mainRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      mainRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      mainRenderer.setSize(container.clientWidth, container.clientHeight);
-      mainRenderer.outputColorSpace = THREE.SRGBColorSpace;
-      mainRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-      mainRenderer.toneMappingExposure = 1.0;
-
-      container.innerHTML = "";
-      container.appendChild(mainRenderer.domElement);
-
-      mainScene.add(new THREE.AmbientLight(0xffffff, 0.88));
-
-      const hemi = new THREE.HemisphereLight(0xcfdcff, 0x4e4239, 0.72);
-      mainScene.add(hemi);
-
-      const moonLight = new THREE.DirectionalLight(0xd9e2ff, 1.22);
-      moonLight.position.set(-5.4, 7.8, 5.2);
-      mainScene.add(moonLight);
-
-      const fillLight = new THREE.DirectionalLight(0xaab7d9, 0.34);
-      fillLight.position.set(3.2, 3.8, 2.5);
-      mainScene.add(fillLight);
-
-      const warmLight = new THREE.PointLight(0xffd2a1, 1.26, 18, 2);
-      warmLight.position.set(3.0, -1.0, 4.8);
-      mainScene.add(warmLight);
-
-      const lowWarm = new THREE.PointLight(0xffc992, 0.52, 10, 2);
-      lowWarm.position.set(-2.4, -1.2, 4.2);
-      mainScene.add(lowWarm);
 
       const data = getMemorialData();
-      const confirmed = data.tombstoneConfirmed === true;
-      buildMainStone(selectedStoneStyle, confirmed);
-
-      renderMainScene();
-      window.addEventListener("resize", resizeMainScene);
-    }
-
-    function buildMainStone(style, finalMode) {
-      selectedStoneStyle = normalizeStyle(style);
-
-      if (!mainScene) return;
-
-      if (mainStoneGroup) {
-        mainScene.remove(mainStoneGroup);
-      }
-
-      mainTextPlane = null;
-
-      const scaleValue = finalMode ? FINAL_SCALE : PREVIEW_SCALE;
-      const angle = finalMode ? FINAL_ANGLE : PREVIEW_ANGLE;
-
-      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scaleValue, angle);
-      mainStoneGroup.position.y = finalMode ? FINAL_Y : PREVIEW_Y;
-      mainScene.add(mainStoneGroup);
-
-      renderMainScene();
-    }
-
-    function renderMainScene() {
-      if (!mainRenderer || !mainScene || !mainCamera) return;
-      mainRenderer.render(mainScene, mainCamera);
-    }
-
-    function resizeMainScene() {
-      const container = document.getElementById("mainScene");
-      if (!container || !mainRenderer || !mainCamera) return;
-      mainRenderer.setSize(container.clientWidth, container.clientHeight);
-      mainCamera.aspect = container.clientWidth / container.clientHeight;
-      mainCamera.updateProjectionMatrix();
-      renderMainScene();
-    }
-
-    function rebuildMainTextTexture() {
-      if (!mainTextPlane) return;
-      const texture = createTextTexture(getMemorialData());
-
-      if (mainTextPlane.material.map) {
-        mainTextPlane.material.map.dispose();
-      }
-
-      mainTextPlane.material.map = texture;
-      mainTextPlane.material.needsUpdate = true;
-      renderMainScene();
-    }
-
-    function initMiniScene(containerId, style) {
-      const container = document.getElementById(containerId);
-      if (!container || !window.THREE) return;
-
-      const scene = new THREE.Scene();
-
-      const camera = new THREE.PerspectiveCamera(
-        32,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      camera.position.set(0, 0.02, 7.0);
-
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.0;
-
-      container.innerHTML = "";
-      container.appendChild(renderer.domElement);
-
-      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-
-      const hemi = new THREE.HemisphereLight(0xcfdcff, 0x4e4239, 0.62);
-      scene.add(hemi);
-
-      const moon = new THREE.DirectionalLight(0xd9e2ff, 1.05);
-      moon.position.set(-4, 6, 4);
-      scene.add(moon);
-
-      const warm = new THREE.PointLight(0xffd2a1, 0.82, 12, 2);
-      warm.position.set(2.2, -0.7, 3.8);
-      scene.add(warm);
-
-      const group = createStoneGroup(style, false, 0.62, -0.22);
-      group.position.y = -0.26;
-      scene.add(group);
-
-      renderer.render(scene, camera);
-
-      miniScenes.push({ container, renderer, camera, scene });
-    }
-
-    function resizeMiniScenes() {
-      miniScenes.forEach(function(item) {
-        const width = item.container.clientWidth;
-        const height = item.container.clientHeight;
-        item.renderer.setSize(width, height);
-        item.camera.aspect = width / height;
-        item.camera.updateProjectionMatrix();
-        item.renderer.render(item.scene, item.camera);
-      });
-    }
-
-    function selectStone(style, button) {
-      if (isPlanting) return;
-
-      selectedStoneStyle = normalizeStyle(style);
-
-      const data = getMemorialData();
-      data.tombstoneStyle = selectedStoneStyle;
-      data.tombstoneConfirmed = false;
+      data.tombstoneStyle = style;
       saveMemorialData(data);
-
-      document.body.classList.remove("memorial-mode");
-
-      document.querySelectorAll(".stone-item").forEach(function(btn) {
-        btn.classList.remove("active");
-      });
-      if (button) button.classList.add("active");
-
-      buildMainStone(selectedStoneStyle, false);
     }
 
-    function easeOutCubic(t) {
-      return 1 - Math.pow(1 - t, 3);
-    }
+    function renderStoneInfo() {
+      const data = getMemorialData();
+      const t = getText();
 
-    function animateStoneToFinal(callback) {
-      if (!mainStoneGroup) {
-        callback();
-        return;
+      const name = data.name || t.defaultName;
+      const birthDate = data.birthDate || "----";
+      const leaveDate = data.leaveDate || "----";
+      const epitaph = data.epitaph || data.memory || t.defaultWords;
+      const visibility = data.visibility || "public";
+      const stonePhoto = data.stonePhoto || data.photo || "";
+
+      document.getElementById("petName").textContent = name;
+      document.getElementById("petDates").textContent = birthDate + " — " + leaveDate;
+      document.getElementById("petEpitaph").textContent = epitaph;
+      document.getElementById("visibilityBadge").textContent = getVisibilityText(visibility);
+
+      const photoBox = document.getElementById("petPhotoBox");
+      const photoImg = document.getElementById("petPhoto");
+
+      if (stonePhoto) {
+        photoImg.src = stonePhoto;
+        photoBox.style.display = "block";
+      } else {
+        photoBox.style.display = "none";
       }
-
-      const parts = mainStoneGroup.userData.parts || {};
-      const start = performance.now();
-      const duration = 1300;
-
-      function setAngle(angle) {
-        Object.keys(parts).forEach(function(key) {
-          if (parts[key]) parts[key].rotation.y = angle;
-        });
-      }
-
-      function frame(now) {
-        const raw = Math.min((now - start) / duration, 1);
-        const t = easeOutCubic(raw);
-
-        const scale = PREVIEW_SCALE + (FINAL_SCALE - PREVIEW_SCALE) * t;
-        const y = PREVIEW_Y + (FINAL_Y - PREVIEW_Y) * t;
-        const angle = PREVIEW_ANGLE + (FINAL_ANGLE - PREVIEW_ANGLE) * t;
-
-        mainStoneGroup.scale.set(scale, scale, scale);
-        mainStoneGroup.position.y = y;
-        setAngle(angle);
-
-        renderMainScene();
-
-        if (raw < 1) {
-          requestAnimationFrame(frame);
-        } else {
-          callback();
-        }
-      }
-
-      requestAnimationFrame(frame);
     }
 
     function confirmStone() {
-      if (isPlanting) return;
-      isPlanting = true;
-
       const data = getMemorialData();
-      data.tombstoneStyle = selectedStoneStyle;
+      data.tombstoneStyle = selectedStyle;
       data.tombstoneConfirmed = true;
       saveMemorialData(data);
 
-      document.body.classList.add("planting");
-
-      animateStoneToFinal(function() {
-        document.body.classList.remove("planting");
-        document.body.classList.add("memorial-mode");
-        isPlanting = false;
-        loadExtraMemorialInfo();
-        renderPlacedItems();
-      });
+      stoneWrap.classList.add("final");
+      document.body.classList.add("final-mode");
     }
 
-    function editStoneAgain() {
-      if (isPlanting) return;
+    function backToSelection() {
       const data = getMemorialData();
       data.tombstoneConfirmed = false;
       saveMemorialData(data);
 
-      document.body.classList.remove("memorial-mode", "planting");
-      buildMainStone(selectedStoneStyle, false);
+      stoneWrap.classList.remove("final");
+      document.body.classList.remove("final-mode");
     }
 
-    function initFromSavedData() {
+    function renderStory() {
       const data = getMemorialData();
-      selectedStoneStyle = normalizeStyle(data.tombstoneStyle || "rounded");
-
-      const active = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
-      if (active) {
-        document.querySelectorAll(".stone-item").forEach(function(btn) {
-          btn.classList.remove("active");
-        });
-        active.classList.add("active");
-      }
-
-      if (data.tombstoneConfirmed === true) {
-        document.body.classList.add("memorial-mode");
+      const t = getText();
+      const storyText = document.getElementById("storyText");
+      if (data.story) {
+        storyText.textContent = data.story;
+        storyText.classList.remove("empty-text");
+      } else {
+        storyText.textContent = t.noStory;
+        storyText.classList.add("empty-text");
       }
     }
 
-    function openPanel(id) {
-      closeAllPanels();
-      const panel = document.getElementById(id);
-      if (panel) panel.classList.add("show");
-    }
+    function createGallery(targetId, list) {
+      const box = document.getElementById(targetId);
+      const t = getText();
+      box.innerHTML = "";
 
-    function closeAllPanels() {
-      document.querySelectorAll(".modal-layer").forEach(function(panel) {
-        panel.classList.remove("show");
-      });
-    }
-
-    function closePanels(event) {
-      if (event.target.classList.contains("modal-layer")) {
-        closeAllPanels();
-      }
-    }
-
-    function showPhotos(containerId, photos) {
-      const container = document.getElementById(containerId);
-      const text = getText();
-      if (!container) return;
-
-      container.innerHTML = "";
-
-      if (!photos || photos.length === 0) {
-        container.innerHTML = '<p class="empty-text">' + text.noPhotos + '</p>';
+      if (!list || list.length === 0) {
+        box.innerHTML = '<div class="empty-text">' + t.noPhotos + '</div>';
         return;
       }
 
-      photos.forEach(function(photo) {
-        const box = document.createElement("div");
-        box.className = "gallery-photo";
-        box.onclick = function() {
-          openPhotoLightbox(photo);
-        };
-
-        const img = document.createElement("img");
-        img.src = photo;
-
-        box.appendChild(img);
-        container.appendChild(box);
+      list.forEach(function(src){
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+        item.innerHTML = '<img src="' + src + '" alt="">';
+        item.addEventListener("click", function(){
+          document.getElementById("lightboxImg").src = src;
+          document.getElementById("lightbox").classList.add("show");
+        });
+        box.appendChild(item);
       });
     }
 
-    function openPhotoLightbox(src) {
-      const lightbox = document.getElementById("photoLightbox");
-      const image = document.getElementById("lightboxImage");
-      if (!lightbox || !image) return;
-      image.src = src;
-      lightbox.classList.add("show");
-    }
-
-    function closePhotoLightbox() {
-      const lightbox = document.getElementById("photoLightbox");
-      const image = document.getElementById("lightboxImage");
-      if (!lightbox || !image) return;
-      lightbox.classList.remove("show");
-      image.src = "";
-    }
-
-    function loadExtraMemorialInfo() {
+    function renderPhotos() {
       const data = getMemorialData();
-      const text = getText();
-
-      const storyDisplay = document.getElementById("petStoryDisplay");
-      if (storyDisplay) {
-        if (data.story) {
-          storyDisplay.textContent = data.story;
-          storyDisplay.classList.remove("empty-text");
-        } else {
-          storyDisplay.textContent = text.noStory;
-          storyDisplay.classList.add("empty-text");
-        }
-      }
-
-      const publicPhotos = (data.publicPhotos && data.publicPhotos.length) ? data.publicPhotos : (data.photo ? [data.photo] : []);
+      const publicPhotos = data.publicPhotos && data.publicPhotos.length ? data.publicPhotos : (data.photo ? [data.photo] : []);
       const privatePhotos = data.privatePhotos || [];
-
-      showPhotos("publicPhotosDisplay", publicPhotos);
-      showPhotos("privatePhotosDisplay", privatePhotos);
-
-      renderMessages();
+      createGallery("publicGallery", publicPhotos);
+      createGallery("privateGallery", privatePhotos);
     }
 
     function getMessages() {
@@ -1702,37 +1442,32 @@
     }
 
     function renderMessages() {
-      const list = document.getElementById("messageList");
-      const text = getText();
-      if (!list) return;
-
+      const box = document.getElementById("messageList");
+      const t = getText();
       const messages = getMessages();
-      list.innerHTML = "";
+      box.innerHTML = "";
 
       if (!messages.length) {
-        list.innerHTML = '<div class="message-item empty-text">' + text.noMessages + '</div>';
+        box.innerHTML = '<div class="message-item empty-text">' + t.noMessages + '</div>';
         return;
       }
 
-      messages.forEach(function(item) {
+      messages.forEach(function(msg){
         const div = document.createElement("div");
         div.className = "message-item";
-        div.textContent = item;
-        list.appendChild(div);
+        div.textContent = msg;
+        box.appendChild(div);
       });
     }
 
     function addMessage() {
       const input = document.getElementById("messageInput");
-      if (!input) return;
-
       const value = input.value.trim();
       if (!value) return;
 
       const messages = getMessages();
       messages.unshift(value);
       localStorage.setItem("memorialMessages", JSON.stringify(messages.slice(0, 20)));
-
       input.value = "";
       renderMessages();
     }
@@ -1741,58 +1476,100 @@
       return JSON.parse(localStorage.getItem("memorialPlacedItems") || "[]");
     }
 
-    function renderPlacedItems() {
-      const box = document.getElementById("placedItemsList");
-      const text = getText();
-      if (!box) return;
+    function placeGift(type) {
+      const list = getPlacedItems();
+      list.unshift(type);
+      localStorage.setItem("memorialPlacedItems", JSON.stringify(list.slice(0, 8)));
+      renderPlacedItems();
+    }
 
-      const items = getPlacedItems();
+    function renderPlacedItems() {
+      const box = document.getElementById("placedList");
+      const t = getText();
+      const list = getPlacedItems();
       box.innerHTML = "";
 
-      items.forEach(function(item) {
+      list.forEach(function(item){
         const div = document.createElement("div");
-        div.className = "placed-item-badge";
-        if (item === "can") div.textContent = "🥫 " + text.placedCan;
-        if (item === "ball") div.textContent = "🎾 " + text.placedBall;
-        if (item === "seed") div.textContent = "🌾 " + text.placedSeed;
-        if (item === "flower") div.textContent = "🌸 " + text.placedFlower;
+        div.className = "placed-item";
+        if (item === "can") div.textContent = "🥫 " + t.placedCan;
+        if (item === "ball") div.textContent = "🎾 " + t.placedBall;
+        if (item === "seed") div.textContent = "🌾 " + t.placedSeed;
+        if (item === "flower") div.textContent = "🌸 " + t.placedFlower;
         box.appendChild(div);
       });
     }
 
-    function placeGift(type) {
-      const items = getPlacedItems();
-      items.unshift(type);
-      localStorage.setItem("memorialPlacedItems", JSON.stringify(items.slice(0, 8)));
-      renderPlacedItems();
+    function openModal(id) {
+      document.getElementById(id).classList.add("show");
     }
 
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "Escape") {
-        closePhotoLightbox();
-        closeAllPanels();
+    function closeModals() {
+      document.querySelectorAll(".modal").forEach(function(modal){
+        modal.classList.remove("show");
+      });
+    }
+
+    document.querySelectorAll(".stone-card").forEach(function(card){
+      card.addEventListener("click", function(){
+        setStyle(card.dataset.style);
+      });
+    });
+
+    document.getElementById("confirmStoneBtn").addEventListener("click", confirmStone);
+    document.getElementById("changeStoneBtn").addEventListener("click", backToSelection);
+    languageSelect.addEventListener("change", function(){
+      applyLanguage(this.value);
+    });
+
+    document.querySelectorAll(".dock-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        openModal(btn.dataset.panel);
+      });
+    });
+
+    document.querySelectorAll(".modal").forEach(function(modal){
+      modal.addEventListener("click", function(e){
+        if (e.target === modal) closeModals();
+      });
+    });
+
+    document.querySelectorAll(".modal-close").forEach(function(btn){
+      btn.addEventListener("click", closeModals);
+    });
+
+    document.getElementById("lightbox").addEventListener("click", function(e){
+      if (e.target.id === "lightbox" || e.target.classList.contains("lightbox-close")) {
+        document.getElementById("lightbox").classList.remove("show");
+        document.getElementById("lightboxImg").src = "";
       }
     });
 
-    window.addEventListener("DOMContentLoaded", function() {
-      initFromSavedData();
-
-      initMainScene();
-      initMiniScene("miniRounded", "rounded");
-      initMiniScene("miniSquare", "square");
-      initMiniScene("miniArch", "arch");
-
-      const savedLanguage = localStorage.getItem("siteLanguage") || "zh";
-      changeLanguage(savedLanguage);
-
-      loadExtraMemorialInfo();
-      renderPlacedItems();
-
-      window.addEventListener("resize", function() {
-        resizeMiniScenes();
-        resizeMainScene();
-      });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape") {
+        closeModals();
+        document.getElementById("lightbox").classList.remove("show");
+      }
     });
+
+    (function init(){
+      const data = getMemorialData();
+      const savedStyle = data.tombstoneStyle || "rounded";
+      const isConfirmed = data.tombstoneConfirmed === true;
+
+      setStyle(savedStyle);
+      renderStoneInfo();
+      renderStory();
+      renderPhotos();
+      renderMessages();
+      renderPlacedItems();
+      applyLanguage(currentLang);
+
+      if (isConfirmed) {
+        stoneWrap.classList.add("final");
+        document.body.classList.add("final-mode");
+      }
+    })();
   </script>
 </body>
 </html>
