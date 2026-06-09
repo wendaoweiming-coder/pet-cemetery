@@ -1001,33 +1001,43 @@
       renderPlacedItems();
     }
 
-    function createStoneTexture(baseColor) {
+    function createStoneTexture(baseColor, seedShift) {
       const canvas = document.createElement("canvas");
       canvas.width = 512;
       canvas.height = 512;
       const ctx = canvas.getContext("2d");
 
-      ctx.fillStyle = baseColor;
+      const gradient = ctx.createLinearGradient(0, 0, 512, 512);
+      gradient.addColorStop(0, lightenColor(baseColor, 18));
+      gradient.addColorStop(0.38, baseColor);
+      gradient.addColorStop(1, darkenColor(baseColor, 18));
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 512, 512);
 
-      for (let i = 0; i < 1200; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const a = Math.random() * 0.038;
-        const light = Math.random() > 0.53 ? 255 : 0;
-        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, Math.random() * 1.3 + 0.35, Math.random() * 1.3 + 0.35);
+      let seed = seedShift || 7;
+      function rnd() {
+        seed = (seed * 9301 + 49297) % 233280;
+        return seed / 233280;
       }
 
-      for (let i = 0; i < 9; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const w = Math.random() * 130 + 35;
-        const h = Math.random() * 1.1 + 0.35;
+      for (let i = 0; i < 1800; i++) {
+        const x = rnd() * 512;
+        const y = rnd() * 512;
+        const a = rnd() * 0.045;
+        const light = rnd() > 0.5 ? 255 : 0;
+        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
+        ctx.fillRect(x, y, rnd() * 1.4 + 0.35, rnd() * 1.4 + 0.35);
+      }
+
+      for (let i = 0; i < 14; i++) {
+        const x = rnd() * 512;
+        const y = rnd() * 512;
+        const w = rnd() * 170 + 40;
+        const h = rnd() * 1.6 + 0.35;
         ctx.save();
         ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.55);
-        ctx.fillStyle = "rgba(255,255,255,0.020)";
+        ctx.rotate((rnd() - 0.5) * 0.75);
+        ctx.fillStyle = "rgba(255,255,255,0.026)";
         ctx.fillRect(-w / 2, -h / 2, w, h);
         ctx.restore();
       }
@@ -1040,72 +1050,92 @@
       return texture;
     }
 
-    function createStoneMaterial() {
-      const texture = createStoneTexture("#847c72");
-      return new THREE.MeshStandardMaterial({
-        color: 0x847c72,
-        map: texture,
-        roughness: 1,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.018
-      });
+    function lightenColor(hex, amount) {
+      const n = parseInt(hex.replace("#", ""), 16);
+      let r = (n >> 16) + amount;
+      let g = ((n >> 8) & 255) + amount;
+      let b = (n & 255) + amount;
+      r = Math.max(0, Math.min(255, r));
+      g = Math.max(0, Math.min(255, g));
+      b = Math.max(0, Math.min(255, b));
+      return "#" + (r << 16 | g << 8 | b).toString(16).padStart(6, "0");
     }
 
-    function createSideMaterial() {
-      const texture = createStoneTexture("#71695f");
+    function darkenColor(hex, amount) {
+      return lightenColor(hex, -amount);
+    }
+
+    function createStoneMaterial() {
+      const texture = createStoneTexture("#8e8579", 11);
       return new THREE.MeshStandardMaterial({
-        color: 0x71695f,
+        color: 0x8e8579,
         map: texture,
-        roughness: 1,
+        roughness: 0.96,
         metalness: 0,
         bumpMap: texture,
         bumpScale: 0.022
       });
     }
 
-    function createBaseMaterial() {
-      const texture = createStoneTexture("#6d655d");
+    function createSideMaterial() {
+      const texture = createStoneTexture("#6f675e", 23);
       return new THREE.MeshStandardMaterial({
-        color: 0x6d655d,
+        color: 0x6f675e,
         map: texture,
-        roughness: 1,
+        roughness: 0.98,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.018
+        bumpScale: 0.026
+      });
+    }
+
+    function createBaseMaterial() {
+      const texture = createStoneTexture("#736b62", 41);
+      return new THREE.MeshStandardMaterial({
+        color: 0x736b62,
+        map: texture,
+        roughness: 0.98,
+        metalness: 0,
+        bumpMap: texture,
+        bumpScale: 0.024
       });
     }
 
     function buildRoundedShape() {
       const s = new THREE.Shape();
-      s.moveTo(-1.14, -1.72);
-      s.lineTo(-1.14, 0.58);
-      s.quadraticCurveTo(-1.14, 1.66, 0, 1.66);
-      s.quadraticCurveTo(1.14, 1.66, 1.14, 0.58);
-      s.lineTo(1.14, -1.72);
+      s.moveTo(-1.12, -1.72);
+      s.lineTo(-1.12, 0.50);
+      s.quadraticCurveTo(-1.12, 1.62, 0, 1.62);
+      s.quadraticCurveTo(1.12, 1.62, 1.12, 0.50);
+      s.lineTo(1.12, -1.72);
       s.closePath();
       return s;
     }
 
     function buildSquareShape() {
       const s = new THREE.Shape();
-      s.moveTo(-1.20, -1.72);
-      s.lineTo(-1.20, 1.38);
-      s.quadraticCurveTo(-1.20, 1.64, -0.96, 1.64);
-      s.lineTo(0.96, 1.64);
-      s.quadraticCurveTo(1.20, 1.64, 1.20, 1.38);
-      s.lineTo(1.20, -1.72);
+      s.moveTo(-1.18, -1.72);
+      s.lineTo(-1.18, 1.30);
+      s.quadraticCurveTo(-1.18, 1.58, -0.90, 1.58);
+      s.lineTo(0.90, 1.58);
+      s.quadraticCurveTo(1.18, 1.58, 1.18, 1.30);
+      s.lineTo(1.18, -1.72);
       s.closePath();
       return s;
     }
 
     function buildArchShape() {
       const s = new THREE.Shape();
-      s.moveTo(-1.18, -1.75);
-      s.lineTo(-1.18, 0.42);
-      s.absarc(0, 0.42, 1.18, Math.PI, 0, true);
-      s.lineTo(1.18, -1.75);
+      s.moveTo(-1.16, -1.74);
+      s.lineTo(-1.16, 0.36);
+      s.absarc(0, 0.36, 1.16, Math.PI, 0, true);
+      s.lineTo(1.16, -1.74);
       s.closePath();
+      return s;
+    }
+
+    function buildInsetShape(style) {
+      const s = buildTombstoneShape(style);
       return s;
     }
 
@@ -1127,32 +1157,29 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillStyle = "rgba(17, 15, 14, 0.20)";
-      ctx.font = "600 44px Arial";
+      ctx.fillStyle = "rgba(255, 248, 230, 0.10)";
+      ctx.font = "600 42px Arial";
+      ctx.fillText("🐾", 513, 177);
+      ctx.fillStyle = "rgba(24, 21, 19, 0.22)";
       ctx.fillText("🐾", 512, 178);
 
-      ctx.fillStyle = "rgba(19, 17, 15, 0.20)";
+      ctx.fillStyle = "rgba(26, 23, 20, 0.18)";
       ctx.beginPath();
-      roundRect(ctx, 400, 238, 224, 52, 26);
+      roundRect(ctx, 406, 240, 212, 48, 24);
       ctx.fill();
 
-      ctx.fillStyle = "rgba(15, 13, 12, 0.38)";
-      ctx.font = "500 26px 'Microsoft YaHei', Arial";
+      ctx.fillStyle = "rgba(255, 248, 230, 0.09)";
+      ctx.font = "500 24px 'Microsoft YaHei', Arial";
+      ctx.fillText(getVisibilityText(memorial.visibility), 513, 263);
+
+      ctx.fillStyle = "rgba(18, 16, 14, 0.42)";
       ctx.fillText(getVisibilityText(memorial.visibility), 512, 264);
 
-      ctx.fillStyle = "rgba(14, 12, 11, 0.60)";
-      ctx.font = "500 76px 'Microsoft YaHei', Arial";
-      ctx.fillText(memorial.name || text.defaultName, 512, 440);
+      drawEngravedText(ctx, memorial.name || text.defaultName, 512, 438, "500 72px 'Microsoft YaHei', Arial", 0.58);
+      drawEngravedText(ctx, (memorial.birthDate || "----") + " — " + (memorial.leaveDate || "----"), 512, 535, "400 32px 'Microsoft YaHei', Arial", 0.44);
 
-      ctx.fillStyle = "rgba(16, 14, 13, 0.46)";
-      ctx.font = "400 34px 'Microsoft YaHei', Arial";
-      const birth = memorial.birthDate || "----";
-      const leave = memorial.leaveDate || "----";
-      ctx.fillText(birth + " — " + leave, 512, 540);
-
-      ctx.fillStyle = "rgba(16, 14, 13, 0.44)";
-      ctx.font = "italic 32px 'Microsoft YaHei', Arial";
-      drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 660, 460, 44, 3);
+      ctx.font = "italic 30px 'Microsoft YaHei', Arial";
+      drawWrappedEngravedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 650, 460, 42, 3);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.needsUpdate = true;
@@ -1160,21 +1187,15 @@
       return texture;
     }
 
-    function roundRect(ctx, x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
+    function drawEngravedText(ctx, value, x, y, font, opacity) {
+      ctx.font = font;
+      ctx.fillStyle = "rgba(255, 248, 230, 0.08)";
+      ctx.fillText(value, x + 1.2, y + 1.2);
+      ctx.fillStyle = "rgba(12, 10, 9, " + opacity + ")";
+      ctx.fillText(value, x, y);
     }
 
-    function drawWrappedText(ctx, value, x, y, maxWidth, lineHeight, maxLines) {
+    function drawWrappedEngravedText(ctx, value, x, y, maxWidth, lineHeight, maxLines) {
       const chars = String(value || "").split("");
       const lines = [];
       let current = "";
@@ -1197,8 +1218,22 @@
       }
 
       finalLines.forEach(function(line, index) {
-        ctx.fillText(line, x, y + index * lineHeight);
+        drawEngravedText(ctx, line, x, y + index * lineHeight, "italic 30px 'Microsoft YaHei', Arial", 0.40);
       });
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
     }
 
     function makeShadowTexture() {
@@ -1208,10 +1243,30 @@
       const ctx = canvas.getContext("2d");
 
       const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
-      gradient.addColorStop(0, "rgba(0,0,0,0.36)");
+      gradient.addColorStop(0, "rgba(0,0,0,0.34)");
       gradient.addColorStop(0.42, "rgba(0,0,0,0.18)");
       gradient.addColorStop(1, "rgba(0,0,0,0)");
 
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 512, 512);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
+    }
+
+    function makeInsetTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, 512, 512);
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, 512);
+      gradient.addColorStop(0, "rgba(255,255,255,0.07)");
+      gradient.addColorStop(0.5, "rgba(0,0,0,0.03)");
+      gradient.addColorStop(1, "rgba(0,0,0,0.09)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 512, 512);
 
@@ -1228,10 +1283,10 @@
       const geometry = new THREE.ExtrudeGeometry(shape, {
         depth: 0.42,
         bevelEnabled: true,
-        bevelThickness: 0.038,
-        bevelSize: 0.038,
-        bevelSegments: 4,
-        curveSegments: 30
+        bevelThickness: 0.048,
+        bevelSize: 0.045,
+        bevelSegments: 6,
+        curveSegments: 36
       });
 
       geometry.center();
@@ -1241,33 +1296,55 @@
       stoneMesh.rotation.y = sideAngle;
       group.add(stoneMesh);
 
-      const backGeo = new THREE.BoxGeometry(2.50, 3.28, 0.14);
+      const backGeo = new THREE.BoxGeometry(2.48, 3.24, 0.13);
       const backMesh = new THREE.Mesh(backGeo, createSideMaterial());
       backMesh.position.set(0, 0.30, -0.30);
       backMesh.rotation.y = sideAngle;
       group.add(backMesh);
 
-      const baseGeo = new THREE.BoxGeometry(3.28, 0.38, 1.08);
+      const insetShape = buildInsetShape(normalized);
+      const insetGeo = new THREE.ShapeGeometry(insetShape);
+      const insetMat = new THREE.MeshBasicMaterial({
+        map: makeInsetTexture(),
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.20,
+        depthWrite: false
+      });
+
+      const insetMesh = new THREE.Mesh(insetGeo, insetMat);
+      insetMesh.scale.set(0.82, 0.78, 1);
+      insetMesh.position.set(0, 0.25, 0.246);
+      insetMesh.rotation.y = sideAngle;
+      group.add(insetMesh);
+
+      const baseGeo = new THREE.BoxGeometry(3.36, 0.36, 1.10);
       const baseMesh = new THREE.Mesh(baseGeo, createBaseMaterial());
       baseMesh.position.set(0, -1.78, -0.02);
       baseMesh.rotation.y = sideAngle;
       group.add(baseMesh);
 
-      const lipGeo = new THREE.BoxGeometry(2.95, 0.16, 0.92);
-      const lipMesh = new THREE.Mesh(lipGeo, createBaseMaterial());
-      lipMesh.position.set(0, -1.49, 0.02);
-      lipMesh.rotation.y = sideAngle;
-      group.add(lipMesh);
+      const baseTopGeo = new THREE.BoxGeometry(3.05, 0.17, 0.94);
+      const baseTopMesh = new THREE.Mesh(baseTopGeo, createBaseMaterial());
+      baseTopMesh.position.set(0, -1.50, 0.03);
+      baseTopMesh.rotation.y = sideAngle;
+      group.add(baseTopMesh);
+
+      const baseFrontGeo = new THREE.BoxGeometry(3.52, 0.16, 0.20);
+      const baseFrontMesh = new THREE.Mesh(baseFrontGeo, createSideMaterial());
+      baseFrontMesh.position.set(0, -1.90, 0.48);
+      baseFrontMesh.rotation.y = sideAngle;
+      group.add(baseFrontMesh);
 
       const shadowMat = new THREE.MeshBasicMaterial({
         map: makeShadowTexture(),
         transparent: true,
         depthWrite: false,
-        opacity: 0.72
+        opacity: 0.70
       });
 
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.65, 1.12), shadowMat);
-      shadow.position.set(0, -1.93, -0.45);
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.75, 1.12), shadowMat);
+      shadow.position.set(0, -1.94, -0.45);
       group.add(shadow);
 
       if (showText) {
@@ -1278,11 +1355,11 @@
           map: textTexture,
           transparent: true,
           depthWrite: false,
-          opacity: 0.76
+          opacity: 0.82
         });
 
-        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.28, 2.88), textMat);
-        mainTextPlane.position.set(0, 0.26, 0.245);
+        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.22, 2.82), textMat);
+        mainTextPlane.position.set(0, 0.26, 0.255);
         mainTextPlane.rotation.y = sideAngle;
         group.add(mainTextPlane);
       }
@@ -1293,8 +1370,10 @@
       group.userData.parts = {
         stoneMesh,
         backMesh,
+        insetMesh,
         baseMesh,
-        lipMesh,
+        baseTopMesh,
+        baseFrontMesh,
         textPlane: mainTextPlane
       };
 
@@ -1327,22 +1406,22 @@
       container.innerHTML = "";
       container.appendChild(mainRenderer.domElement);
 
-      mainScene.add(new THREE.AmbientLight(0xffffff, 1.18));
+      mainScene.add(new THREE.AmbientLight(0xffffff, 1.30));
 
-      const hemi = new THREE.HemisphereLight(0xcbd8ff, 0x6b584a, 0.90);
+      const hemi = new THREE.HemisphereLight(0xd1dcff, 0x756052, 0.95);
       mainScene.add(hemi);
 
-      const moonLight = new THREE.DirectionalLight(0xd8e0ff, 1.18);
+      const moonLight = new THREE.DirectionalLight(0xd8e0ff, 1.22);
       moonLight.position.set(-4.2, 7.2, 6.2);
       mainScene.add(moonLight);
 
-      const warmLight = new THREE.PointLight(0xffd3a0, 1.28, 18, 2);
+      const warmLight = new THREE.PointLight(0xffd1a0, 1.42, 18, 2);
       warmLight.position.set(2.4, -0.9, 5.5);
       mainScene.add(warmLight);
 
-      const fill = new THREE.PointLight(0xffffff, 0.26, 18, 2);
-      fill.position.set(-2.5, 1.0, 4.5);
-      mainScene.add(fill);
+      const leftSoft = new THREE.PointLight(0xffffff, 0.38, 18, 2);
+      leftSoft.position.set(-2.6, 1.1, 4.5);
+      mainScene.add(leftSoft);
 
       const data = getMemorialData();
       const confirmed = data.tombstoneConfirmed === true;
@@ -1431,13 +1510,13 @@
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 1.14));
+      scene.add(new THREE.AmbientLight(0xffffff, 1.22));
 
-      const light = new THREE.DirectionalLight(0xd8e1ff, 1.12);
+      const light = new THREE.DirectionalLight(0xd8e1ff, 1.16);
       light.position.set(-3, 5, 5);
       scene.add(light);
 
-      const warm = new THREE.PointLight(0xffd2a0, 0.90, 12, 2);
+      const warm = new THREE.PointLight(0xffd2a0, 0.95, 12, 2);
       warm.position.set(2, -0.6, 4);
       scene.add(warm);
 
@@ -1505,11 +1584,9 @@
       const duration = 1300;
 
       function setAngle(angle) {
-        if (parts.stoneMesh) parts.stoneMesh.rotation.y = angle;
-        if (parts.backMesh) parts.backMesh.rotation.y = angle;
-        if (parts.baseMesh) parts.baseMesh.rotation.y = angle;
-        if (parts.lipMesh) parts.lipMesh.rotation.y = angle;
-        if (parts.textPlane) parts.textPlane.rotation.y = angle;
+        Object.keys(parts).forEach(function(key) {
+          if (parts[key]) parts[key].rotation.y = angle;
+        });
       }
 
       function frame(now) {
