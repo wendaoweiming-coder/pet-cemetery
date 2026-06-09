@@ -1,56 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>Pet Memorial</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8" />
+  <title>选择墓碑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { box-sizing: border-box; }
-
     html, body {
       margin: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
       font-family: "Microsoft YaHei", Arial, sans-serif;
-      background: #10140f;
       color: #fffaf5;
+      background: #0b1015;
     }
 
-    button, a, select, textarea {
+    button, select, textarea {
       font-family: inherit;
       outline: none;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .page-bg {
+    .bg {
       position: fixed;
       inset: 0;
+      z-index: 0;
       background:
-        linear-gradient(
-          180deg,
-          rgba(6, 10, 18, 0.05) 0%,
-          rgba(6, 10, 18, 0.12) 46%,
-          rgba(6, 10, 18, 0.30) 100%
-        ),
+        linear-gradient(180deg, rgba(6,10,18,0.08) 0%, rgba(6,10,18,0.18) 52%, rgba(6,10,18,0.34) 100%),
         url("cemetery-bg.png") center center / cover no-repeat;
       transform: scale(1.08);
       transform-origin: center center;
-      z-index: 0;
     }
 
-    .page-bg::after {
+    .bg::after {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at center 61%, rgba(255, 231, 190, 0.08), transparent 22%),
-        radial-gradient(circle at center 64%, rgba(255, 255, 255, 0.04), transparent 34%);
+        radial-gradient(circle at 50% 58%, rgba(255,240,205,0.07), transparent 22%),
+        radial-gradient(circle at 50% 68%, rgba(255,255,255,0.03), transparent 36%);
       pointer-events: none;
     }
 
-    .page-shell {
+    .shell {
       position: relative;
       z-index: 2;
       width: 100%;
@@ -59,23 +52,23 @@
       flex-direction: column;
     }
 
-    .top-bar {
-      position: relative;
-      z-index: 30;
+    .topbar {
       width: 100%;
       max-width: 1320px;
       margin: 0 auto;
-      padding: 30px 34px 0;
+      padding: 28px 34px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      z-index: 20;
     }
 
     .logo {
-      color: rgba(255, 250, 245, 0.96);
+      font-size: 17px;
+      color: rgba(255,250,245,0.96);
       text-decoration: none;
-      font-size: 18px;
-      text-shadow: 0 3px 16px rgba(0,0,0,0.36);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.35);
     }
 
     .top-actions {
@@ -84,73 +77,76 @@
       align-items: center;
     }
 
-    .soft-button,
-    .language-select,
-    .bottom-button {
-      border: 1px solid rgba(255, 250, 245, 0.30);
-      background: rgba(255, 250, 245, 0.08);
-      color: #fffaf5;
-      padding: 10px 16px;
+    .soft-btn,
+    .lang-select,
+    .dock-btn,
+    .confirm-btn {
       border-radius: 999px;
+      border: 1px solid rgba(255,250,245,0.26);
+      background: rgba(255,250,245,0.08);
+      color: #fffaf5;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      text-decoration: none;
-      font-size: 14px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.22);
       cursor: pointer;
       transition: 0.25s ease;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.25);
     }
 
-    .soft-button:hover,
-    .language-select:hover,
-    .bottom-button:hover {
-      background: rgba(255, 250, 245, 0.16);
-      border-color: rgba(255, 250, 245, 0.42);
+    .soft-btn,
+    .lang-select {
+      padding: 10px 16px;
+      font-size: 14px;
     }
 
-    .language-select {
-      min-width: 146px;
+    .soft-btn:hover,
+    .lang-select:hover,
+    .dock-btn:hover {
+      background: rgba(255,250,245,0.15);
+      border-color: rgba(255,250,245,0.42);
     }
 
-    .language-select option {
-      color: #2d2520;
+    .lang-select {
+      min-width: 150px;
+    }
+
+    .lang-select option {
       background: #fffaf5;
+      color: #382f28;
     }
 
-    .main-layout {
-      position: relative;
-      flex: 1;
+    .layout {
       width: 100%;
       max-width: 1320px;
       margin: 0 auto;
+      flex: 1;
       display: grid;
-      grid-template-columns: 270px 1fr 270px;
+      grid-template-columns: 280px 1fr 260px;
       gap: 24px;
       align-items: center;
-      padding: 20px 34px 116px;
+      padding: 18px 34px 116px;
+      position: relative;
     }
 
     .left-panel {
       position: relative;
-      z-index: 20;
-      align-self: center;
+      z-index: 15;
       transition: opacity 0.45s ease, transform 0.45s ease;
     }
 
-    .panel-title {
+    .left-title {
       margin: 0 0 10px;
-      font-size: 23px;
+      font-size: 24px;
       font-weight: 500;
-      color: rgba(255, 250, 245, 0.95);
+      color: rgba(255,250,245,0.96);
       text-shadow: 0 3px 16px rgba(0,0,0,0.34);
     }
 
-    .panel-subtitle {
+    .left-subtitle {
       margin: 0 0 20px;
-      color: rgba(255, 244, 232, 0.68);
+      color: rgba(255,243,231,0.74);
       font-size: 13px;
-      line-height: 1.7;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
+      line-height: 1.75;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.26);
     }
 
     .stone-list {
@@ -159,78 +155,74 @@
       gap: 12px;
     }
 
-    .stone-option {
-      width: 100%;
+    .stone-item {
       border: none;
-      padding: 0;
       background: transparent;
-      color: #fffaf5;
+      padding: 0;
       cursor: pointer;
       text-align: left;
+      color: #fffaf5;
     }
 
-    .stone-option-inner {
+    .stone-item-inner {
       display: grid;
       grid-template-columns: 78px 1fr;
       gap: 13px;
       align-items: center;
-      padding: 10px 12px;
+      padding: 12px;
       border-radius: 24px;
-      border: 1px solid rgba(255, 250, 245, 0.13);
-      background: rgba(255, 250, 245, 0.055);
+      background: rgba(255,250,245,0.05);
+      border: 1px solid rgba(255,250,245,0.14);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       transition: 0.22s ease;
     }
 
-    .stone-option:hover .stone-option-inner {
-      background: rgba(255, 250, 245, 0.11);
-      border-color: rgba(255, 250, 245, 0.28);
+    .stone-item:hover .stone-item-inner {
+      background: rgba(255,250,245,0.1);
+      border-color: rgba(255,250,245,0.28);
       transform: translateX(5px);
     }
 
-    .stone-option.active .stone-option-inner {
-      background: rgba(255, 250, 245, 0.17);
-      border-color: rgba(255, 250, 245, 0.48);
+    .stone-item.active .stone-item-inner {
+      background: rgba(255,250,245,0.16);
+      border-color: rgba(255,250,245,0.46);
     }
 
-    .mini-3d {
+    .mini-scene {
       width: 70px;
       height: 86px;
       border-radius: 18px;
       overflow: hidden;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.06), transparent 70%);
+      background: radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 72%);
     }
 
-    .option-name {
-      margin: 0 0 4px;
+    .stone-name {
+      margin: 0 0 5px;
       font-size: 14px;
-      color: rgba(255, 250, 245, 0.93);
+      color: rgba(255,250,245,0.95);
     }
 
-    .option-desc {
+    .stone-desc {
       margin: 0;
-      color: rgba(255, 244, 232, 0.58);
       font-size: 12px;
       line-height: 1.5;
+      color: rgba(255,243,231,0.62);
     }
 
-    .confirm-button {
-      width: 100%;
+    .confirm-btn {
       margin-top: 22px;
-      border: 1px solid rgba(255, 250, 245, 0.52);
-      background: rgba(255, 250, 245, 0.88);
-      color: #4b3d35;
+      width: 100%;
       padding: 13px 18px;
-      border-radius: 999px;
-      cursor: pointer;
       font-size: 14px;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
-      transition: 0.22s ease;
+      background: rgba(255,250,245,0.92);
+      color: #4c3d34;
+      border: 1px solid rgba(255,250,245,0.58);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.18);
     }
 
-    .confirm-button:hover {
-      background: rgba(255, 250, 245, 0.96);
+    .confirm-btn:hover {
+      background: rgba(255,250,245,0.98);
       transform: translateY(-1px);
     }
 
@@ -238,61 +230,61 @@
       position: relative;
       min-height: 650px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
 
-    .instruction {
+    .headline {
       position: absolute;
-      top: 12px;
+      top: 8px;
       left: 50%;
-      width: min(720px, 90%);
       transform: translateX(-50%);
+      width: min(720px, 90%);
       text-align: center;
       z-index: 10;
       pointer-events: none;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.36);
+      text-shadow: 0 3px 18px rgba(0,0,0,0.34);
       transition: opacity 0.45s ease, transform 0.45s ease;
     }
 
-    .instruction h1 {
+    .headline h1 {
       margin: 0 0 8px;
       font-size: 34px;
       font-weight: 500;
-      color: rgba(255, 248, 239, 0.96);
+      color: rgba(255,248,239,0.98);
     }
 
-    .instruction p {
+    .headline p {
       margin: 0;
-      color: rgba(255, 244, 232, 0.72);
       font-size: 14px;
       line-height: 1.7;
+      color: rgba(255,243,231,0.76);
     }
 
     .scene-wrap {
       position: relative;
-      width: min(500px, 54vw);
-      height: min(580px, 68vh);
-      min-width: 320px;
-      min-height: 430px;
-      margin-top: 42px;
+      width: min(520px, 56vw);
+      height: min(590px, 70vh);
+      min-width: 330px;
+      min-height: 440px;
+      margin-top: 44px;
       transition:
         width 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
         height 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
         transform 1.25s cubic-bezier(0.22, 0.82, 0.22, 1);
     }
 
-    #mainStoneScene {
+    #mainScene {
       position: absolute;
       inset: 0;
-      border-radius: 26px;
+      border-radius: 24px;
     }
 
-    .right-spacer {
+    .right-space {
       min-height: 1px;
     }
 
-    .bottom-dock {
+    .dock {
       position: fixed;
       left: 50%;
       bottom: 26px;
@@ -302,8 +294,8 @@
       gap: 12px;
       padding: 12px;
       border-radius: 999px;
-      background: rgba(20, 22, 20, 0.36);
-      border: 1px solid rgba(255, 250, 245, 0.16);
+      background: rgba(20,22,20,0.34);
+      border: 1px solid rgba(255,250,245,0.16);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 18px 40px rgba(0,0,0,0.24);
@@ -312,35 +304,36 @@
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
 
-    body.memorial-mode .bottom-dock {
+    .dock-btn {
+      padding: 10px 18px;
+      font-size: 14px;
+      background: rgba(255,250,245,0.06);
+    }
+
+    body.memorial-mode .dock {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(-50%) translateY(0);
     }
 
-    body.planting .top-bar .soft-button:first-child,
-    body.memorial-mode .top-bar .soft-button:first-child {
-      display: none;
-    }
-
     body.planting .left-panel,
     body.memorial-mode .left-panel {
       opacity: 0;
-      transform: translateX(-20px);
+      transform: translateX(-16px);
       pointer-events: none;
     }
 
-    body.planting .instruction,
-    body.memorial-mode .instruction {
+    body.planting .headline,
+    body.memorial-mode .headline {
       opacity: 0;
-      transform: translateX(-50%) translateY(-12px);
+      transform: translateX(-50%) translateY(-10px);
     }
 
     body.planting .scene-wrap,
     body.memorial-mode .scene-wrap {
       width: min(350px, 43vw);
       height: min(445px, 55vh);
-      transform: translate(-72px, 4px);
+      transform: translate(-20px, 8px);
     }
 
     .modal-layer {
@@ -351,12 +344,10 @@
       align-items: center;
       justify-content: center;
       padding: 26px;
-      background: rgba(5, 7, 8, 0.64);
+      background: rgba(5,7,8,0.64);
     }
 
-    .modal-layer.show {
-      display: flex;
-    }
+    .modal-layer.show { display: flex; }
 
     .modal-card {
       position: relative;
@@ -365,8 +356,8 @@
       overflow-y: auto;
       padding: 30px;
       border-radius: 30px;
-      background: rgba(255, 250, 245, 0.95);
-      color: #4b3d35;
+      background: rgba(255,250,245,0.95);
+      color: #4c3d34;
       box-shadow: 0 26px 80px rgba(0,0,0,0.45);
     }
 
@@ -378,8 +369,8 @@
       height: 38px;
       border: none;
       border-radius: 50%;
-      background: rgba(75, 61, 53, 0.10);
-      color: #4b3d35;
+      background: rgba(76,61,52,0.1);
+      color: #4c3d34;
       font-size: 26px;
       line-height: 1;
       cursor: pointer;
@@ -389,25 +380,21 @@
       margin: 0 0 18px;
       font-size: 26px;
       font-weight: 500;
-      color: #4b3d35;
     }
 
     .modal-card p {
       margin: 0;
       line-height: 1.8;
-      color: rgba(75, 61, 53, 0.75);
+      color: rgba(76,61,52,0.75);
       font-size: 15px;
     }
 
-    .photo-block {
-      margin-bottom: 26px;
-    }
-
+    .photo-block { margin-bottom: 26px; }
     .photo-block h3 {
       margin: 0 0 14px;
       font-size: 18px;
       font-weight: 500;
-      color: #4b3d35;
+      color: #4c3d34;
     }
 
     .photo-gallery {
@@ -420,8 +407,8 @@
       aspect-ratio: 1 / 1;
       border-radius: 18px;
       overflow: hidden;
-      background: rgba(120, 95, 70, 0.08);
-      border: 1px solid rgba(134, 103, 75, 0.16);
+      background: rgba(120,95,70,0.08);
+      border: 1px solid rgba(134,103,75,0.16);
       cursor: zoom-in;
     }
 
@@ -433,7 +420,7 @@
     }
 
     .empty-text {
-      color: rgba(75, 61, 53, 0.46);
+      color: rgba(76,61,52,0.46);
       font-size: 14px;
     }
 
@@ -458,8 +445,8 @@
       margin-top: 14px;
       padding: 13px 15px;
       border-radius: 18px;
-      background: rgba(118, 91, 66, 0.08);
-      color: rgba(75, 61, 53, 0.66);
+      background: rgba(118,91,66,0.08);
+      color: rgba(76,61,52,0.66);
       font-size: 13px;
       line-height: 1.6;
     }
@@ -479,17 +466,17 @@
       gap: 6px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(113, 88, 67, 0.10);
-      color: rgba(75, 61, 53, 0.72);
+      background: rgba(113,88,67,0.10);
+      color: rgba(76,61,52,0.72);
       font-size: 13px;
     }
 
     .message-box textarea {
       width: 100%;
       height: 108px;
-      border: 1px solid rgba(134, 103, 75, 0.22);
+      border: 1px solid rgba(134,103,75,0.22);
       background: rgba(255,255,255,0.72);
-      color: #4b3d35;
+      color: #4c3d34;
       padding: 14px;
       border-radius: 18px;
       font-size: 14px;
@@ -502,8 +489,8 @@
 
     .message-item {
       padding: 12px 0;
-      border-bottom: 1px solid rgba(134, 103, 75, 0.14);
-      color: rgba(75, 61, 53, 0.72);
+      border-bottom: 1px solid rgba(134,103,75,0.14);
+      color: rgba(76,61,52,0.72);
       line-height: 1.6;
       font-size: 14px;
     }
@@ -512,16 +499,14 @@
       position: fixed;
       inset: 0;
       z-index: 200;
-      background: rgba(5, 7, 8, 0.86);
+      background: rgba(5,7,8,0.86);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 28px;
     }
 
-    .photo-lightbox.show {
-      display: flex;
-    }
+    .photo-lightbox.show { display: flex; }
 
     .photo-lightbox img {
       max-width: min(92vw, 1100px);
@@ -553,12 +538,12 @@
         min-height: 100%;
       }
 
-      .page-shell {
+      .shell {
         min-height: 100vh;
         height: auto;
       }
 
-      .top-bar {
+      .topbar {
         padding: 22px 18px 0;
         align-items: flex-start;
       }
@@ -568,7 +553,7 @@
         align-items: flex-end;
       }
 
-      .main-layout {
+      .layout {
         grid-template-columns: 1fr;
         padding: 22px 18px 100px;
       }
@@ -584,7 +569,7 @@
         order: 1;
       }
 
-      .right-spacer {
+      .right-space {
         display: none;
       }
 
@@ -598,14 +583,12 @@
       body.memorial-mode .scene-wrap {
         width: min(86vw, 335px);
         height: min(52vh, 410px);
-        transform: translate(-10px, 6px);
+        transform: translate(-10px, 8px);
       }
 
-      .instruction h1 {
-        font-size: 28px;
-      }
+      .headline h1 { font-size: 28px; }
 
-      .bottom-dock {
+      .dock {
         width: calc(100vw - 24px);
         justify-content: center;
         flex-wrap: wrap;
@@ -619,19 +602,18 @@
     }
   </style>
 </head>
-
 <body>
-  <div class="page-bg"></div>
+  <div class="bg"></div>
 
-  <div class="page-shell">
-    <header class="top-bar">
+  <div class="shell">
+    <div class="topbar">
       <a href="index.html" class="logo" data-key="logo">Starlit Pet Memorial Garden</a>
 
       <div class="top-actions">
-        <a href="create.html" class="soft-button" data-key="backBtn">Back to edit</a>
-        <button class="soft-button" onclick="editStoneAgain()" data-key="changeStoneBtn">Change Stone</button>
+        <a href="create.html" class="soft-btn" data-key="backBtn">Back to edit</a>
+        <button class="soft-btn" onclick="editStoneAgain()" data-key="changeStoneBtn">Change Stone</button>
 
-        <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
+        <select id="languageSelect" class="lang-select" onchange="changeLanguage(this.value)">
           <option value="en">English</option>
           <option value="zh">简体中文</option>
           <option value="zh-TW">繁體中文</option>
@@ -650,72 +632,70 @@
           <option value="ar">العربية</option>
         </select>
       </div>
-    </header>
+    </div>
 
-    <main class="main-layout">
+    <div class="layout">
       <aside class="left-panel">
-        <h2 class="panel-title" data-key="panelTitle">Tombstone style</h2>
-        <p class="panel-subtitle" data-key="panelSubtitle">
+        <h2 class="left-title" data-key="panelTitle">Tombstone style</h2>
+        <p class="left-subtitle" data-key="panelSubtitle">
           Choose a 3D tombstone. The center preview will update immediately.
         </p>
 
         <div class="stone-list">
-          <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
-            <div class="stone-option-inner">
-              <div class="mini-3d" id="miniRounded"></div>
+          <button class="stone-item active" data-style="rounded" onclick="selectStone('rounded', this)">
+            <div class="stone-item-inner">
+              <div class="mini-scene" id="miniRounded"></div>
               <div>
-                <p class="option-name" data-key="roundedName">Rounded stone</p>
-                <p class="option-desc" data-key="roundedDesc">Classic and gentle.</p>
+                <p class="stone-name" data-key="roundedName">Rounded stone</p>
+                <p class="stone-desc" data-key="roundedDesc">Classic and gentle.</p>
               </div>
             </div>
           </button>
 
-          <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
-            <div class="stone-option-inner">
-              <div class="mini-3d" id="miniSquare"></div>
+          <button class="stone-item" data-style="square" onclick="selectStone('square', this)">
+            <div class="stone-item-inner">
+              <div class="mini-scene" id="miniSquare"></div>
               <div>
-                <p class="option-name" data-key="squareName">Soft square</p>
-                <p class="option-desc" data-key="squareDesc">Clean and quiet.</p>
+                <p class="stone-name" data-key="squareName">Soft square</p>
+                <p class="stone-desc" data-key="squareDesc">Clean and quiet.</p>
               </div>
             </div>
           </button>
 
-          <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
-            <div class="stone-option-inner">
-              <div class="mini-3d" id="miniArch"></div>
+          <button class="stone-item" data-style="arch" onclick="selectStone('arch', this)">
+            <div class="stone-item-inner">
+              <div class="mini-scene" id="miniArch"></div>
               <div>
-                <p class="option-name" data-key="archName">Tall arch</p>
-                <p class="option-desc" data-key="archDesc">Calm and solemn.</p>
+                <p class="stone-name" data-key="archName">Tall arch</p>
+                <p class="stone-desc" data-key="archDesc">Calm and solemn.</p>
               </div>
             </div>
           </button>
         </div>
 
-        <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">
-          Use this tombstone
-        </button>
+        <button class="confirm-btn" onclick="confirmStone()" data-key="confirmBtn">Use this tombstone</button>
       </aside>
 
       <section class="center-area">
-        <div class="instruction">
+        <div class="headline">
           <h1 data-key="title">Choose a tombstone</h1>
           <p data-key="subtitle">The stone will gently turn forward and settle into the memorial garden.</p>
         </div>
 
         <div class="scene-wrap" id="sceneWrap">
-          <div id="mainStoneScene"></div>
+          <div id="mainScene"></div>
         </div>
       </section>
 
-      <div class="right-spacer"></div>
-    </main>
+      <div class="right-space"></div>
+    </div>
   </div>
 
-  <div class="bottom-dock">
-    <button class="bottom-button" onclick="openPanel('storyPanel')" data-key="storyBtn">Story</button>
-    <button class="bottom-button" onclick="openPanel('photosPanel')" data-key="photosBtn">Photos</button>
-    <button class="bottom-button" onclick="openPanel('giftPanel')" data-key="giftBtn">Gift</button>
-    <button class="bottom-button" onclick="openPanel('messagePanel')" data-key="messageBtnShort">Messages</button>
+  <div class="dock">
+    <button class="dock-btn" onclick="openPanel('storyPanel')" data-key="storyBtn">Story</button>
+    <button class="dock-btn" onclick="openPanel('photosPanel')" data-key="photosBtn">Photos</button>
+    <button class="dock-btn" onclick="openPanel('giftPanel')" data-key="giftBtn">Gift</button>
+    <button class="dock-btn" onclick="openPanel('messagePanel')" data-key="messageBtnShort">Messages</button>
   </div>
 
   <div class="modal-layer" id="storyPanel" onclick="closePanels(event)">
@@ -783,7 +763,6 @@
   </div>
 
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-
   <script>
     let currentLang = "en";
     let selectedStoneStyle = "rounded";
@@ -797,12 +776,12 @@
 
     const miniScenes = [];
 
-    const FINAL_SCALE = 0.56;
-    const PREVIEW_SCALE = 0.72;
-    const FINAL_Y = -0.38;
-    const PREVIEW_Y = -0.18;
+    const PREVIEW_SCALE = 0.78;
+    const FINAL_SCALE = 0.57;
+    const PREVIEW_Y = -0.10;
+    const FINAL_Y = -0.36;
+    const PREVIEW_ANGLE = -0.28;
     const FINAL_ANGLE = 0;
-    const PREVIEW_ANGLE = -0.16;
 
     const translations = {
       en: {
@@ -1001,112 +980,152 @@
       renderPlacedItems();
     }
 
-    function createStoneTexture(baseColor, seedShift) {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext("2d");
+    function createStoneMaps(baseHex, seedStart) {
+      const size = 1024;
+      const colorCanvas = document.createElement("canvas");
+      const bumpCanvas = document.createElement("canvas");
+      colorCanvas.width = size;
+      colorCanvas.height = size;
+      bumpCanvas.width = size;
+      bumpCanvas.height = size;
 
-      const gradient = ctx.createLinearGradient(0, 0, 512, 512);
-      gradient.addColorStop(0, lightenColor(baseColor, 18));
-      gradient.addColorStop(0.38, baseColor);
-      gradient.addColorStop(1, darkenColor(baseColor, 18));
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
+      const cctx = colorCanvas.getContext("2d");
+      const bctx = bumpCanvas.getContext("2d");
 
-      let seed = seedShift || 7;
+      function hexToRgb(hex) {
+        const clean = hex.replace("#", "");
+        const n = parseInt(clean, 16);
+        return {
+          r: (n >> 16) & 255,
+          g: (n >> 8) & 255,
+          b: n & 255
+        };
+      }
+
+      let seed = seedStart || 13;
       function rnd() {
         seed = (seed * 9301 + 49297) % 233280;
         return seed / 233280;
       }
 
-      for (let i = 0; i < 1800; i++) {
-        const x = rnd() * 512;
-        const y = rnd() * 512;
-        const a = rnd() * 0.045;
-        const light = rnd() > 0.5 ? 255 : 0;
-        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, rnd() * 1.4 + 0.35, rnd() * 1.4 + 0.35);
+      const base = hexToRgb(baseHex);
+      cctx.fillStyle = baseHex;
+      cctx.fillRect(0, 0, size, size);
+
+      const grad = cctx.createLinearGradient(0, 0, size, size);
+      grad.addColorStop(0, "rgba(255,255,255,0.04)");
+      grad.addColorStop(0.5, "rgba(255,255,255,0.00)");
+      grad.addColorStop(1, "rgba(0,0,0,0.06)");
+      cctx.fillStyle = grad;
+      cctx.fillRect(0, 0, size, size);
+
+      bctx.fillStyle = "rgb(128,128,128)";
+      bctx.fillRect(0, 0, size, size);
+
+      for (let i = 0; i < 12000; i++) {
+        const x = rnd() * size;
+        const y = rnd() * size;
+        const r = rnd() * 1.5 + 0.2;
+        const delta = Math.floor((rnd() - 0.5) * 24);
+        const rr = Math.max(0, Math.min(255, base.r + delta));
+        const gg = Math.max(0, Math.min(255, base.g + delta));
+        const bb = Math.max(0, Math.min(255, base.b + delta));
+        cctx.fillStyle = "rgba(" + rr + "," + gg + "," + bb + "," + (rnd() * 0.08 + 0.03) + ")";
+        cctx.beginPath();
+        cctx.arc(x, y, r, 0, Math.PI * 2);
+        cctx.fill();
+
+        const light = Math.floor(128 + (rnd() - 0.5) * 20);
+        bctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + (rnd() * 0.10 + 0.05) + ")";
+        bctx.beginPath();
+        bctx.arc(x, y, r * 1.2, 0, Math.PI * 2);
+        bctx.fill();
       }
 
-      for (let i = 0; i < 14; i++) {
-        const x = rnd() * 512;
-        const y = rnd() * 512;
-        const w = rnd() * 170 + 40;
-        const h = rnd() * 1.6 + 0.35;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate((rnd() - 0.5) * 0.75);
-        ctx.fillStyle = "rgba(255,255,255,0.026)";
-        ctx.fillRect(-w / 2, -h / 2, w, h);
-        ctx.restore();
+      for (let i = 0; i < 26; i++) {
+        const startX = rnd() * size;
+        const startY = rnd() * size;
+        const len = rnd() * 160 + 60;
+        cctx.save();
+        cctx.translate(startX, startY);
+        cctx.rotate((rnd() - 0.5) * 0.9);
+        cctx.fillStyle = "rgba(255,255,255,0.025)";
+        cctx.fillRect(-len / 2, -0.8, len, rnd() * 1.6 + 0.4);
+        cctx.restore();
+
+        bctx.save();
+        bctx.translate(startX, startY);
+        bctx.rotate((rnd() - 0.5) * 0.9);
+        bctx.fillStyle = "rgba(138,138,138,0.07)";
+        bctx.fillRect(-len / 2, -0.8, len, rnd() * 1.6 + 0.4);
+        bctx.restore();
       }
+
+      const colorMap = new THREE.CanvasTexture(colorCanvas);
+      const bumpMap = new THREE.CanvasTexture(bumpCanvas);
+      colorMap.colorSpace = THREE.SRGBColorSpace;
+      colorMap.needsUpdate = true;
+      bumpMap.needsUpdate = true;
+
+      return { colorMap, bumpMap };
+    }
+
+    function createStoneMaterial(baseHex, seedStart) {
+      const maps = createStoneMaps(baseHex, seedStart);
+      return new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        map: maps.colorMap,
+        bumpMap: maps.bumpMap,
+        bumpScale: 0.018,
+        roughness: 0.98,
+        metalness: 0.0
+      });
+    }
+
+    function createInsetTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, 1024, 1024);
+
+      const grad = ctx.createLinearGradient(0, 0, 0, 1024);
+      grad.addColorStop(0, "rgba(255,255,255,0.05)");
+      grad.addColorStop(0.5, "rgba(255,255,255,0.01)");
+      grad.addColorStop(1, "rgba(0,0,0,0.05)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1024, 1024);
 
       const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1.05, 1.05);
-      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.needsUpdate = true;
       return texture;
     }
 
-    function lightenColor(hex, amount) {
-      const n = parseInt(hex.replace("#", ""), 16);
-      let r = (n >> 16) + amount;
-      let g = ((n >> 8) & 255) + amount;
-      let b = (n & 255) + amount;
-      r = Math.max(0, Math.min(255, r));
-      g = Math.max(0, Math.min(255, g));
-      b = Math.max(0, Math.min(255, b));
-      return "#" + (r << 16 | g << 8 | b).toString(16).padStart(6, "0");
-    }
+    function createShadowTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext("2d");
 
-    function darkenColor(hex, amount) {
-      return lightenColor(hex, -amount);
-    }
+      const grad = ctx.createRadialGradient(512, 512, 20, 512, 512, 420);
+      grad.addColorStop(0, "rgba(0,0,0,0.32)");
+      grad.addColorStop(0.42, "rgba(0,0,0,0.18)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1024, 1024);
 
-    function createStoneMaterial() {
-      const texture = createStoneTexture("#8e8579", 11);
-      return new THREE.MeshStandardMaterial({
-        color: 0x8e8579,
-        map: texture,
-        roughness: 0.96,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.022
-      });
-    }
-
-    function createSideMaterial() {
-      const texture = createStoneTexture("#6f675e", 23);
-      return new THREE.MeshStandardMaterial({
-        color: 0x6f675e,
-        map: texture,
-        roughness: 0.98,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.026
-      });
-    }
-
-    function createBaseMaterial() {
-      const texture = createStoneTexture("#736b62", 41);
-      return new THREE.MeshStandardMaterial({
-        color: 0x736b62,
-        map: texture,
-        roughness: 0.98,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.024
-      });
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
     }
 
     function buildRoundedShape() {
       const s = new THREE.Shape();
       s.moveTo(-1.12, -1.72);
-      s.lineTo(-1.12, 0.50);
+      s.lineTo(-1.12, 0.48);
       s.quadraticCurveTo(-1.12, 1.62, 0, 1.62);
-      s.quadraticCurveTo(1.12, 1.62, 1.12, 0.50);
+      s.quadraticCurveTo(1.12, 1.62, 1.12, 0.48);
       s.lineTo(1.12, -1.72);
       s.closePath();
       return s;
@@ -1115,10 +1134,10 @@
     function buildSquareShape() {
       const s = new THREE.Shape();
       s.moveTo(-1.18, -1.72);
-      s.lineTo(-1.18, 1.30);
-      s.quadraticCurveTo(-1.18, 1.58, -0.90, 1.58);
-      s.lineTo(0.90, 1.58);
-      s.quadraticCurveTo(1.18, 1.58, 1.18, 1.30);
+      s.lineTo(-1.18, 1.28);
+      s.quadraticCurveTo(-1.18, 1.58, -0.92, 1.58);
+      s.lineTo(0.92, 1.58);
+      s.quadraticCurveTo(1.18, 1.58, 1.18, 1.28);
       s.lineTo(1.18, -1.72);
       s.closePath();
       return s;
@@ -1127,22 +1146,17 @@
     function buildArchShape() {
       const s = new THREE.Shape();
       s.moveTo(-1.16, -1.74);
-      s.lineTo(-1.16, 0.36);
-      s.absarc(0, 0.36, 1.16, Math.PI, 0, true);
+      s.lineTo(-1.16, 0.34);
+      s.absarc(0, 0.34, 1.16, Math.PI, 0, true);
       s.lineTo(1.16, -1.74);
       s.closePath();
       return s;
     }
 
-    function buildInsetShape(style) {
-      const s = buildTombstoneShape(style);
-      return s;
-    }
-
     function buildTombstoneShape(style) {
-      const normalized = normalizeStyle(style);
-      if (normalized === "square") return buildSquareShape();
-      if (normalized === "arch") return buildArchShape();
+      style = normalizeStyle(style);
+      if (style === "square") return buildSquareShape();
+      if (style === "arch") return buildArchShape();
       return buildRoundedShape();
     }
 
@@ -1157,28 +1171,23 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillStyle = "rgba(255, 248, 230, 0.10)";
-      ctx.font = "600 42px Arial";
-      ctx.fillText("🐾", 513, 177);
-      ctx.fillStyle = "rgba(24, 21, 19, 0.22)";
-      ctx.fillText("🐾", 512, 178);
+      ctx.fillStyle = "rgba(255,250,240,0.05)";
+      ctx.font = "600 40px Arial";
+      ctx.fillText("🐾", 513, 178);
 
-      ctx.fillStyle = "rgba(26, 23, 20, 0.18)";
+      ctx.fillStyle = "rgba(30,26,23,0.18)";
       ctx.beginPath();
       roundRect(ctx, 406, 240, 212, 48, 24);
       ctx.fill();
 
-      ctx.fillStyle = "rgba(255, 248, 230, 0.09)";
+      ctx.fillStyle = "rgba(245,240,232,0.10)";
       ctx.font = "500 24px 'Microsoft YaHei', Arial";
       ctx.fillText(getVisibilityText(memorial.visibility), 513, 263);
-
-      ctx.fillStyle = "rgba(18, 16, 14, 0.42)";
+      ctx.fillStyle = "rgba(42,35,30,0.36)";
       ctx.fillText(getVisibilityText(memorial.visibility), 512, 264);
 
-      drawEngravedText(ctx, memorial.name || text.defaultName, 512, 438, "500 72px 'Microsoft YaHei', Arial", 0.58);
-      drawEngravedText(ctx, (memorial.birthDate || "----") + " — " + (memorial.leaveDate || "----"), 512, 535, "400 32px 'Microsoft YaHei', Arial", 0.44);
-
-      ctx.font = "italic 30px 'Microsoft YaHei', Arial";
+      drawEngravedText(ctx, memorial.name || text.defaultName, 512, 438, "500 72px 'Microsoft YaHei', Arial", 0.50);
+      drawEngravedText(ctx, (memorial.birthDate || "----") + " — " + (memorial.leaveDate || "----"), 512, 535, "400 32px 'Microsoft YaHei', Arial", 0.38);
       drawWrappedEngravedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 650, 460, 42, 3);
 
       const texture = new THREE.CanvasTexture(canvas);
@@ -1187,11 +1196,11 @@
       return texture;
     }
 
-    function drawEngravedText(ctx, value, x, y, font, opacity) {
+    function drawEngravedText(ctx, value, x, y, font, darkAlpha) {
       ctx.font = font;
-      ctx.fillStyle = "rgba(255, 248, 230, 0.08)";
+      ctx.fillStyle = "rgba(255,250,240,0.08)";
       ctx.fillText(value, x + 1.2, y + 1.2);
-      ctx.fillStyle = "rgba(12, 10, 9, " + opacity + ")";
+      ctx.fillStyle = "rgba(45,38,33," + darkAlpha + ")";
       ctx.fillText(value, x, y);
     }
 
@@ -1218,7 +1227,7 @@
       }
 
       finalLines.forEach(function(line, index) {
-        drawEngravedText(ctx, line, x, y + index * lineHeight, "italic 30px 'Microsoft YaHei', Arial", 0.40);
+        drawEngravedText(ctx, line, x, y + index * lineHeight, "italic 30px 'Microsoft YaHei', Arial", 0.34);
       });
     }
 
@@ -1236,144 +1245,98 @@
       ctx.closePath();
     }
 
-    function makeShadowTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext("2d");
-
-      const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
-      gradient.addColorStop(0, "rgba(0,0,0,0.34)");
-      gradient.addColorStop(0.42, "rgba(0,0,0,0.18)");
-      gradient.addColorStop(1, "rgba(0,0,0,0)");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
-    function makeInsetTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext("2d");
-
-      ctx.clearRect(0, 0, 512, 512);
-
-      const gradient = ctx.createLinearGradient(0, 0, 0, 512);
-      gradient.addColorStop(0, "rgba(255,255,255,0.07)");
-      gradient.addColorStop(0.5, "rgba(0,0,0,0.03)");
-      gradient.addColorStop(1, "rgba(0,0,0,0.09)");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
-    function createStoneGroup(style, showText, scale, sideAngle) {
+    function createStoneGroup(style, showText, scaleValue, sideAngle) {
       const group = new THREE.Group();
-      const normalized = normalizeStyle(style);
+      style = normalizeStyle(style);
 
-      const shape = buildTombstoneShape(normalized);
+      const shape = buildTombstoneShape(style);
       const geometry = new THREE.ExtrudeGeometry(shape, {
-        depth: 0.42,
+        depth: 0.38,
         bevelEnabled: true,
-        bevelThickness: 0.048,
-        bevelSize: 0.045,
-        bevelSegments: 6,
-        curveSegments: 36
+        bevelThickness: 0.045,
+        bevelSize: 0.04,
+        bevelSegments: 8,
+        curveSegments: 42
       });
-
       geometry.center();
 
-      const stoneMesh = new THREE.Mesh(geometry, createStoneMaterial());
-      stoneMesh.position.y = 0.30;
-      stoneMesh.rotation.y = sideAngle;
-      group.add(stoneMesh);
+      const mainMat = createStoneMaterial("#8c857a", 21);
+      const body = new THREE.Mesh(geometry, mainMat);
+      body.position.y = 0.28;
+      body.rotation.y = sideAngle;
+      group.add(body);
 
-      const backGeo = new THREE.BoxGeometry(2.48, 3.24, 0.13);
-      const backMesh = new THREE.Mesh(backGeo, createSideMaterial());
-      backMesh.position.set(0, 0.30, -0.30);
-      backMesh.rotation.y = sideAngle;
-      group.add(backMesh);
+      const rearMat = createStoneMaterial("#756d63", 39);
+      const rear = new THREE.Mesh(new THREE.BoxGeometry(2.42, 3.20, 0.09), rearMat);
+      rear.position.set(0, 0.28, -0.25);
+      rear.rotation.y = sideAngle;
+      group.add(rear);
 
-      const insetShape = buildInsetShape(normalized);
-      const insetGeo = new THREE.ShapeGeometry(insetShape);
+      const insetGeo = new THREE.ShapeGeometry(shape);
       const insetMat = new THREE.MeshBasicMaterial({
-        map: makeInsetTexture(),
-        color: 0xffffff,
+        map: createInsetTexture(),
         transparent: true,
-        opacity: 0.20,
+        opacity: 0.22,
         depthWrite: false
       });
+      const inset = new THREE.Mesh(insetGeo, insetMat);
+      inset.scale.set(0.82, 0.78, 1);
+      inset.position.set(0, 0.24, 0.23);
+      inset.rotation.y = sideAngle;
+      group.add(inset);
 
-      const insetMesh = new THREE.Mesh(insetGeo, insetMat);
-      insetMesh.scale.set(0.82, 0.78, 1);
-      insetMesh.position.set(0, 0.25, 0.246);
-      insetMesh.rotation.y = sideAngle;
-      group.add(insetMesh);
+      const baseMat = createStoneMaterial("#787166", 55);
 
-      const baseGeo = new THREE.BoxGeometry(3.36, 0.36, 1.10);
-      const baseMesh = new THREE.Mesh(baseGeo, createBaseMaterial());
-      baseMesh.position.set(0, -1.78, -0.02);
-      baseMesh.rotation.y = sideAngle;
-      group.add(baseMesh);
+      const baseMain = new THREE.Mesh(new THREE.BoxGeometry(3.26, 0.30, 1.06), baseMat);
+      baseMain.position.set(0, -1.73, -0.03);
+      baseMain.rotation.y = sideAngle;
+      group.add(baseMain);
 
-      const baseTopGeo = new THREE.BoxGeometry(3.05, 0.17, 0.94);
-      const baseTopMesh = new THREE.Mesh(baseTopGeo, createBaseMaterial());
-      baseTopMesh.position.set(0, -1.50, 0.03);
-      baseTopMesh.rotation.y = sideAngle;
-      group.add(baseTopMesh);
+      const baseTop = new THREE.Mesh(new THREE.BoxGeometry(2.95, 0.14, 0.92), baseMat);
+      baseTop.position.set(0, -1.50, 0.00);
+      baseTop.rotation.y = sideAngle;
+      group.add(baseTop);
 
-      const baseFrontGeo = new THREE.BoxGeometry(3.52, 0.16, 0.20);
-      const baseFrontMesh = new THREE.Mesh(baseFrontGeo, createSideMaterial());
-      baseFrontMesh.position.set(0, -1.90, 0.48);
-      baseFrontMesh.rotation.y = sideAngle;
-      group.add(baseFrontMesh);
+      const baseFront = new THREE.Mesh(new THREE.BoxGeometry(3.42, 0.12, 0.18), baseMat);
+      baseFront.position.set(0, -1.86, 0.45);
+      baseFront.rotation.y = sideAngle;
+      group.add(baseFront);
 
       const shadowMat = new THREE.MeshBasicMaterial({
-        map: makeShadowTexture(),
+        map: createShadowTexture(),
         transparent: true,
         depthWrite: false,
-        opacity: 0.70
+        opacity: 0.82
       });
-
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.75, 1.12), shadowMat);
-      shadow.position.set(0, -1.94, -0.45);
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 1.18), shadowMat);
+      shadow.position.set(0, -1.93, -0.48);
       group.add(shadow);
 
       if (showText) {
         const memorial = getMemorialData();
         const textTexture = createTextTexture(memorial);
-
         const textMat = new THREE.MeshBasicMaterial({
           map: textTexture,
           transparent: true,
-          depthWrite: false,
-          opacity: 0.82
+          opacity: 0.80,
+          depthWrite: false
         });
-
-        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.22, 2.82), textMat);
-        mainTextPlane.position.set(0, 0.26, 0.255);
+        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.18, 2.78), textMat);
+        mainTextPlane.position.set(0, 0.25, 0.238);
         mainTextPlane.rotation.y = sideAngle;
         group.add(mainTextPlane);
       }
 
-      group.scale.set(scale, scale, scale);
+      group.scale.set(scaleValue, scaleValue, scaleValue);
       group.position.y = PREVIEW_Y;
 
       group.userData.parts = {
-        stoneMesh,
-        backMesh,
-        insetMesh,
-        baseMesh,
-        baseTopMesh,
-        baseFrontMesh,
+        body,
+        rear,
+        inset,
+        baseMain,
+        baseTop,
+        baseFront,
         textPlane: mainTextPlane
       };
 
@@ -1381,7 +1344,7 @@
     }
 
     function initMainScene() {
-      const container = document.getElementById("mainStoneScene");
+      const container = document.getElementById("mainScene");
       if (!container || !window.THREE) return;
 
       mainScene = new THREE.Scene();
@@ -1392,43 +1355,44 @@
         0.1,
         100
       );
-      mainCamera.position.set(0, 0.08, 7.7);
+      mainCamera.position.set(0, 0.0, 7.5);
 
-      mainRenderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true
-      });
-
+      mainRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       mainRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       mainRenderer.setSize(container.clientWidth, container.clientHeight);
       mainRenderer.outputColorSpace = THREE.SRGBColorSpace;
+      mainRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+      mainRenderer.toneMappingExposure = 1.0;
 
       container.innerHTML = "";
       container.appendChild(mainRenderer.domElement);
 
-      mainScene.add(new THREE.AmbientLight(0xffffff, 1.30));
+      mainScene.add(new THREE.AmbientLight(0xffffff, 0.88));
 
-      const hemi = new THREE.HemisphereLight(0xd1dcff, 0x756052, 0.95);
+      const hemi = new THREE.HemisphereLight(0xcfdcff, 0x4e4239, 0.72);
       mainScene.add(hemi);
 
-      const moonLight = new THREE.DirectionalLight(0xd8e0ff, 1.22);
-      moonLight.position.set(-4.2, 7.2, 6.2);
+      const moonLight = new THREE.DirectionalLight(0xd9e2ff, 1.22);
+      moonLight.position.set(-5.4, 7.8, 5.2);
       mainScene.add(moonLight);
 
-      const warmLight = new THREE.PointLight(0xffd1a0, 1.42, 18, 2);
-      warmLight.position.set(2.4, -0.9, 5.5);
+      const fillLight = new THREE.DirectionalLight(0xaab7d9, 0.34);
+      fillLight.position.set(3.2, 3.8, 2.5);
+      mainScene.add(fillLight);
+
+      const warmLight = new THREE.PointLight(0xffd2a1, 1.26, 18, 2);
+      warmLight.position.set(3.0, -1.0, 4.8);
       mainScene.add(warmLight);
 
-      const leftSoft = new THREE.PointLight(0xffffff, 0.38, 18, 2);
-      leftSoft.position.set(-2.6, 1.1, 4.5);
-      mainScene.add(leftSoft);
+      const lowWarm = new THREE.PointLight(0xffc992, 0.52, 10, 2);
+      lowWarm.position.set(-2.4, -1.2, 4.2);
+      mainScene.add(lowWarm);
 
       const data = getMemorialData();
       const confirmed = data.tombstoneConfirmed === true;
       buildMainStone(selectedStoneStyle, confirmed);
 
       renderMainScene();
-
       window.addEventListener("resize", resizeMainScene);
     }
 
@@ -1443,12 +1407,11 @@
 
       mainTextPlane = null;
 
-      const scale = finalMode ? FINAL_SCALE : PREVIEW_SCALE;
-      const sideAngle = finalMode ? FINAL_ANGLE : PREVIEW_ANGLE;
+      const scaleValue = finalMode ? FINAL_SCALE : PREVIEW_SCALE;
+      const angle = finalMode ? FINAL_ANGLE : PREVIEW_ANGLE;
 
-      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scale, sideAngle);
+      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scaleValue, angle);
       mainStoneGroup.position.y = finalMode ? FINAL_Y : PREVIEW_Y;
-
       mainScene.add(mainStoneGroup);
 
       renderMainScene();
@@ -1460,9 +1423,8 @@
     }
 
     function resizeMainScene() {
-      const container = document.getElementById("mainStoneScene");
+      const container = document.getElementById("mainScene");
       if (!container || !mainRenderer || !mainCamera) return;
-
       mainRenderer.setSize(container.clientWidth, container.clientHeight);
       mainCamera.aspect = container.clientWidth / container.clientHeight;
       mainCamera.updateProjectionMatrix();
@@ -1471,7 +1433,6 @@
 
     function rebuildMainTextTexture() {
       if (!mainTextPlane) return;
-
       const texture = createTextTexture(getMemorialData());
 
       if (mainTextPlane.material.map) {
@@ -1480,7 +1441,6 @@
 
       mainTextPlane.material.map = texture;
       mainTextPlane.material.needsUpdate = true;
-
       renderMainScene();
     }
 
@@ -1496,49 +1456,44 @@
         0.1,
         100
       );
-      camera.position.set(0, 0.08, 7.2);
+      camera.position.set(0, 0.02, 7.0);
 
-      const renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true
-      });
-
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.0;
 
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 1.22));
+      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
-      const light = new THREE.DirectionalLight(0xd8e1ff, 1.16);
-      light.position.set(-3, 5, 5);
-      scene.add(light);
+      const hemi = new THREE.HemisphereLight(0xcfdcff, 0x4e4239, 0.62);
+      scene.add(hemi);
 
-      const warm = new THREE.PointLight(0xffd2a0, 0.95, 12, 2);
-      warm.position.set(2, -0.6, 4);
+      const moon = new THREE.DirectionalLight(0xd9e2ff, 1.05);
+      moon.position.set(-4, 6, 4);
+      scene.add(moon);
+
+      const warm = new THREE.PointLight(0xffd2a1, 0.82, 12, 2);
+      warm.position.set(2.2, -0.7, 3.8);
       scene.add(warm);
 
-      const group = createStoneGroup(style, false, 0.65, -0.18);
+      const group = createStoneGroup(style, false, 0.62, -0.22);
       group.position.y = -0.26;
       scene.add(group);
 
       renderer.render(scene, camera);
 
-      miniScenes.push({
-        container,
-        renderer,
-        camera,
-        scene
-      });
+      miniScenes.push({ container, renderer, camera, scene });
     }
 
     function resizeMiniScenes() {
       miniScenes.forEach(function(item) {
         const width = item.container.clientWidth;
         const height = item.container.clientHeight;
-
         item.renderer.setSize(width, height);
         item.camera.aspect = width / height;
         item.camera.updateProjectionMatrix();
@@ -1558,13 +1513,10 @@
 
       document.body.classList.remove("memorial-mode");
 
-      document.querySelectorAll(".stone-option").forEach(function(btn) {
+      document.querySelectorAll(".stone-item").forEach(function(btn) {
         btn.classList.remove("active");
       });
-
-      if (button) {
-        button.classList.add("active");
-      }
+      if (button) button.classList.add("active");
 
       buildMainStone(selectedStoneStyle, false);
     }
@@ -1615,7 +1567,6 @@
 
     function confirmStone() {
       if (isPlanting) return;
-
       isPlanting = true;
 
       const data = getMemorialData();
@@ -1636,7 +1587,6 @@
 
     function editStoneAgain() {
       if (isPlanting) return;
-
       const data = getMemorialData();
       data.tombstoneConfirmed = false;
       saveMemorialData(data);
@@ -1649,12 +1599,12 @@
       const data = getMemorialData();
       selectedStoneStyle = normalizeStyle(data.tombstoneStyle || "rounded");
 
-      const activeButton = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
-      if (activeButton) {
-        document.querySelectorAll(".stone-option").forEach(function(btn) {
+      const active = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
+      if (active) {
+        document.querySelectorAll(".stone-item").forEach(function(btn) {
           btn.classList.remove("active");
         });
-        activeButton.classList.add("active");
+        active.classList.add("active");
       }
 
       if (data.tombstoneConfirmed === true) {
@@ -1683,7 +1633,6 @@
     function showPhotos(containerId, photos) {
       const container = document.getElementById(containerId);
       const text = getText();
-
       if (!container) return;
 
       container.innerHTML = "";
@@ -1712,7 +1661,6 @@
       const lightbox = document.getElementById("photoLightbox");
       const image = document.getElementById("lightboxImage");
       if (!lightbox || !image) return;
-
       image.src = src;
       lightbox.classList.add("show");
     }
@@ -1721,7 +1669,6 @@
       const lightbox = document.getElementById("photoLightbox");
       const image = document.getElementById("lightboxImage");
       if (!lightbox || !image) return;
-
       lightbox.classList.remove("show");
       image.src = "";
     }
@@ -1731,7 +1678,6 @@
       const text = getText();
 
       const storyDisplay = document.getElementById("petStoryDisplay");
-
       if (storyDisplay) {
         if (data.story) {
           storyDisplay.textContent = data.story;
@@ -1758,7 +1704,6 @@
     function renderMessages() {
       const list = document.getElementById("messageList");
       const text = getText();
-
       if (!list) return;
 
       const messages = getMessages();
@@ -1799,7 +1744,6 @@
     function renderPlacedItems() {
       const box = document.getElementById("placedItemsList");
       const text = getText();
-
       if (!box) return;
 
       const items = getPlacedItems();
@@ -1808,12 +1752,10 @@
       items.forEach(function(item) {
         const div = document.createElement("div");
         div.className = "placed-item-badge";
-
         if (item === "can") div.textContent = "🥫 " + text.placedCan;
         if (item === "ball") div.textContent = "🎾 " + text.placedBall;
         if (item === "seed") div.textContent = "🌾 " + text.placedSeed;
         if (item === "flower") div.textContent = "🌸 " + text.placedFlower;
-
         box.appendChild(div);
       });
     }
@@ -1840,7 +1782,7 @@
       initMiniScene("miniSquare", "square");
       initMiniScene("miniArch", "arch");
 
-      const savedLanguage = localStorage.getItem("siteLanguage") || "en";
+      const savedLanguage = localStorage.getItem("siteLanguage") || "zh";
       changeLanguage(savedLanguage);
 
       loadExtraMemorialInfo();
