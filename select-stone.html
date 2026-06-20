@@ -556,6 +556,7 @@
           <option value="zh">简体中文</option>
           <option value="zh-TW">繁體中文</option>
           <option value="en">English</option>
+          <option value="ja">日本語</option>
         </select>
       </div>
     </header>
@@ -694,6 +695,30 @@
     const FINAL_ANGLE = 0;
     const PREVIEW_ANGLE = -0.16;
 
+    const ENGRAVING_CONFIG = {
+      planeWidth: 2.12,
+      planeHeight: 2.70,
+      positionX: 0,
+      positionY: 0.27,
+      positionZ: 0.244,
+      opacity: 0.74,
+      mainColor: "rgba(32, 36, 37, 0.56)",
+      dateColor: "rgba(34, 38, 39, 0.43)",
+      epitaphColor: "rgba(34, 38, 39, 0.45)",
+      shadowColor: "rgba(2, 4, 5, 0.22)",
+      highlightColor: "rgba(220, 228, 226, 0.11)",
+      wearAmount: 0.026,
+      nameSize: 78,
+      dateSize: 34,
+      epitaphSize: 36,
+      nameY: 316,
+      dateY: 430,
+      epitaphStartY: 555,
+      epitaphLineHeight: 52,
+      epitaphMaxWidth: 520,
+      maxEpitaphLines: 3
+    };
+
     const translations = {
       zh: {
         logo: "星眠宠物纪念园",
@@ -731,11 +756,8 @@
         noStory: "还没有写下故事。",
         noPhotos: "还没有照片。",
         noMessages: "还没有留言。",
-        defaultName: "露娜",
-        defaultWords: "永远爱你。",
-        publicText: "公开",
-        privateText: "私密",
-        inviteText: "邀请可见",
+        defaultName: "豆豆",
+        defaultWords: "谢谢你陪我走过这段人生",
         placedCan: "已放置罐头",
         placedBall: "已放置球",
         placedSeed: "已放置鸟食",
@@ -777,11 +799,8 @@
         noStory: "還沒有寫下故事。",
         noPhotos: "還沒有照片。",
         noMessages: "還沒有留言。",
-        defaultName: "露娜",
-        defaultWords: "永遠愛你。",
-        publicText: "公開",
-        privateText: "私密",
-        inviteText: "邀請可見",
+        defaultName: "豆豆",
+        defaultWords: "謝謝你陪我走過這段人生",
         placedCan: "已放置罐頭",
         placedBall: "已放置球",
         placedSeed: "已放置鳥食",
@@ -824,14 +843,54 @@
         noPhotos: "No photos yet.",
         noMessages: "No messages yet.",
         defaultName: "Luna",
-        defaultWords: "You are loved, always.",
-        publicText: "Public",
-        privateText: "Private",
-        inviteText: "Invite only",
+        defaultWords: "Thank you for walking through this life with me.",
         placedCan: "Can placed",
         placedBall: "Ball placed",
         placedSeed: "Seeds placed",
         placedFlower: "Flowers placed"
+      },
+      ja: {
+        logo: "星眠ペットメモリアルガーデン",
+        backBtn: "戻って修正",
+        changeStoneBtn: "墓石を変更",
+        panelTitle: "墓石のスタイル",
+        panelSubtitle: "3D墓石を選ぶと、中央のプレビューがすぐに変わります。",
+        title: "墓石を選ぶ",
+        subtitle: "墓石はゆっくり正面を向き、静かに記念園へ置かれます。",
+        confirmBtn: "この墓石を使う",
+        roundedName: "丸い墓石",
+        roundedDesc: "やさしく、クラシック。",
+        squareName: "角型の墓石",
+        squareDesc: "清潔で静か。",
+        archName: "高いアーチ墓石",
+        archDesc: "穏やかで厳か。",
+        storyBtn: "物語",
+        photosBtn: "写真",
+        giftBtn: "贈り物",
+        messageBtnShort: "メッセージ",
+        storyTitle: "ペットの物語",
+        photosTitle: "思い出の写真",
+        publicPhotosTitle: "公開写真",
+        privatePhotosTitle: "非公開写真",
+        privatePhotosDesc: "これらの写真は現在、このブラウザのデモ内だけで表示されます。",
+        giftTitle: "小さな贈り物を置く",
+        giftCan: "缶詰を置く",
+        giftBall: "ボールを置く",
+        giftSeed: "鳥の餌を置く",
+        giftFlower: "花を置く",
+        animalStatus: "静かな贈り物は、やさしい訪問者を呼ぶかもしれません。",
+        messageTitle: "メッセージ",
+        messagePlaceholder: "静かな言葉を書いてください...",
+        messageSendBtn: "メッセージを残す",
+        noStory: "まだ物語は書かれていません。",
+        noPhotos: "まだ写真はありません。",
+        noMessages: "まだメッセージはありません。",
+        defaultName: "ルナ",
+        defaultWords: "一緒に歩いてくれてありがとう",
+        placedCan: "缶詰を置きました",
+        placedBall: "ボールを置きました",
+        placedSeed: "鳥の餌を置きました",
+        placedFlower: "花を置きました"
       }
     };
 
@@ -840,18 +899,15 @@
     }
 
     function getMemorialData() {
-      return JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+      try {
+        return JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+      } catch (error) {
+        return {};
+      }
     }
 
     function saveMemorialData(data) {
       localStorage.setItem("myPetMemorial", JSON.stringify(data));
-    }
-
-    function getVisibilityText(value) {
-      const text = getText();
-      if (value === "private") return text.privateText;
-      if (value === "invite") return text.inviteText;
-      return text.publicText;
     }
 
     function normalizeStyle(style) {
@@ -902,7 +958,7 @@
         ctx.fillRect(x, y, Math.random() * 1.4 + 0.35, Math.random() * 1.4 + 0.35);
       }
 
-      for (let i = 0; i < 32; i++) {
+      for (let i = 0; i < 34; i++) {
         const x = Math.random() * 512;
         const y = Math.random() * 512;
         const w = Math.random() * 150 + 40;
@@ -918,7 +974,9 @@
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(1.05, 1.05);
-      texture.colorSpace = THREE.SRGBColorSpace;
+
+      if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
+
       return texture;
     }
 
@@ -987,51 +1045,111 @@
       return buildRoundedShape();
     }
 
-    function createTextTexture(memorial) {
+    function normalizeEngravingData(data) {
       const text = getText();
-      const canvas = document.createElement("canvas");
-      canvas.width = 1024;
-      canvas.height = 1024;
-      const ctx = canvas.getContext("2d");
+      const memorial = data || {};
 
-      ctx.clearRect(0, 0, 1024, 1024);
+      const name =
+        memorial.name ||
+        memorial.petName ||
+        memorial.pet ||
+        text.defaultName ||
+        "豆豆";
+
+      const birth =
+        memorial.birthDate ||
+        memorial.birth ||
+        memorial.startDate ||
+        "";
+
+      const death =
+        memorial.deathDate ||
+        memorial.leaveDate ||
+        memorial.passDate ||
+        memorial.leave ||
+        memorial.endDate ||
+        "";
+
+      const epitaph =
+        memorial.epitaph ||
+        memorial.memory ||
+        memorial.words ||
+        memorial.message ||
+        text.defaultWords ||
+        "谢谢你陪我走过这段人生";
+
+      let dateText = "";
+      if (birth && death) {
+        dateText = birth + " - " + death;
+      } else if (birth || death) {
+        dateText = birth || death;
+      } else {
+        dateText = "2015.08.20 - 2026.05.12";
+      }
+
+      return {
+        name: String(name).trim(),
+        dateText: String(dateText).trim(),
+        epitaph: String(epitaph).trim()
+      };
+    }
+
+    function drawSoftEngravingPanel(ctx) {
+      const gradient = ctx.createRadialGradient(512, 455, 40, 512, 455, 420);
+      gradient.addColorStop(0, "rgba(0, 0, 0, 0.045)");
+      gradient.addColorStop(0.55, "rgba(0, 0, 0, 0.020)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(150, 150, 724, 680);
+    }
+
+    function drawEngravedLine(ctx, options) {
+      ctx.save();
+
+      ctx.font = options.font;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillStyle = "rgba(18, 15, 13, 0.16)";
-      ctx.font = "600 44px Arial";
-      ctx.fillText("🐾", 512, 178);
+      ctx.fillStyle = options.shadowColor;
+      ctx.fillText(options.text, options.x + 1.35, options.y + 1.75);
 
-      ctx.fillStyle = "rgba(16, 13, 11, 0.48)";
-      ctx.font = "500 76px 'Microsoft YaHei', Arial";
-      ctx.fillText(memorial.name || text.defaultName, 512, 420);
+      ctx.fillStyle = options.highlightColor;
+      ctx.fillText(options.text, options.x - 1.05, options.y - 1.15);
 
-      ctx.fillStyle = "rgba(16, 13, 11, 0.34)";
-      ctx.font = "400 34px 'Microsoft YaHei', Arial";
-      const birth = memorial.birthDate || "----";
-      const leave = memorial.leaveDate || "----";
-      ctx.fillText(birth + " — " + leave, 512, 520);
+      ctx.fillStyle = options.mainColor;
+      ctx.fillText(options.text, options.x, options.y);
 
-      ctx.fillStyle = "rgba(16, 13, 11, 0.31)";
-      ctx.font = "italic 32px 'Microsoft YaHei', Arial";
-      drawWrappedText(ctx, memorial.epitaph || memorial.memory || text.defaultWords, 512, 650, 460, 44, 3);
+      ctx.globalAlpha = 0.26;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
+      ctx.fillText(options.text, options.x + 0.45, options.y + 0.65);
 
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      texture.colorSpace = THREE.SRGBColorSpace;
-      return texture;
+      ctx.restore();
     }
 
-    function drawWrappedText(ctx, value, x, y, maxWidth, lineHeight, maxLines) {
-      const chars = String(value || "").split("");
+    function wrapTextToLines(ctx, text, maxWidth, maxLines, font) {
+      ctx.save();
+      ctx.font = font;
+
+      const value = String(text || "").trim();
+      if (!value) {
+        ctx.restore();
+        return [];
+      }
+
       const lines = [];
+      const hasSpace = /\s/.test(value);
+      const units = hasSpace ? value.split(/\s+/) : value.split("");
+
       let current = "";
 
-      for (let i = 0; i < chars.length; i++) {
-        const test = current + chars[i];
+      for (let i = 0; i < units.length; i++) {
+        const unit = units[i];
+        const test = hasSpace ? (current ? current + " " + unit : unit) : current + unit;
+
         if (ctx.measureText(test).width > maxWidth && current) {
           lines.push(current);
-          current = chars[i];
+          current = unit;
         } else {
           current = test;
         }
@@ -1040,13 +1158,110 @@
       if (current) lines.push(current);
 
       const finalLines = lines.slice(0, maxLines);
+
       if (lines.length > maxLines && finalLines.length) {
-        finalLines[finalLines.length - 1] = finalLines[finalLines.length - 1].slice(0, -1) + "…";
+        let last = finalLines[finalLines.length - 1];
+
+        while (ctx.measureText(last + "…").width > maxWidth && last.length > 0) {
+          last = last.slice(0, -1);
+        }
+
+        finalLines[finalLines.length - 1] = last + "…";
       }
 
-      finalLines.forEach(function(line, index) {
-        ctx.fillText(line, x, y + index * lineHeight);
+      ctx.restore();
+      return finalLines;
+    }
+
+    function applyTextWear(ctx, width, height, amount) {
+      const image = ctx.getImageData(0, 0, width, height);
+      const data = image.data;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const alpha = data[i + 3];
+
+        if (alpha > 14) {
+          const random = Math.random();
+
+          if (random < amount) {
+            data[i + 3] = Math.floor(alpha * 0.30);
+          } else if (random < amount * 2.4) {
+            data[i + 3] = Math.floor(alpha * 0.68);
+          }
+        }
+      }
+
+      ctx.putImageData(image, 0, 0);
+    }
+
+    function updateEngravingTexture(data) {
+      const config = ENGRAVING_CONFIG;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1024;
+      canvas.height = 1024;
+
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      const safeData = normalizeEngravingData(data);
+      const fontStack = "'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif";
+
+      drawSoftEngravingPanel(ctx);
+
+      drawEngravedLine(ctx, {
+        text: safeData.name,
+        x: 512,
+        y: config.nameY,
+        font: "600 " + config.nameSize + "px " + fontStack,
+        mainColor: config.mainColor,
+        shadowColor: config.shadowColor,
+        highlightColor: config.highlightColor
       });
+
+      drawEngravedLine(ctx, {
+        text: safeData.dateText,
+        x: 512,
+        y: config.dateY,
+        font: "400 " + config.dateSize + "px " + fontStack,
+        mainColor: config.dateColor,
+        shadowColor: "rgba(3, 5, 6, 0.16)",
+        highlightColor: "rgba(220, 230, 226, 0.08)"
+      });
+
+      const epitaphFont = "400 " + config.epitaphSize + "px " + fontStack;
+      const epitaphLines = wrapTextToLines(
+        ctx,
+        safeData.epitaph,
+        config.epitaphMaxWidth,
+        config.maxEpitaphLines,
+        epitaphFont
+      );
+
+      epitaphLines.forEach(function(line, index) {
+        drawEngravedLine(ctx, {
+          text: line,
+          x: 512,
+          y: config.epitaphStartY + index * config.epitaphLineHeight,
+          font: epitaphFont,
+          mainColor: config.epitaphColor,
+          shadowColor: "rgba(3, 5, 6, 0.14)",
+          highlightColor: "rgba(220, 230, 226, 0.075)"
+        });
+      });
+
+      applyTextWear(ctx, canvas.width, canvas.height, config.wearAmount);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+
+      if (THREE.SRGBColorSpace) {
+        texture.colorSpace = THREE.SRGBColorSpace;
+      }
+
+      return texture;
     }
 
     function makeShadowTexture() {
@@ -1071,6 +1286,7 @@
 
     function createStoneGroup(style, showText, scale, sideAngle) {
       const group = new THREE.Group();
+      const rotator = new THREE.Group();
       const normalized = normalizeStyle(style);
 
       const shape = buildTombstoneShape(normalized);
@@ -1088,18 +1304,48 @@
 
       const stoneMesh = new THREE.Mesh(geometry, createStoneMaterial());
       stoneMesh.position.y = 0.30;
-      stoneMesh.rotation.y = sideAngle;
-      group.add(stoneMesh);
+      rotator.add(stoneMesh);
 
       const baseMesh = new THREE.Mesh(new THREE.BoxGeometry(3.24, 0.34, 1.02), createBaseMaterial());
       baseMesh.position.set(0, -1.78, -0.02);
-      baseMesh.rotation.y = sideAngle;
-      group.add(baseMesh);
+      rotator.add(baseMesh);
 
       const lipMesh = new THREE.Mesh(new THREE.BoxGeometry(2.88, 0.15, 0.86), createBaseMaterial());
       lipMesh.position.set(0, -1.49, 0.02);
-      lipMesh.rotation.y = sideAngle;
-      group.add(lipMesh);
+      rotator.add(lipMesh);
+
+      if (showText) {
+        const textTexture = updateEngravingTexture(getMemorialData());
+
+        const textMat = new THREE.MeshBasicMaterial({
+          map: textTexture,
+          transparent: true,
+          depthWrite: false,
+          depthTest: true,
+          opacity: ENGRAVING_CONFIG.opacity
+        });
+
+        textMat.polygonOffset = true;
+        textMat.polygonOffsetFactor = -1;
+        textMat.polygonOffsetUnits = -1;
+
+        mainTextPlane = new THREE.Mesh(
+          new THREE.PlaneGeometry(ENGRAVING_CONFIG.planeWidth, ENGRAVING_CONFIG.planeHeight),
+          textMat
+        );
+
+        mainTextPlane.position.set(
+          ENGRAVING_CONFIG.positionX,
+          ENGRAVING_CONFIG.positionY,
+          ENGRAVING_CONFIG.positionZ
+        );
+
+        mainTextPlane.renderOrder = 3;
+        rotator.add(mainTextPlane);
+      }
+
+      rotator.rotation.y = sideAngle;
+      group.add(rotator);
 
       const shadowMat = new THREE.MeshBasicMaterial({
         map: makeShadowTexture(),
@@ -1112,30 +1358,14 @@
       shadow.position.set(0, -1.95, -0.50);
       group.add(shadow);
 
-      if (showText) {
-        const memorial = getMemorialData();
-        const textTexture = createTextTexture(memorial);
-
-        const textMat = new THREE.MeshBasicMaterial({
-          map: textTexture,
-          transparent: true,
-          depthWrite: false,
-          opacity: 0.62
-        });
-
-        mainTextPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.14, 2.74), textMat);
-        mainTextPlane.position.set(0, 0.26, 0.248);
-        mainTextPlane.rotation.y = sideAngle;
-        group.add(mainTextPlane);
-      }
-
       group.scale.set(scale, scale, scale);
       group.position.y = PREVIEW_Y;
 
       group.userData.parts = {
-        stoneMesh,
-        baseMesh,
-        lipMesh,
+        rotator: rotator,
+        stoneMesh: stoneMesh,
+        baseMesh: baseMesh,
+        lipMesh: lipMesh,
         textPlane: mainTextPlane
       };
 
@@ -1161,9 +1391,12 @@
         antialias: true
       });
 
-      mainRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      mainRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       mainRenderer.setSize(container.clientWidth, container.clientHeight);
-      mainRenderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      if (THREE.SRGBColorSpace) {
+        mainRenderer.outputColorSpace = THREE.SRGBColorSpace;
+      }
 
       container.innerHTML = "";
       container.appendChild(mainRenderer.domElement);
@@ -1230,9 +1463,9 @@
     }
 
     function rebuildMainTextTexture() {
-      if (!mainTextPlane) return;
+      if (!mainTextPlane || !mainTextPlane.material) return;
 
-      const texture = createTextTexture(getMemorialData());
+      const texture = updateEngravingTexture(getMemorialData());
 
       if (mainTextPlane.material.map) {
         mainTextPlane.material.map.dispose();
@@ -1240,6 +1473,7 @@
 
       mainTextPlane.material.map = texture;
       mainTextPlane.material.needsUpdate = true;
+
       renderMainScene();
     }
 
@@ -1262,9 +1496,12 @@
         antialias: true
       });
 
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      if (THREE.SRGBColorSpace) {
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+      }
 
       container.innerHTML = "";
       container.appendChild(renderer.domElement);
@@ -1333,13 +1570,6 @@
       const start = performance.now();
       const duration = 1300;
 
-      function setAngle(angle) {
-        if (parts.stoneMesh) parts.stoneMesh.rotation.y = angle;
-        if (parts.baseMesh) parts.baseMesh.rotation.y = angle;
-        if (parts.lipMesh) parts.lipMesh.rotation.y = angle;
-        if (parts.textPlane) parts.textPlane.rotation.y = angle;
-      }
-
       function frame(now) {
         const raw = Math.min((now - start) / duration, 1);
         const t = easeOutCubic(raw);
@@ -1350,7 +1580,10 @@
 
         mainStoneGroup.scale.set(scale, scale, scale);
         mainStoneGroup.position.y = y;
-        setAngle(angle);
+
+        if (parts.rotator) {
+          parts.rotator.rotation.y = angle;
+        }
 
         renderMainScene();
 
@@ -1500,7 +1733,11 @@
     }
 
     function getMessages() {
-      return JSON.parse(localStorage.getItem("memorialMessages") || "[]");
+      try {
+        return JSON.parse(localStorage.getItem("memorialMessages") || "[]");
+      } catch (error) {
+        return [];
+      }
     }
 
     function renderMessages() {
@@ -1540,7 +1777,11 @@
     }
 
     function getPlacedItems() {
-      return JSON.parse(localStorage.getItem("memorialPlacedItems") || "[]");
+      try {
+        return JSON.parse(localStorage.getItem("memorialPlacedItems") || "[]");
+      } catch (error) {
+        return [];
+      }
     }
 
     function renderPlacedItems() {
@@ -1575,6 +1816,13 @@
       if (event.key === "Escape") {
         closePhotoLightbox();
         closeAllPanels();
+      }
+    });
+
+    window.addEventListener("storage", function(event) {
+      if (event.key === "myPetMemorial") {
+        rebuildMainTextTexture();
+        loadExtraMemorialInfo();
       }
     });
 
