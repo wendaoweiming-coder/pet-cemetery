@@ -297,21 +297,21 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    const MODEL_URL = "assets/models/tombstone-real.glb?v=7";
+    const MODEL_URL = "assets/models/tombstone-real.glb?v=8";
 
     const MODEL_VIEW_CONFIG = {
       // 只调这里：GLB 墓碑在选择页的大小、位置、角度
-      targetHeight: 3.82,
+      targetHeight: 3.62,
       modelBottomY: -1.88,
 
-      previewX: -0.10,
-      previewY: -0.26,
+      previewX: -0.20,
+      previewY: -0.22,
       previewZ: 0,
       previewScale: 0.82,
-      previewRotYDeg: 5,
+      previewRotYDeg: 2,
 
-      finalX: 0.00,
-      finalY: -0.86,
+      finalX: -0.02,
+      finalY: -0.92,
       finalZ: -0.08,
       finalScale: 0.54,
       finalRotYDeg: 0,
@@ -323,24 +323,24 @@
     };
 
     const ENGRAVING_CONFIG = {
-      // v7：刻字层改成固定尺寸和固定位置，不再用模型包围盒自动放大
-      planeWidth: 1.16,
-      planeHeight: 1.42,
+      // v8：按当前 GLB 模型重新校准。刻字区域固定贴在墓碑正面中部，不再放大到墓碑外
+      planeWidth: 0.78,
+      planeHeight: 1.08,
       planeX: 0,
-      planeY: -0.08,
-      planeZ: 0.075,
-      opacity: 0.76,
+      planeY: -0.23,
+      planeZ: 0.086,
+      opacity: 0.64,
       canvasWidth: 1400,
       canvasHeight: 1400,
-      nameFontSize: 92,
-      dateFontSize: 36,
-      epitaphFontSize: 42,
-      lineGap: 18,
+      nameFontSize: 54,
+      dateFontSize: 24,
+      epitaphFontSize: 28,
+      lineGap: 14,
       maxEpitaphLines: 3,
-      textColor: "rgba(52, 56, 58, 0.78)",
-      darkShadow: "rgba(10, 12, 14, 0.24)",
-      softHighlight: "rgba(235, 240, 238, 0.08)",
-      wearAmount: 0.030
+      textColor: "rgba(40, 43, 45, 0.66)",
+      darkShadow: "rgba(4, 5, 6, 0.16)",
+      softHighlight: "rgba(235, 240, 238, 0.045)",
+      wearAmount: 0.014
     };
 
     const I18N = {
@@ -655,7 +655,7 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const centerX = canvas.width / 2;
-      const topY = 330;
+      const topY = 430;
       const fontFamily = "'Noto Serif SC','Noto Serif TC','Noto Serif JP','Microsoft YaHei','PingFang SC','Hiragino Sans',serif";
       const nameFont = "700 " + ENGRAVING_CONFIG.nameFontSize + "px " + fontFamily;
       const dateFont = "500 " + ENGRAVING_CONFIG.dateFontSize + "px " + fontFamily;
@@ -664,12 +664,12 @@
       const dateLine = [data.birthDate, data.deathDate].filter(Boolean).join(" - ");
 
       drawEngravedText(ctx, data.name, centerX, topY, nameFont);
-      drawEngravedText(ctx, dateLine, centerX, topY + 138, dateFont);
+      drawEngravedText(ctx, dateLine, centerX, topY + 108, dateFont);
 
       ctx.font = epitaphFont;
-      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.54, ENGRAVING_CONFIG.maxEpitaphLines);
+      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.36, ENGRAVING_CONFIG.maxEpitaphLines);
       const step = ENGRAVING_CONFIG.epitaphFontSize + ENGRAVING_CONFIG.lineGap;
-      const startY = topY + 288 - ((lines.length - 1) * step) / 2;
+      const startY = topY + 238 - ((lines.length - 1) * step) / 2;
       lines.forEach(function(line, index) {
         drawEngravedText(ctx, line, centerX, startY + index * step, epitaphFont);
       });
