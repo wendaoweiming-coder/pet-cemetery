@@ -510,34 +510,35 @@
     const FINAL_ANGLE = 0;
 
     const ENGRAVING_CONFIG = {
-      planeWidth: 2.12,
-      planeHeight: 2.70,
-
+      planeWidth: 2.08,
+      planeHeight: 2.62,
       positionX: 0,
-      positionY: 0.27,
-      positionZ: 0.36,
+      positionY: 0.28,
+      positionZ: 0.292,
+      opacity: 0.88,
 
-      opacity: 1.0,
+      // 冷灰石刻色：可见，但不是白贴纸
+      mainColor: "rgba(128, 139, 138, 0.66)",
+      dateColor: "rgba(116, 127, 126, 0.54)",
+      epitaphColor: "rgba(120, 131, 130, 0.58)",
 
-      mainColor: "rgba(226, 236, 232, 0.92)",
-      dateColor: "rgba(204, 214, 210, 0.78)",
-      epitaphColor: "rgba(210, 220, 216, 0.82)",
+      // 凹陷阴影与边缘冷光
+      shadowColor: "rgba(6, 9, 10, 0.38)",
+      highlightColor: "rgba(190, 202, 198, 0.16)",
 
-      shadowColor: "rgba(0, 0, 0, 0.52)",
-      highlightColor: "rgba(255, 255, 255, 0.30)",
+      wearAmount: 0.018,
+      grainAmount: 0.030,
 
-      wearAmount: 0.004,
+      nameSize: 76,
+      dateSize: 33,
+      epitaphSize: 35,
 
-      nameSize: 78,
-      dateSize: 34,
-      epitaphSize: 36,
+      nameY: 318,
+      dateY: 432,
+      epitaphStartY: 556,
+      epitaphLineHeight: 51,
 
-      nameY: 316,
-      dateY: 430,
-      epitaphStartY: 555,
-      epitaphLineHeight: 52,
-
-      epitaphMaxWidth: 520,
+      epitaphMaxWidth: 500,
       maxEpitaphLines: 3
     };
 
@@ -722,67 +723,109 @@
 
     function createStoneTexture(baseColor) {
       const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
+      canvas.width = 768;
+      canvas.height = 768;
       const ctx = canvas.getContext("2d");
 
+      // 冷灰石材底色，不再是死黑色
       ctx.fillStyle = baseColor;
-      ctx.fillRect(0, 0, 512, 512);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < 1600; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const a = Math.random() * 0.045;
-        const light = Math.random() > 0.53 ? 255 : 0;
+      const vertical = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      vertical.addColorStop(0, "rgba(255, 255, 255, 0.075)");
+      vertical.addColorStop(0.42, "rgba(255, 255, 255, 0.018)");
+      vertical.addColorStop(1, "rgba(0, 0, 0, 0.105)");
+      ctx.fillStyle = vertical;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const side = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      side.addColorStop(0, "rgba(0, 0, 0, 0.085)");
+      side.addColorStop(0.48, "rgba(255, 255, 255, 0.035)");
+      side.addColorStop(1, "rgba(0, 0, 0, 0.055)");
+      ctx.fillStyle = side;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 细颗粒：模拟花岗岩点状纹理
+      for (let i = 0; i < 5200; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const size = Math.random() * 1.35 + 0.28;
+        const light = Math.random() > 0.52 ? 255 : 0;
+        const a = Math.random() * 0.055 + 0.012;
         ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, Math.random() * 1.4 + 0.35, Math.random() * 1.4 + 0.35);
+        ctx.fillRect(x, y, size, size);
       }
 
-      for (let i = 0; i < 34; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const w = Math.random() * 150 + 40;
+      // 长石纹：低对比，不像贴图脏污
+      for (let i = 0; i < 58; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const len = Math.random() * 260 + 80;
+        const alpha = Math.random() * 0.030 + 0.010;
         ctx.save();
         ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.5);
-        ctx.fillStyle = "rgba(255,255,255,0.018)";
-        ctx.fillRect(-w / 2, 0, w, 1);
+        ctx.rotate((Math.random() - 0.5) * 0.55);
+        ctx.strokeStyle = "rgba(230, 236, 232," + alpha + ")";
+        ctx.lineWidth = Math.random() * 1.2 + 0.35;
+        ctx.beginPath();
+        ctx.moveTo(-len / 2, 0);
+        ctx.bezierCurveTo(-len * 0.18, Math.random() * 14 - 7, len * 0.18, Math.random() * 14 - 7, len / 2, 0);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 少量暗裂纹，不能太明显
+      for (let i = 0; i < 10; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const len = Math.random() * 95 + 32;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate((Math.random() - 0.5) * 1.2);
+        ctx.strokeStyle = "rgba(25, 28, 28, 0.055)";
+        ctx.lineWidth = Math.random() * 0.9 + 0.35;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(len * 0.35, Math.random() * 18 - 9, len, Math.random() * 22 - 11);
+        ctx.stroke();
         ctx.restore();
       }
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1.05, 1.05);
+      texture.repeat.set(1.0, 1.0);
 
-      if (THREE.SRGBColorSpace) {
-        texture.colorSpace = THREE.SRGBColorSpace;
-      }
+      if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
 
       return texture;
     }
 
     function createStoneMaterial() {
-      const texture = createStoneTexture("#7d756b");
+      const texture = createStoneTexture("#898d89");
       return new THREE.MeshStandardMaterial({
-        color: 0x81786e,
+        color: 0xa4a7a1,
         map: texture,
-        roughness: 1,
+        roughness: 0.96,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.012
+        bumpScale: 0.030,
+        emissive: 0x171a1a,
+        emissiveIntensity: 0.13
       });
     }
 
     function createBaseMaterial() {
-      const texture = createStoneTexture("#655d55");
+      const texture = createStoneTexture("#747873");
       return new THREE.MeshStandardMaterial({
-        color: 0x6c635b,
+        color: 0x888b85,
         map: texture,
-        roughness: 1,
+        roughness: 0.98,
         metalness: 0,
         bumpMap: texture,
-        bumpScale: 0.010
+        bumpScale: 0.026,
+        emissive: 0x121514,
+        emissiveIntensity: 0.10
       });
     }
 
@@ -877,33 +920,44 @@
     }
 
     function drawSoftEngravingPanel(ctx) {
-      const gradient = ctx.createRadialGradient(512, 455, 40, 512, 455, 420);
-      gradient.addColorStop(0, "rgba(0, 0, 0, 0.045)");
-      gradient.addColorStop(0.55, "rgba(0, 0, 0, 0.020)");
+      // 只做极轻微的压暗区域，避免像一张透明贴纸
+      const gradient = ctx.createRadialGradient(512, 455, 70, 512, 455, 390);
+      gradient.addColorStop(0, "rgba(0, 0, 0, 0.020)");
+      gradient.addColorStop(0.58, "rgba(0, 0, 0, 0.010)");
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
 
       ctx.fillStyle = gradient;
-      ctx.fillRect(150, 150, 724, 680);
+      ctx.fillRect(160, 170, 704, 640);
     }
 
     function drawEngravedLine(ctx, options) {
       ctx.save();
+
       ctx.font = options.font;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
+      // 先画一层柔和暗痕，让字像压进石头
+      ctx.save();
+      ctx.globalAlpha = 0.46;
+      ctx.filter = "blur(0.65px)";
       ctx.fillStyle = options.shadowColor;
-      ctx.fillText(options.text, options.x + 1.35, options.y + 1.75);
+      ctx.fillText(options.text, options.x + 1.45, options.y + 1.65);
+      ctx.restore();
 
+      // 左上高光，模拟刻痕边缘受光
       ctx.fillStyle = options.highlightColor;
-      ctx.fillText(options.text, options.x - 1.05, options.y - 1.15);
+      ctx.fillText(options.text, options.x - 0.95, options.y - 1.05);
 
+      // 主刻痕：冷灰，不用白色
       ctx.fillStyle = options.mainColor;
       ctx.fillText(options.text, options.x, options.y);
 
-      ctx.globalAlpha = 0.26;
-      ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
-      ctx.fillText(options.text, options.x + 0.45, options.y + 0.65);
+      // 很浅的二次暗压，不让字浮在表面
+      ctx.globalAlpha = 0.20;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.30)";
+      ctx.fillText(options.text, options.x + 0.50, options.y + 0.70);
+
       ctx.restore();
     }
 
@@ -956,17 +1010,38 @@
 
       for (let i = 0; i < data.length; i += 4) {
         const alpha = data[i + 3];
-        if (alpha > 14) {
+
+        if (alpha > 12) {
           const random = Math.random();
+
           if (random < amount) {
-            data[i + 3] = Math.floor(alpha * 0.30);
-          } else if (random < amount * 2.4) {
-            data[i + 3] = Math.floor(alpha * 0.68);
+            data[i + 3] = Math.floor(alpha * 0.42);
+          } else if (random < amount * 2.15) {
+            data[i + 3] = Math.floor(alpha * 0.76);
+          }
+
+          // 让文字颜色轻微不均匀，像石头吃进去的刻痕
+          if (Math.random() < ENGRAVING_CONFIG.grainAmount) {
+            data[i] = Math.max(0, data[i] - 10);
+            data[i + 1] = Math.max(0, data[i + 1] - 10);
+            data[i + 2] = Math.max(0, data[i + 2] - 10);
           }
         }
       }
 
       ctx.putImageData(image, 0, 0);
+
+      // 轻微横向划痕，破坏“电脑字”的完美边缘
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-out";
+      for (let i = 0; i < 24; i++) {
+        const x = 250 + Math.random() * 520;
+        const y = 250 + Math.random() * 420;
+        const w = Math.random() * 85 + 18;
+        ctx.globalAlpha = Math.random() * 0.040 + 0.012;
+        ctx.fillRect(x, y, w, 1);
+      }
+      ctx.restore();
     }
 
     function updateEngravingTexture(data) {
