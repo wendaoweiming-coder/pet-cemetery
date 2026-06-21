@@ -2,557 +2,411 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>选择墓碑</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>选择墓碑 - 星眠宠物纪念园</title>
   <style>
     * { box-sizing: border-box; }
-
     html, body {
       margin: 0;
+      padding: 0;
       width: 100%;
-      height: 100%;
+      min-height: 100%;
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #f7f3ee;
+      background: #07111d;
       overflow: hidden;
-      font-family: "Microsoft YaHei", Arial, sans-serif;
-      background: #10140f;
-      color: #fffaf5;
     }
 
-    button, a, select, textarea {
-      font-family: inherit;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
+    body {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(2, 8, 18, 0.22) 0%, rgba(2, 8, 18, 0.48) 100%),
+        url("cemetery-bg.png") center center / cover no-repeat;
     }
 
-    .page-bg {
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
       background:
-        linear-gradient(
-          180deg,
-          rgba(6, 10, 18, 0.05) 0%,
-          rgba(6, 10, 18, 0.12) 46%,
-          rgba(6, 10, 18, 0.30) 100%
-        ),
-        url("cemetery-bg.png") center center / cover no-repeat;
-      transform: scale(1.08);
-      transform-origin: center center;
-      z-index: 0;
-    }
-
-    .page-bg::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at center 61%, rgba(255, 231, 190, 0.08), transparent 22%),
-        radial-gradient(circle at center 64%, rgba(255, 255, 255, 0.04), transparent 34%);
+        radial-gradient(circle at center 62%, rgba(242, 209, 124, 0.12), transparent 22%),
+        radial-gradient(circle at 50% 10%, rgba(162, 187, 226, 0.12), transparent 28%);
       pointer-events: none;
     }
 
-    .page-shell {
+    .page {
       position: relative;
-      z-index: 2;
       width: 100%;
-      height: 100%;
+      min-height: 100vh;
+      padding: 28px 42px;
       display: flex;
       flex-direction: column;
+      z-index: 1;
     }
 
-    .top-bar {
-      position: relative;
-      z-index: 30;
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 30px 34px 0;
+    .topbar {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
+      gap: 16px;
+      z-index: 3;
     }
 
-    .logo {
-      color: rgba(255, 250, 245, 0.96);
-      text-decoration: none;
+    .brand {
       font-size: 18px;
-      text-shadow: 0 3px 16px rgba(0,0,0,0.36);
+      font-weight: 600;
+      color: rgba(255,255,255,0.96);
+      letter-spacing: 0.4px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
     }
 
-    .top-actions {
+    .topbar-actions {
       display: flex;
-      gap: 12px;
       align-items: center;
+      gap: 12px;
     }
 
-    .soft-button,
-    .language-select,
-    .bottom-button {
-      border: 1px solid rgba(255, 250, 245, 0.30);
-      background: rgba(255, 250, 245, 0.08);
-      color: #fffaf5;
-      padding: 10px 16px;
+    .glass-btn,
+    .glass-select {
+      height: 46px;
       border-radius: 999px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      text-decoration: none;
-      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(18, 22, 28, 0.38);
+      color: rgba(255,255,255,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        0 10px 28px rgba(0,0,0,0.24);
+      transition: all 0.25s ease;
+      font-size: 16px;
+    }
+
+    .glass-btn {
+      padding: 0 20px;
       cursor: pointer;
-      transition: 0.25s ease;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.25);
     }
 
-    .soft-button:hover,
-    .language-select:hover,
-    .bottom-button:hover {
-      background: rgba(255, 250, 245, 0.16);
-      border-color: rgba(255, 250, 245, 0.42);
+    .glass-btn:hover,
+    .glass-select:hover {
+      background: rgba(28, 32, 40, 0.46);
+      border-color: rgba(255,255,255,0.30);
+      transform: translateY(-1px);
     }
 
-    .language-select {
+    .glass-select {
       min-width: 146px;
+      padding: 0 18px;
+      outline: none;
+      cursor: pointer;
     }
 
-    .language-select option {
-      color: #2d2520;
-      background: #fffaf5;
-    }
-
-    .main-layout {
+    .main {
       position: relative;
       flex: 1;
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
       display: grid;
-      grid-template-columns: 270px 1fr 270px;
-      gap: 24px;
+      grid-template-columns: 380px minmax(0, 1fr);
+      gap: 34px;
       align-items: center;
-      padding: 20px 34px 116px;
+      min-height: calc(100vh - 102px);
     }
 
     .left-panel {
-      position: relative;
-      z-index: 20;
-      align-self: center;
-      transition: opacity 0.45s ease, transform 0.45s ease;
-    }
-
-    .panel-title {
-      margin: 0 0 10px;
-      font-size: 23px;
-      font-weight: 500;
-      color: rgba(255, 250, 245, 0.95);
-      text-shadow: 0 3px 16px rgba(0,0,0,0.34);
-    }
-
-    .panel-subtitle {
-      margin: 0 0 20px;
-      color: rgba(255, 244, 232, 0.68);
-      font-size: 13px;
-      line-height: 1.7;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
-    }
-
-    .stone-list {
+      align-self: stretch;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      justify-content: center;
+      gap: 16px;
+      padding-left: 6px;
+      z-index: 3;
+    }
+
+    .left-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 6px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.32);
+    }
+
+    .left-desc {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.86);
+      line-height: 1.7;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.24);
     }
 
     .stone-option {
       width: 100%;
-      border: none;
-      padding: 0;
-      background: transparent;
-      color: #fffaf5;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .stone-option-inner {
-      display: grid;
-      grid-template-columns: 78px 1fr;
-      gap: 13px;
+      min-height: 138px;
+      padding: 18px 20px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: linear-gradient(180deg, rgba(17,23,30,0.26), rgba(17,23,30,0.18));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        0 14px 36px rgba(0,0,0,0.18);
+      display: flex;
       align-items: center;
-      padding: 10px 12px;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 250, 245, 0.13);
-      background: rgba(255, 250, 245, 0.055);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: 0.22s ease;
-    }
-
-    .stone-option:hover .stone-option-inner {
-      background: rgba(255, 250, 245, 0.11);
-      border-color: rgba(255, 250, 245, 0.28);
-      transform: translateX(5px);
-    }
-
-    .stone-option.active .stone-option-inner {
-      background: rgba(255, 250, 245, 0.17);
-      border-color: rgba(255, 250, 245, 0.48);
-    }
-
-    .mini-3d {
-      width: 70px;
-      height: 86px;
-      border-radius: 18px;
-      overflow: hidden;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.06), transparent 70%);
-    }
-
-    .option-name {
-      margin: 0 0 4px;
-      font-size: 14px;
-      color: rgba(255, 250, 245, 0.93);
-    }
-
-    .option-desc {
-      margin: 0;
-      color: rgba(255, 244, 232, 0.58);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .confirm-button {
-      width: 100%;
-      margin-top: 22px;
-      border: 1px solid rgba(255, 250, 245, 0.52);
-      background: rgba(255, 250, 245, 0.88);
-      color: #4b3d35;
-      padding: 13px 18px;
-      border-radius: 999px;
+      gap: 18px;
       cursor: pointer;
-      font-size: 14px;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
-      transition: 0.22s ease;
-    }
-
-    .confirm-button:hover {
-      background: rgba(255, 250, 245, 0.96);
-      transform: translateY(-1px);
-    }
-
-    .center-area {
+      transition: all 0.28s ease;
       position: relative;
-      min-height: 650px;
+      overflow: hidden;
+    }
+
+    .stone-option:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.24);
+      background: linear-gradient(180deg, rgba(20,27,34,0.34), rgba(20,27,34,0.24));
+    }
+
+    .stone-option.active {
+      border-color: rgba(255,255,255,0.28);
+      background: linear-gradient(180deg, rgba(30,36,44,0.34), rgba(24,30,38,0.28));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        0 18px 42px rgba(0,0,0,0.24);
+    }
+
+    .stone-icon {
+      width: 76px;
+      height: 90px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex: 0 0 auto;
+      opacity: 0.92;
     }
 
-    .instruction {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      width: min(720px, 90%);
-      transform: translateX(-50%);
-      text-align: center;
-      z-index: 10;
-      pointer-events: none;
-      text-shadow: 0 3px 18px rgba(0,0,0,0.36);
-      transition: opacity 0.45s ease, transform 0.45s ease;
-    }
-
-    .instruction h1 {
-      margin: 0 0 8px;
-      font-size: 34px;
-      font-weight: 500;
-      color: rgba(255, 248, 239, 0.96);
-    }
-
-    .instruction p {
-      margin: 0;
-      color: rgba(255, 244, 232, 0.72);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .scene-wrap {
-      position: relative;
-      width: min(500px, 54vw);
-      height: min(580px, 68vh);
-      min-width: 320px;
-      min-height: 430px;
-      margin-top: 42px;
-      transition:
-        width 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
-        height 1.25s cubic-bezier(0.22, 0.82, 0.22, 1),
-        transform 1.25s cubic-bezier(0.22, 0.82, 0.22, 1);
-    }
-
-    #mainStoneScene {
-      position: absolute;
-      inset: 0;
-      border-radius: 26px;
-    }
-
-    .right-spacer {
-      min-height: 1px;
-    }
-
-    .bottom-dock {
-      position: fixed;
-      left: 50%;
-      bottom: 26px;
-      transform: translateX(-50%) translateY(24px);
-      z-index: 40;
-      display: flex;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 999px;
-      background: rgba(20, 22, 20, 0.36);
-      border: 1px solid rgba(255, 250, 245, 0.16);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.24);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
-
-    body.memorial-mode .bottom-dock {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    body.planting .top-bar .soft-button:first-child,
-    body.memorial-mode .top-bar .soft-button:first-child {
-      display: none;
-    }
-
-    body.planting .left-panel,
-    body.memorial-mode .left-panel {
-      opacity: 0;
-      transform: translateX(-20px);
-      pointer-events: none;
-    }
-
-    body.planting .instruction,
-    body.memorial-mode .instruction {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-12px);
-    }
-
-    body.planting .scene-wrap,
-    body.memorial-mode .scene-wrap {
-      width: min(350px, 43vw);
-      height: min(445px, 55vh);
-      transform: translate(-72px, 4px);
-    }
-
-    .modal-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 26px;
-      background: rgba(5, 7, 8, 0.64);
-    }
-
-    .modal-layer.show { display: flex; }
-
-    .modal-card {
-      position: relative;
-      width: min(760px, 92vw);
-      max-height: 82vh;
-      overflow-y: auto;
-      padding: 30px;
-      border-radius: 30px;
-      background: rgba(255, 250, 245, 0.95);
-      color: #4b3d35;
-      box-shadow: 0 26px 80px rgba(0,0,0,0.45);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 38px;
-      height: 38px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(75, 61, 53, 0.10);
-      color: #4b3d35;
-      font-size: 26px;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .modal-card h2 {
-      margin: 0 0 18px;
-      font-size: 26px;
-      font-weight: 500;
-      color: #4b3d35;
-    }
-
-    .modal-card p {
-      margin: 0;
-      line-height: 1.8;
-      color: rgba(75, 61, 53, 0.75);
-      font-size: 15px;
-    }
-
-    .empty-text {
-      color: rgba(75, 61, 53, 0.46);
-      font-size: 14px;
-    }
-
-    .photo-block { margin-bottom: 26px; }
-
-    .photo-block h3 {
-      margin: 0 0 14px;
-      font-size: 18px;
-      font-weight: 500;
-      color: #4b3d35;
-    }
-
-    .photo-gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .gallery-photo {
-      aspect-ratio: 1 / 1;
-      border-radius: 18px;
-      overflow: hidden;
-      background: rgba(120, 95, 70, 0.08);
-      border: 1px solid rgba(134, 103, 75, 0.16);
-      cursor: zoom-in;
-    }
-
-    .gallery-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .stone-icon svg {
+      width: 66px;
+      height: 80px;
       display: block;
     }
 
-    .gift-buttons {
+    .stone-meta {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .gift-buttons button,
-    .message-box button {
-      border: none;
-      background: #715843;
-      color: #fffaf5;
-      padding: 11px 16px;
-      border-radius: 999px;
-      cursor: pointer;
+    .stone-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .stone-subtitle {
       font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.74);
     }
 
-    .animal-status {
-      margin-top: 14px;
-      padding: 13px 15px;
-      border-radius: 18px;
-      background: rgba(118, 91, 66, 0.08);
-      color: rgba(75, 61, 53, 0.66);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .placed-items {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      min-height: 28px;
-    }
-
-    .placed-item-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(113, 88, 67, 0.10);
-      color: rgba(75, 61, 53, 0.72);
-      font-size: 13px;
-    }
-
-    .message-box textarea {
+    .confirm-btn {
+      margin-top: 8px;
       width: 100%;
-      height: 108px;
-      border: 1px solid rgba(134, 103, 75, 0.22);
-      background: rgba(255,255,255,0.72);
-      color: #4b3d35;
-      padding: 14px;
-      border-radius: 18px;
-      font-size: 14px;
-      resize: none;
+      height: 68px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.20);
+      background: rgba(246, 241, 235, 0.92);
+      color: #5a5147;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.45),
+        0 14px 30px rgba(0,0,0,0.18);
+      transition: all 0.25s ease;
     }
 
-    .message-list { margin-top: 14px; }
-
-    .message-item {
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(134, 103, 75, 0.14);
-      color: rgba(75, 61, 53, 0.72);
-      line-height: 1.6;
-      font-size: 14px;
+    .confirm-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(250, 246, 241, 0.96);
     }
 
-    .photo-lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      background: rgba(5, 7, 8, 0.86);
-      display: none;
+    .confirm-btn:disabled {
+      opacity: 0.72;
+      cursor: wait;
+      transform: none;
+    }
+
+    .viewer-area {
+      position: relative;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 28px;
+      min-height: 100%;
+      z-index: 2;
     }
 
-    .photo-lightbox.show { display: flex; }
-
-    .photo-lightbox img {
-      max-width: min(92vw, 1100px);
-      max-height: 86vh;
-      object-fit: contain;
-      border-radius: 18px;
-      box-shadow: 0 26px 80px rgba(0,0,0,0.55);
+    .center-title {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(90%, 680px);
+      text-align: center;
+      z-index: 4;
+      pointer-events: none;
     }
 
-    .lightbox-close {
-      position: fixed;
-      top: 22px;
-      right: 24px;
-      width: 42px;
-      height: 42px;
-      border: 1px solid rgba(255,255,255,0.32);
-      background: rgba(255,255,255,0.10);
-      color: #fffaf5;
-      border-radius: 50%;
-      font-size: 26px;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 210;
+    .center-title h1 {
+      margin: 0;
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.97);
+      text-shadow: 0 4px 18px rgba(0,0,0,0.34);
+    }
+
+    .center-title p {
+      margin: 16px auto 0;
+      max-width: 620px;
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.86);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.24);
+    }
+
+    .viewer-wrap {
+      width: min(100%, 920px);
+      height: min(72vh, 760px);
+      position: relative;
+    }
+
+    #stoneCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 24px;
+      background: transparent;
+    }
+
+    .loading-text,
+    .error-text {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      transform: translate(-50%, -50%);
+      font-size: 18px;
+      color: rgba(255,255,255,0.90);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.28);
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    .error-text {
+      color: #ffd7d7;
+      text-align: center;
+      white-space: normal;
+      max-width: 90%;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 1100px) {
+      .page {
+        padding: 20px 18px 26px;
+        overflow-y: auto;
+      }
+
+      .main {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        min-height: auto;
+      }
+
+      .left-panel {
+        order: 2;
+        padding-left: 0;
+      }
+
+      .viewer-area {
+        order: 1;
+        min-height: 62vh;
+      }
+
+      .center-title {
+        top: 8px;
+      }
+
+      .viewer-wrap {
+        width: 100%;
+        height: min(60vh, 560px);
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .topbar-actions {
+        justify-content: space-between;
+      }
+
+      .glass-btn,
+      .glass-select {
+        height: 44px;
+        font-size: 15px;
+      }
+
+      .brand {
+        font-size: 16px;
+      }
+
+      .left-title {
+        font-size: 22px;
+      }
+
+      .stone-option {
+        min-height: 124px;
+        border-radius: 22px;
+        padding: 16px 16px;
+      }
+
+      .stone-name {
+        font-size: 17px;
+      }
+
+      .confirm-btn {
+        height: 60px;
+        font-size: 17px;
+      }
+
+      .center-title h1 {
+        font-size: 34px;
+      }
+
+      .center-title p {
+        font-size: 14px;
+      }
+
+      .viewer-wrap {
+        height: 54vh;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="page-bg"></div>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand" id="brandText">星眠宠物纪念园</div>
 
-  <div class="page-shell">
-    <header class="top-bar">
-      <a href="index.html" class="logo" data-key="logo">星眠宠物纪念园</a>
+      <div class="topbar-actions">
+        <button class="glass-btn" id="backBtn">返回修改</button>
 
-      <div class="top-actions">
-        <a href="create.html" class="soft-button" data-key="backBtn">返回修改</a>
-        <button class="soft-button" onclick="editStoneAgain()" data-key="changeStoneBtn">更换墓碑</button>
-
-        <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
+        <select id="languageSelect" class="glass-select" aria-label="language">
           <option value="zh">简体中文</option>
           <option value="zh-TW">繁體中文</option>
           <option value="en">English</option>
@@ -561,1372 +415,693 @@
       </div>
     </header>
 
-    <main class="main-layout">
+    <section class="main">
       <aside class="left-panel">
-        <h2 class="panel-title" data-key="panelTitle">墓碑样式</h2>
-        <p class="panel-subtitle" data-key="panelSubtitle">选择一个 3D 墓碑，中间预览会立刻变化。</p>
-
-        <div class="stone-list">
-          <button class="stone-option active" data-style="rounded" onclick="selectStone('rounded', this)">
-            <div class="stone-option-inner">
-              <div class="mini-3d" id="miniRounded"></div>
-              <div>
-                <p class="option-name" data-key="roundedName">圆顶墓碑</p>
-                <p class="option-desc" data-key="roundedDesc">经典、温柔。</p>
-              </div>
-            </div>
-          </button>
-
-          <button class="stone-option" data-style="square" onclick="selectStone('square', this)">
-            <div class="stone-option-inner">
-              <div class="mini-3d" id="miniSquare"></div>
-              <div>
-                <p class="option-name" data-key="squareName">方角墓碑</p>
-                <p class="option-desc" data-key="squareDesc">干净、安静。</p>
-              </div>
-            </div>
-          </button>
-
-          <button class="stone-option" data-style="arch" onclick="selectStone('arch', this)">
-            <div class="stone-option-inner">
-              <div class="mini-3d" id="miniArch"></div>
-              <div>
-                <p class="option-name" data-key="archName">高拱墓碑</p>
-                <p class="option-desc" data-key="archDesc">平静、庄重。</p>
-              </div>
-            </div>
-          </button>
+        <div>
+          <h2 class="left-title" id="leftTitle">墓碑样式</h2>
+          <p class="left-desc" id="leftDesc">选择一个墓碑，中间预览会立刻变化。</p>
         </div>
 
-        <button class="confirm-button" onclick="confirmStone()" data-key="confirmBtn">使用这个墓碑</button>
+        <div class="stone-option active" id="roundedOption">
+          <div class="stone-icon">
+            <svg viewBox="0 0 90 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="stoneThumbGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#d9d4cc"/>
+                  <stop offset="55%" stop-color="#bdb6ab"/>
+                  <stop offset="100%" stop-color="#8c867d"/>
+                </linearGradient>
+              </defs>
+              <path d="M18 96H72V84H18V96Z" fill="url(#stoneThumbGrad)" opacity="0.95"/>
+              <path d="M24 83H66V30C66 18.9543 57.0457 10 46 10H44C32.9543 10 24 18.9543 24 30V83Z" fill="url(#stoneThumbGrad)"/>
+              <path d="M24 83H66" stroke="#7E786F" stroke-width="1.6" opacity="0.45"/>
+            </svg>
+          </div>
+          <div class="stone-meta">
+            <div class="stone-name" id="optionName">圆顶墓碑</div>
+            <div class="stone-subtitle" id="optionDesc">真实石材圆顶墓碑。</div>
+          </div>
+        </div>
+
+        <button class="confirm-btn" id="useStoneBtn">使用这个墓碑</button>
       </aside>
 
-      <section class="center-area">
-        <div class="instruction">
-          <h1 data-key="title">选择墓碑</h1>
-          <p data-key="subtitle">墓碑会慢慢转正，并安静地落到纪念园中。</p>
+      <div class="viewer-area">
+        <div class="center-title">
+          <h1 id="mainTitle">选择墓碑</h1>
+          <p id="mainDesc">墓碑会慢慢转正，并安静地落到纪念园中。</p>
         </div>
 
-        <div class="scene-wrap">
-          <div id="mainStoneScene"></div>
+        <div class="viewer-wrap">
+          <canvas id="stoneCanvas"></canvas>
+          <div class="loading-text" id="loadingText">正在加载墓碑模型...</div>
+          <div class="error-text" id="errorText" style="display:none;"></div>
         </div>
-      </section>
-
-      <div class="right-spacer"></div>
-    </main>
-  </div>
-
-  <div class="bottom-dock">
-    <button class="bottom-button" onclick="openPanel('storyPanel')" data-key="storyBtn">故事</button>
-    <button class="bottom-button" onclick="openPanel('photosPanel')" data-key="photosBtn">相册</button>
-    <button class="bottom-button" onclick="openPanel('giftPanel')" data-key="giftBtn">礼物</button>
-    <button class="bottom-button" onclick="openPanel('messagePanel')" data-key="messageBtnShort">留言</button>
-  </div>
-
-  <div class="modal-layer" id="storyPanel" onclick="closePanels(event)">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="storyTitle">宠物故事</h2>
-      <p id="petStoryDisplay" class="empty-text">还没有写下故事。</p>
-    </div>
-  </div>
-
-  <div class="modal-layer" id="photosPanel" onclick="closePanels(event)">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="photosTitle">回忆相册</h2>
-      <div class="photo-block">
-        <h3 data-key="publicPhotosTitle">公开回忆照片</h3>
-        <div id="publicPhotosDisplay" class="photo-gallery"></div>
       </div>
-      <div class="photo-block">
-        <h3 data-key="privatePhotosTitle">私密回忆照片</h3>
-        <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">这些照片目前只会显示在你的浏览器演示中。</p>
-        <div id="privatePhotosDisplay" class="photo-gallery"></div>
-      </div>
-    </div>
+    </section>
   </div>
 
-  <div class="modal-layer" id="giftPanel" onclick="closePanels(event)">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="giftTitle">放置一个小礼物</h2>
-      <div class="gift-buttons">
-        <button onclick="placeGift('can')" data-key="giftCan">放一个罐头</button>
-        <button onclick="placeGift('ball')" data-key="giftBall">放一个球</button>
-        <button onclick="placeGift('seed')" data-key="giftSeed">放一些鸟食</button>
-        <button onclick="placeGift('flower')" data-key="giftFlower">放一些花</button>
-      </div>
-      <div class="animal-status" data-key="animalStatus">安静的小礼物，可能会吸引温柔的访客。</div>
-      <div class="placed-items" id="placedItemsList"></div>
-    </div>
-  </div>
+  <script type="module">
+    import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
+    import { GLTFLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
-  <div class="modal-layer" id="messagePanel" onclick="closePanels(event)">
-    <div class="modal-card message-box">
-      <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="messageTitle">留言</h2>
-      <textarea id="messageInput" data-placeholder-key="messagePlaceholder" placeholder="写几句安静的话..."></textarea>
-      <br><br>
-      <button onclick="addMessage()" data-key="messageSendBtn">留下留言</button>
-      <div id="messageList" class="message-list"></div>
-    </div>
-  </div>
-
-  <div class="photo-lightbox" id="photoLightbox" onclick="closePhotoLightbox()">
-    <button class="lightbox-close" onclick="closePhotoLightbox()">×</button>
-    <img id="lightboxImage" src="" alt="">
-  </div>
-
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-
-  <script>
-    let currentLang = "zh";
-    let selectedStoneStyle = "rounded";
-    let isPlanting = false;
-
-    let mainScene, mainCamera, mainRenderer, mainStoneGroup, mainTextPlane;
-    const miniScenes = [];
-
-    const FINAL_SCALE = 0.56;
-    const PREVIEW_SCALE = 0.72;
-    const FINAL_Y = -0.38;
-    const PREVIEW_Y = -0.18;
-    const FINAL_ANGLE = 0;
-    const PREVIEW_ANGLE = -0.16;
+    const MODEL_URL = "assets/models/tombstone-real.glb";
 
     const ENGRAVING_CONFIG = {
-      planeWidth: 2.08,
-      planeHeight: 2.62,
-      positionX: 0,
-      positionY: 0.28,
-      positionZ: 0.292,
-      opacity: 0.88,
-
-      // 冷灰石刻色：可见，但不是白贴纸
-      mainColor: "rgba(128, 139, 138, 0.66)",
-      dateColor: "rgba(116, 127, 126, 0.54)",
-      epitaphColor: "rgba(120, 131, 130, 0.58)",
-
-      // 凹陷阴影与边缘冷光
-      shadowColor: "rgba(6, 9, 10, 0.38)",
-      highlightColor: "rgba(190, 202, 198, 0.16)",
-
-      wearAmount: 0.018,
-      grainAmount: 0.030,
-
-      nameSize: 76,
-      dateSize: 33,
-      epitaphSize: 35,
-
-      nameY: 318,
-      dateY: 432,
-      epitaphStartY: 556,
-      epitaphLineHeight: 51,
-
-      epitaphMaxWidth: 500,
-      maxEpitaphLines: 3
+      planeWidthRatio: 0.58,
+      planeHeightRatio: 0.46,
+      offsetYRatio: 0.06,
+      offsetZ: 0.0065,
+      opacity: 0.92,
+      canvasWidth: 1400,
+      canvasHeight: 1400,
+      nameFontSize: 128,
+      dateFontSize: 48,
+      epitaphFontSize: 58,
+      lineGap: 20,
+      maxEpitaphLines: 3,
+      textColor: "rgba(70, 74, 78, 0.96)",
+      darkShadow: "rgba(18, 20, 22, 0.34)",
+      softHighlight: "rgba(255, 255, 255, 0.15)",
+      wearAmount: 0.045
     };
 
-    const translations = {
+    const I18N = {
       zh: {
-        logo: "星眠宠物纪念园",
-        backBtn: "返回修改",
-        changeStoneBtn: "更换墓碑",
-        panelTitle: "墓碑样式",
-        panelSubtitle: "选择一个 3D 墓碑，中间预览会立刻变化。",
-        title: "选择墓碑",
-        subtitle: "墓碑会慢慢转正，并安静地落到纪念园中。",
-        confirmBtn: "使用这个墓碑",
-        roundedName: "圆顶墓碑",
-        roundedDesc: "经典、温柔。",
-        squareName: "方角墓碑",
-        squareDesc: "干净、安静。",
-        archName: "高拱墓碑",
-        archDesc: "平静、庄重。",
-        storyBtn: "故事",
-        photosBtn: "相册",
-        giftBtn: "礼物",
-        messageBtnShort: "留言",
-        storyTitle: "宠物故事",
-        photosTitle: "回忆相册",
-        publicPhotosTitle: "公开回忆照片",
-        privatePhotosTitle: "私密回忆照片",
-        privatePhotosDesc: "这些照片目前只会显示在你的浏览器演示中。",
-        giftTitle: "放置一个小礼物",
-        giftCan: "放一个罐头",
-        giftBall: "放一个球",
-        giftSeed: "放一些鸟食",
-        giftFlower: "放一些花",
-        animalStatus: "安静的小礼物，可能会吸引温柔的访客。",
-        messageTitle: "留言",
-        messagePlaceholder: "写几句安静的话...",
-        messageSendBtn: "留下留言",
-        noStory: "还没有写下故事。",
-        noPhotos: "还没有照片。",
-        noMessages: "还没有留言。",
-        defaultName: "豆豆",
-        defaultWords: "谢谢你陪我走过这段人生",
-        placedCan: "已放置罐头",
-        placedBall: "已放置球",
-        placedSeed: "已放置鸟食",
-        placedFlower: "已放置花"
+        brand: "星眠宠物纪念园",
+        back: "返回修改",
+        leftTitle: "墓碑样式",
+        leftDesc: "选择一个墓碑，中间预览会立刻变化。",
+        mainTitle: "选择墓碑",
+        mainDesc: "墓碑会慢慢转正，并安静地落到纪念园中。",
+        optionName: "圆顶墓碑",
+        optionDesc: "真实石材圆顶墓碑。",
+        useStone: "使用这个墓碑",
+        loading: "正在加载墓碑模型...",
+        loadError: "墓碑模型加载失败，请检查路径是否正确：assets/models/tombstone-real.glb"
       },
       "zh-TW": {
-        logo: "星眠寵物紀念園",
-        backBtn: "返回修改",
-        changeStoneBtn: "更換墓碑",
-        panelTitle: "墓碑樣式",
-        panelSubtitle: "選擇一個 3D 墓碑，中間預覽會立刻變化。",
-        title: "選擇墓碑",
-        subtitle: "墓碑會慢慢轉正，並安靜地落到紀念園中。",
-        confirmBtn: "使用這個墓碑",
-        roundedName: "圓頂墓碑",
-        roundedDesc: "經典、溫柔。",
-        squareName: "方角墓碑",
-        squareDesc: "乾淨、安靜。",
-        archName: "高拱墓碑",
-        archDesc: "平靜、莊重。",
-        storyBtn: "故事",
-        photosBtn: "相冊",
-        giftBtn: "禮物",
-        messageBtnShort: "留言",
-        storyTitle: "寵物故事",
-        photosTitle: "回憶相冊",
-        publicPhotosTitle: "公開回憶照片",
-        privatePhotosTitle: "私密回憶照片",
-        privatePhotosDesc: "這些照片目前只會顯示在你的瀏覽器演示中。",
-        giftTitle: "放置一個小禮物",
-        giftCan: "放一個罐頭",
-        giftBall: "放一個球",
-        giftSeed: "放一些鳥食",
-        giftFlower: "放一些花",
-        animalStatus: "安靜的小禮物，可能會吸引溫柔的訪客。",
-        messageTitle: "留言",
-        messagePlaceholder: "寫幾句安靜的話...",
-        messageSendBtn: "留下留言",
-        noStory: "還沒有寫下故事。",
-        noPhotos: "還沒有照片。",
-        noMessages: "還沒有留言。",
-        defaultName: "豆豆",
-        defaultWords: "謝謝你陪我走過這段人生",
-        placedCan: "已放置罐頭",
-        placedBall: "已放置球",
-        placedSeed: "已放置鳥食",
-        placedFlower: "已放置花"
+        brand: "星眠寵物紀念園",
+        back: "返回修改",
+        leftTitle: "墓碑樣式",
+        leftDesc: "選擇一個墓碑，中間預覽會立刻變化。",
+        mainTitle: "選擇墓碑",
+        mainDesc: "墓碑會慢慢轉正，並安靜地落到紀念園中。",
+        optionName: "圓頂墓碑",
+        optionDesc: "真實石材圓頂墓碑。",
+        useStone: "使用這個墓碑",
+        loading: "正在載入墓碑模型...",
+        loadError: "墓碑模型載入失敗，請檢查路徑是否正確：assets/models/tombstone-real.glb"
       },
       en: {
-        logo: "Starlit Pet Memorial Garden",
-        backBtn: "Back to edit",
-        changeStoneBtn: "Change Stone",
-        panelTitle: "Tombstone style",
-        panelSubtitle: "Choose a 3D tombstone. The center preview will update immediately.",
-        title: "Choose a tombstone",
-        subtitle: "The stone will gently turn forward and settle into the memorial garden.",
-        confirmBtn: "Use this tombstone",
-        roundedName: "Rounded stone",
-        roundedDesc: "Classic and gentle.",
-        squareName: "Soft square",
-        squareDesc: "Clean and quiet.",
-        archName: "Tall arch",
-        archDesc: "Calm and solemn.",
-        storyBtn: "Story",
-        photosBtn: "Photos",
-        giftBtn: "Gift",
-        messageBtnShort: "Messages",
-        storyTitle: "Pet Story",
-        photosTitle: "Memory Photos",
-        publicPhotosTitle: "Public Memory Photos",
-        privatePhotosTitle: "Private Memory Photos",
-        privatePhotosDesc: "These photos are currently shown only in your browser demo.",
-        giftTitle: "Offer a small gift",
-        giftCan: "Place a can",
-        giftBall: "Place a ball",
-        giftSeed: "Place seeds",
-        giftFlower: "Place flowers",
-        animalStatus: "Quiet gifts may bring gentle visitors.",
-        messageTitle: "Leave a message",
-        messagePlaceholder: "Write a few quiet words...",
-        messageSendBtn: "Leave message",
-        noStory: "No story has been written yet.",
-        noPhotos: "No photos yet.",
-        noMessages: "No messages yet.",
-        defaultName: "Luna",
-        defaultWords: "Thank you for walking through this life with me.",
-        placedCan: "Can placed",
-        placedBall: "Ball placed",
-        placedSeed: "Seeds placed",
-        placedFlower: "Flowers placed"
+        brand: "Starlit Pet Memorial Garden",
+        back: "Back to Edit",
+        leftTitle: "Stone Style",
+        leftDesc: "Choose a stone and the preview updates immediately.",
+        mainTitle: "Choose a Memorial Stone",
+        mainDesc: "The stone will gently turn forward and settle into the garden.",
+        optionName: "Rounded Stone",
+        optionDesc: "A realistic rounded stone in natural stone material.",
+        useStone: "Use This Stone",
+        loading: "Loading tombstone model...",
+        loadError: "Failed to load the tombstone model. Please check this path: assets/models/tombstone-real.glb"
       },
       ja: {
-        logo: "星眠ペットメモリアルガーデン",
-        backBtn: "戻って修正",
-        changeStoneBtn: "墓石を変更",
-        panelTitle: "墓石のスタイル",
-        panelSubtitle: "3D墓石を選ぶと、中央のプレビューがすぐに変わります。",
-        title: "墓石を選ぶ",
-        subtitle: "墓石はゆっくり正面を向き、静かに記念園へ置かれます。",
-        confirmBtn: "この墓石を使う",
-        roundedName: "丸い墓石",
-        roundedDesc: "やさしく、クラシック。",
-        squareName: "角型の墓石",
-        squareDesc: "清潔で静か。",
-        archName: "高いアーチ墓石",
-        archDesc: "穏やかで厳か。",
-        storyBtn: "物語",
-        photosBtn: "写真",
-        giftBtn: "贈り物",
-        messageBtnShort: "メッセージ",
-        storyTitle: "ペットの物語",
-        photosTitle: "思い出の写真",
-        publicPhotosTitle: "公開写真",
-        privatePhotosTitle: "非公開写真",
-        privatePhotosDesc: "これらの写真は現在、このブラウザのデモ内だけで表示されます。",
-        giftTitle: "小さな贈り物を置く",
-        giftCan: "缶詰を置く",
-        giftBall: "ボールを置く",
-        giftSeed: "鳥の餌を置く",
-        giftFlower: "花を置く",
-        animalStatus: "静かな贈り物は、やさしい訪問者を呼ぶかもしれません。",
-        messageTitle: "メッセージ",
-        messagePlaceholder: "静かな言葉を書いてください...",
-        messageSendBtn: "メッセージを残す",
-        noStory: "まだ物語は書かれていません。",
-        noPhotos: "まだ写真はありません。",
-        noMessages: "まだメッセージはありません。",
-        defaultName: "ルナ",
-        defaultWords: "一緒に歩いてくれてありがとう",
-        placedCan: "缶詰を置きました",
-        placedBall: "ボールを置きました",
-        placedSeed: "鳥の餌を置きました",
-        placedFlower: "花を置きました"
+        brand: "星眠ペット記念園",
+        back: "修正に戻る",
+        leftTitle: "墓碑スタイル",
+        leftDesc: "墓碑を選ぶと中央プレビューがすぐ変わります。",
+        mainTitle: "墓碑を選ぶ",
+        mainDesc: "墓碑はゆっくり正面を向き、静かに記念園へ収まります。",
+        optionName: "ラウンド墓碑",
+        optionDesc: "自然な石材のリアルなラウンド墓碑です。",
+        useStone: "この墓碑を使う",
+        loading: "墓碑モデルを読み込み中...",
+        loadError: "墓碑モデルの読み込みに失敗しました。パスを確認してください：assets/models/tombstone-real.glb"
       }
     };
 
-    function getText() {
-      return translations[currentLang] || translations.zh;
+    const state = {
+      language: localStorage.getItem("siteLanguage") || "zh",
+      memorial: null,
+      scene: null,
+      camera: null,
+      renderer: null,
+      loader: null,
+      stoneRoot: null,
+      tombstoneModel: null,
+      engravingMesh: null,
+      engravingCanvas: null,
+      engravingContext: null,
+      engravingTexture: null,
+      isAnimating: false,
+      animationFrame: null,
+      previewClock: 0
+    };
+
+    const els = {
+      brandText: document.getElementById("brandText"),
+      backBtn: document.getElementById("backBtn"),
+      languageSelect: document.getElementById("languageSelect"),
+      leftTitle: document.getElementById("leftTitle"),
+      leftDesc: document.getElementById("leftDesc"),
+      mainTitle: document.getElementById("mainTitle"),
+      mainDesc: document.getElementById("mainDesc"),
+      optionName: document.getElementById("optionName"),
+      optionDesc: document.getElementById("optionDesc"),
+      useStoneBtn: document.getElementById("useStoneBtn"),
+      loadingText: document.getElementById("loadingText"),
+      errorText: document.getElementById("errorText"),
+      canvas: document.getElementById("stoneCanvas")
+    };
+
+    function getLangText() {
+      return I18N[state.language] || I18N.zh;
+    }
+
+    function applyLanguage() {
+      const text = getLangText();
+      document.documentElement.lang = state.language === "zh" ? "zh-CN" : state.language;
+      els.brandText.textContent = text.brand;
+      els.backBtn.textContent = text.back;
+      els.leftTitle.textContent = text.leftTitle;
+      els.leftDesc.textContent = text.leftDesc;
+      els.mainTitle.textContent = text.mainTitle;
+      els.mainDesc.textContent = text.mainDesc;
+      els.optionName.textContent = text.optionName;
+      els.optionDesc.textContent = text.optionDesc;
+      els.useStoneBtn.textContent = text.useStone;
+      els.loadingText.textContent = text.loading;
+      if (els.errorText.style.display !== "none") {
+        els.errorText.textContent = text.loadError;
+      }
+      els.languageSelect.value = state.language;
+      updateEngravingTexture(state.memorial);
+    }
+
+    function normalizeDateString(value) {
+      if (!value) return "";
+      return String(value).trim().replace(/\//g, ".").replace(/-/g, ".");
     }
 
     function getMemorialData() {
+      const raw = localStorage.getItem("myPetMemorial");
+      let data = {};
       try {
-        return JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+        data = raw ? JSON.parse(raw) : {};
       } catch (error) {
-        return {};
+        data = {};
       }
+
+      const name = data.name || data.petName || data.pet || "豆豆";
+      const birthDate = normalizeDateString(data.birthDate || data.birthday || data.birth || "2015.08.20");
+      const deathDate = normalizeDateString(data.deathDate || data.passingDate || data.death || "2026.05.12");
+      const epitaph = data.epitaph || data.message || data.words || "谢谢你陪我走过这段人生";
+
+      return { ...data, name, birthDate, deathDate, epitaph };
     }
 
-    function saveMemorialData(data) {
-      localStorage.setItem("myPetMemorial", JSON.stringify(data));
-    }
-
-    function normalizeStyle(style) {
-      if (style === "square") return "square";
-      if (style === "arch") return "arch";
-      return "rounded";
-    }
-
-    function changeLanguage(lang) {
-      currentLang = translations[lang] ? lang : "zh";
-      localStorage.setItem("siteLanguage", currentLang);
-
-      const select = document.getElementById("languageSelect");
-      if (select) select.value = currentLang;
-
-      const text = getText();
-
-      document.querySelectorAll("[data-key]").forEach(function(el) {
-        const key = el.getAttribute("data-key");
-        if (text[key]) el.textContent = text[key];
+    function createScene() {
+      const canvas = els.canvas;
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true
       });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-      document.querySelectorAll("[data-placeholder-key]").forEach(function(el) {
-        const key = el.getAttribute("data-placeholder-key");
-        if (text[key]) el.placeholder = text[key];
-      });
+      const scene = new THREE.Scene();
 
-      rebuildMainTextTexture();
-      loadExtraMemorialInfo();
-      renderPlacedItems();
+      const camera = new THREE.PerspectiveCamera(
+        28,
+        canvas.clientWidth / Math.max(canvas.clientHeight, 1),
+        0.1,
+        100
+      );
+      camera.position.set(0, 1.45, 9.2);
+
+      const ambient = new THREE.AmbientLight(0xcfd9e8, 1.55);
+      scene.add(ambient);
+
+      const hemi = new THREE.HemisphereLight(0x9fb7d7, 0x4c4132, 1.35);
+      hemi.position.set(0, 12, 0);
+      scene.add(hemi);
+
+      const moonLight = new THREE.DirectionalLight(0xbfd0ea, 1.28);
+      moonLight.position.set(-4.5, 7.5, 7.2);
+      moonLight.castShadow = true;
+      moonLight.shadow.mapSize.width = 2048;
+      moonLight.shadow.mapSize.height = 2048;
+      moonLight.shadow.camera.near = 0.1;
+      moonLight.shadow.camera.far = 30;
+      moonLight.shadow.camera.left = -8;
+      moonLight.shadow.camera.right = 8;
+      moonLight.shadow.camera.top = 8;
+      moonLight.shadow.camera.bottom = -8;
+      scene.add(moonLight);
+
+      const warmLightLeft = new THREE.PointLight(0xf2cd8a, 0.85, 18, 2);
+      warmLightLeft.position.set(-3.5, 1.25, 2.6);
+      scene.add(warmLightLeft);
+
+      const warmLightRight = new THREE.PointLight(0xf0c57f, 0.95, 18, 2);
+      warmLightRight.position.set(3.7, 1.25, 2.8);
+      scene.add(warmLightRight);
+
+      const backFill = new THREE.PointLight(0x86a2cf, 0.48, 22, 2);
+      backFill.position.set(0, 3.6, -4.8);
+      scene.add(backFill);
+
+      const shadowPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(12, 10),
+        new THREE.ShadowMaterial({ opacity: 0.14 })
+      );
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.position.set(0, -2.2, 0.5);
+      shadowPlane.receiveShadow = true;
+      scene.add(shadowPlane);
+
+      const stoneRoot = new THREE.Group();
+      stoneRoot.position.set(0.42, -0.64, 0);
+      stoneRoot.rotation.y = THREE.MathUtils.degToRad(18);
+      stoneRoot.scale.setScalar(1.06);
+      scene.add(stoneRoot);
+
+      state.scene = scene;
+      state.camera = camera;
+      state.renderer = renderer;
+      state.stoneRoot = stoneRoot;
+      state.loader = new GLTFLoader();
     }
 
-    function createStoneTexture(baseColor) {
-      const canvas = document.createElement("canvas");
-      canvas.width = 768;
-      canvas.height = 768;
-      const ctx = canvas.getContext("2d");
+    function resizeScene() {
+      if (!state.renderer || !state.camera) return;
+      const canvas = els.canvas;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      state.camera.aspect = width / Math.max(height, 1);
+      state.camera.updateProjectionMatrix();
+      state.renderer.setSize(width, height, false);
+    }
 
-      // 冷灰石材底色，不再是死黑色
-      ctx.fillStyle = baseColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const vertical = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      vertical.addColorStop(0, "rgba(255, 255, 255, 0.075)");
-      vertical.addColorStop(0.42, "rgba(255, 255, 255, 0.018)");
-      vertical.addColorStop(1, "rgba(0, 0, 0, 0.105)");
-      ctx.fillStyle = vertical;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const side = ctx.createLinearGradient(0, 0, canvas.width, 0);
-      side.addColorStop(0, "rgba(0, 0, 0, 0.085)");
-      side.addColorStop(0.48, "rgba(255, 255, 255, 0.035)");
-      side.addColorStop(1, "rgba(0, 0, 0, 0.055)");
-      ctx.fillStyle = side;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // 细颗粒：模拟花岗岩点状纹理
-      for (let i = 0; i < 5200; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const size = Math.random() * 1.35 + 0.28;
-        const light = Math.random() > 0.52 ? 255 : 0;
-        const a = Math.random() * 0.055 + 0.012;
-        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, size, size);
+    function clearOldStone() {
+      if (!state.stoneRoot) return;
+      while (state.stoneRoot.children.length) {
+        const child = state.stoneRoot.children[0];
+        state.stoneRoot.remove(child);
+        child.traverse?.((obj) => {
+          if (obj.geometry) obj.geometry.dispose?.();
+          if (obj.material) {
+            if (Array.isArray(obj.material)) {
+              obj.material.forEach((mat) => {
+                mat.map?.dispose?.();
+                mat.dispose?.();
+              });
+            } else {
+              obj.material.map?.dispose?.();
+              obj.material.dispose?.();
+            }
+          }
+        });
       }
-
-      // 长石纹：低对比，不像贴图脏污
-      for (let i = 0; i < 58; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const len = Math.random() * 260 + 80;
-        const alpha = Math.random() * 0.030 + 0.010;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.55);
-        ctx.strokeStyle = "rgba(230, 236, 232," + alpha + ")";
-        ctx.lineWidth = Math.random() * 1.2 + 0.35;
-        ctx.beginPath();
-        ctx.moveTo(-len / 2, 0);
-        ctx.bezierCurveTo(-len * 0.18, Math.random() * 14 - 7, len * 0.18, Math.random() * 14 - 7, len / 2, 0);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 少量暗裂纹，不能太明显
-      for (let i = 0; i < 10; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const len = Math.random() * 95 + 32;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 1.2);
-        ctx.strokeStyle = "rgba(25, 28, 28, 0.055)";
-        ctx.lineWidth = Math.random() * 0.9 + 0.35;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.quadraticCurveTo(len * 0.35, Math.random() * 18 - 9, len, Math.random() * 22 - 11);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1.0, 1.0);
-
-      if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
-
-      return texture;
+      state.tombstoneModel = null;
+      state.engravingMesh = null;
     }
 
-    function createStoneMaterial() {
-      const texture = createStoneTexture("#898d89");
-      return new THREE.MeshStandardMaterial({
-        color: 0xa4a7a1,
-        map: texture,
-        roughness: 0.96,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.030,
-        emissive: 0x171a1a,
-        emissiveIntensity: 0.13
-      });
+    function createEngravingCanvas() {
+      if (state.engravingCanvas) return;
+      state.engravingCanvas = document.createElement("canvas");
+      state.engravingCanvas.width = ENGRAVING_CONFIG.canvasWidth;
+      state.engravingCanvas.height = ENGRAVING_CONFIG.canvasHeight;
+      state.engravingContext = state.engravingCanvas.getContext("2d");
+
+      state.engravingTexture = new THREE.CanvasTexture(state.engravingCanvas);
+      state.engravingTexture.colorSpace = THREE.SRGBColorSpace;
+      state.engravingTexture.needsUpdate = true;
     }
 
-    function createBaseMaterial() {
-      const texture = createStoneTexture("#747873");
-      return new THREE.MeshStandardMaterial({
-        color: 0x888b85,
-        map: texture,
-        roughness: 0.98,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.026,
-        emissive: 0x121514,
-        emissiveIntensity: 0.10
-      });
-    }
-
-    function buildRoundedShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.14, -1.72);
-      s.lineTo(-1.14, 0.58);
-      s.bezierCurveTo(-1.14, 1.32, -0.68, 1.66, 0, 1.66);
-      s.bezierCurveTo(0.68, 1.66, 1.14, 1.32, 1.14, 0.58);
-      s.lineTo(1.14, -1.72);
-      s.closePath();
-      return s;
-    }
-
-    function buildSquareShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.20, -1.72);
-      s.lineTo(-1.20, 1.34);
-      s.quadraticCurveTo(-1.20, 1.64, -0.90, 1.64);
-      s.lineTo(0.90, 1.64);
-      s.quadraticCurveTo(1.20, 1.64, 1.20, 1.34);
-      s.lineTo(1.20, -1.72);
-      s.closePath();
-      return s;
-    }
-
-    function buildArchShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.18, -1.75);
-      s.lineTo(-1.18, 0.38);
-      s.bezierCurveTo(-1.18, 1.34, -0.64, 1.78, 0, 1.78);
-      s.bezierCurveTo(0.64, 1.78, 1.18, 1.34, 1.18, 0.38);
-      s.lineTo(1.18, -1.75);
-      s.closePath();
-      return s;
-    }
-
-    function buildTombstoneShape(style) {
-      const normalized = normalizeStyle(style);
-      if (normalized === "square") return buildSquareShape();
-      if (normalized === "arch") return buildArchShape();
-      return buildRoundedShape();
-    }
-
-    function normalizeEngravingData(data) {
-      const text = getText();
-      const memorial = data || {};
-
-      const name =
-        memorial.name ||
-        memorial.petName ||
-        memorial.pet ||
-        text.defaultName ||
-        "豆豆";
-
-      const birth =
-        memorial.birthDate ||
-        memorial.birth ||
-        memorial.startDate ||
-        "";
-
-      const death =
-        memorial.deathDate ||
-        memorial.leaveDate ||
-        memorial.passDate ||
-        memorial.leave ||
-        memorial.endDate ||
-        "";
-
-      const epitaph =
-        memorial.epitaph ||
-        memorial.memory ||
-        memorial.words ||
-        memorial.message ||
-        text.defaultWords ||
-        "谢谢你陪我走过这段人生";
-
-      let dateText = "";
-      if (birth && death) {
-        dateText = birth + " - " + death;
-      } else if (birth || death) {
-        dateText = birth || death;
-      } else {
-        dateText = "2015.08.20 - 2026.05.12";
-      }
-
-      return {
-        name: String(name).trim(),
-        dateText: String(dateText).trim(),
-        epitaph: String(epitaph).trim()
-      };
-    }
-
-    function drawSoftEngravingPanel(ctx) {
-      // 只做极轻微的压暗区域，避免像一张透明贴纸
-      const gradient = ctx.createRadialGradient(512, 455, 70, 512, 455, 390);
-      gradient.addColorStop(0, "rgba(0, 0, 0, 0.020)");
-      gradient.addColorStop(0.58, "rgba(0, 0, 0, 0.010)");
-      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(160, 170, 704, 640);
-    }
-
-    function drawEngravedLine(ctx, options) {
-      ctx.save();
-
-      ctx.font = options.font;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      // 先画一层柔和暗痕，让字像压进石头
-      ctx.save();
-      ctx.globalAlpha = 0.46;
-      ctx.filter = "blur(0.65px)";
-      ctx.fillStyle = options.shadowColor;
-      ctx.fillText(options.text, options.x + 1.45, options.y + 1.65);
-      ctx.restore();
-
-      // 左上高光，模拟刻痕边缘受光
-      ctx.fillStyle = options.highlightColor;
-      ctx.fillText(options.text, options.x - 0.95, options.y - 1.05);
-
-      // 主刻痕：冷灰，不用白色
-      ctx.fillStyle = options.mainColor;
-      ctx.fillText(options.text, options.x, options.y);
-
-      // 很浅的二次暗压，不让字浮在表面
-      ctx.globalAlpha = 0.20;
-      ctx.fillStyle = "rgba(0, 0, 0, 0.30)";
-      ctx.fillText(options.text, options.x + 0.50, options.y + 0.70);
-
-      ctx.restore();
-    }
-
-    function wrapTextToLines(ctx, text, maxWidth, maxLines, font) {
-      ctx.save();
-      ctx.font = font;
-
-      const value = String(text || "").trim();
-      if (!value) {
-        ctx.restore();
-        return [];
-      }
-
+    function wrapText(ctx, text, maxWidth, maxLines) {
+      if (!text) return [];
+      const chars = Array.from(text.trim());
       const lines = [];
-      const hasSpace = /\s/.test(value);
-      const units = hasSpace ? value.split(/\s+/) : value.split("");
-
       let current = "";
 
-      for (let i = 0; i < units.length; i++) {
-        const unit = units[i];
-        const test = hasSpace ? (current ? current + " " + unit : unit) : current + unit;
-
-        if (ctx.measureText(test).width > maxWidth && current) {
+      for (let i = 0; i < chars.length; i += 1) {
+        const testLine = current + chars[i];
+        if (ctx.measureText(testLine).width > maxWidth && current) {
           lines.push(current);
-          current = unit;
+          current = chars[i];
+          if (lines.length >= maxLines - 1) break;
         } else {
-          current = test;
+          current = testLine;
         }
       }
 
-      if (current) lines.push(current);
-
-      const finalLines = lines.slice(0, maxLines);
-
-      if (lines.length > maxLines && finalLines.length) {
-        let last = finalLines[finalLines.length - 1];
-
-        while (ctx.measureText(last + "…").width > maxWidth && last.length > 0) {
-          last = last.slice(0, -1);
+      const remaining = chars.slice(lines.join("").length).join("");
+      if (lines.length < maxLines) {
+        if (remaining) {
+          let finalLine = remaining;
+          while (ctx.measureText(finalLine).width > maxWidth && finalLine.length > 1) {
+            finalLine = finalLine.slice(0, -1);
+          }
+          if (finalLine.length < remaining.length) {
+            finalLine = finalLine.slice(0, Math.max(0, finalLine.length - 1)) + "…";
+          }
+          lines.push(finalLine);
+        } else if (current) {
+          lines.push(current);
         }
-
-        finalLines[finalLines.length - 1] = last + "…";
       }
 
-      ctx.restore();
-      return finalLines;
+      return lines.slice(0, maxLines);
     }
 
-    function applyTextWear(ctx, width, height, amount) {
-      const image = ctx.getImageData(0, 0, width, height);
-      const data = image.data;
+    function drawWornText(ctx, text, x, y, options = {}) {
+      const {
+        font,
+        color = ENGRAVING_CONFIG.textColor,
+        align = "center",
+        baseline = "middle",
+        darkShadow = ENGRAVING_CONFIG.darkShadow,
+        softHighlight = ENGRAVING_CONFIG.softHighlight,
+        jitter = 0.8
+      } = options;
 
-      for (let i = 0; i < data.length; i += 4) {
-        const alpha = data[i + 3];
+      if (!text) return;
 
-        if (alpha > 12) {
-          const random = Math.random();
+      ctx.save();
+      ctx.font = font;
+      ctx.textAlign = align;
+      ctx.textBaseline = baseline;
 
-          if (random < amount) {
-            data[i + 3] = Math.floor(alpha * 0.42);
-          } else if (random < amount * 2.15) {
-            data[i + 3] = Math.floor(alpha * 0.76);
-          }
+      ctx.fillStyle = softHighlight;
+      ctx.shadowColor = "transparent";
+      ctx.fillText(text, x - 1.2, y - 1.2);
 
-          // 让文字颜色轻微不均匀，像石头吃进去的刻痕
-          if (Math.random() < ENGRAVING_CONFIG.grainAmount) {
-            data[i] = Math.max(0, data[i] - 10);
-            data[i + 1] = Math.max(0, data[i + 1] - 10);
-            data[i + 2] = Math.max(0, data[i + 2] - 10);
-          }
-        }
+      ctx.fillStyle = darkShadow;
+      ctx.globalAlpha = 0.85;
+      ctx.fillText(text, x + 1.25, y + 1.45);
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = color;
+      for (let i = 0; i < 3; i += 1) {
+        const ox = (Math.random() - 0.5) * jitter;
+        const oy = (Math.random() - 0.5) * jitter;
+        ctx.globalAlpha = 0.42 + i * 0.18;
+        ctx.fillText(text, x + ox, y + oy);
       }
 
-      ctx.putImageData(image, 0, 0);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
 
-      // 轻微横向划痕，破坏“电脑字”的完美边缘
+    function addWearNoise(ctx, width, height, amount) {
+      const count = Math.floor(width * height * amount * 0.00008);
       ctx.save();
-      ctx.globalCompositeOperation = "destination-out";
-      for (let i = 0; i < 24; i++) {
-        const x = 250 + Math.random() * 520;
-        const y = 250 + Math.random() * 420;
-        const w = Math.random() * 85 + 18;
-        ctx.globalAlpha = Math.random() * 0.040 + 0.012;
-        ctx.fillRect(x, y, w, 1);
+      for (let i = 0; i < count; i += 1) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const r = Math.random() * 2.3;
+        const a = Math.random() * 0.06;
+        ctx.fillStyle = `rgba(255,255,255,${a})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
       }
       ctx.restore();
     }
 
     function updateEngravingTexture(data) {
-      const config = ENGRAVING_CONFIG;
+      createEngravingCanvas();
+      const ctx = state.engravingContext;
+      const canvas = state.engravingCanvas;
+      if (!ctx || !canvas) return;
 
-      const canvas = document.createElement("canvas");
-      canvas.width = 1024;
-      canvas.height = 1024;
-
-      const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const centerX = canvas.width / 2;
+      const topY = 250;
+
+      const name = data?.name || "豆豆";
+      const dateLine = [data?.birthDate || "", data?.deathDate || ""].filter(Boolean).join(" - ");
+      const epitaph = data?.epitaph || "";
+
+      const fontFamily = `"Noto Serif SC","Noto Serif TC","Noto Serif JP","Times New Roman",serif`;
+
+      ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      const safeData = normalizeEngravingData(data);
-      const fontStack = "'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif";
-
-      drawSoftEngravingPanel(ctx);
-
-      drawEngravedLine(ctx, {
-        text: safeData.name,
-        x: 512,
-        y: config.nameY,
-        font: "600 " + config.nameSize + "px " + fontStack,
-        mainColor: config.mainColor,
-        shadowColor: config.shadowColor,
-        highlightColor: config.highlightColor
+      drawWornText(ctx, name, centerX, topY, {
+        font: `700 ${ENGRAVING_CONFIG.nameFontSize}px ${fontFamily}`
       });
 
-      drawEngravedLine(ctx, {
-        text: safeData.dateText,
-        x: 512,
-        y: config.dateY,
-        font: "400 " + config.dateSize + "px " + fontStack,
-        mainColor: config.dateColor,
-        shadowColor: "rgba(3, 5, 6, 0.16)",
-        highlightColor: "rgba(220, 230, 226, 0.08)"
+      drawWornText(ctx, dateLine, centerX, topY + 132, {
+        font: `500 ${ENGRAVING_CONFIG.dateFontSize}px ${fontFamily}`
       });
 
-      const epitaphFont = "400 " + config.epitaphSize + "px " + fontStack;
-      const epitaphLines = wrapTextToLines(
-        ctx,
-        safeData.epitaph,
-        config.epitaphMaxWidth,
-        config.maxEpitaphLines,
-        epitaphFont
-      );
+      ctx.font = `500 ${ENGRAVING_CONFIG.epitaphFontSize}px ${fontFamily}`;
+      const lines = wrapText(ctx, epitaph, canvas.width * 0.64, ENGRAVING_CONFIG.maxEpitaphLines);
+      const totalHeight = lines.length * ENGRAVING_CONFIG.epitaphFontSize + Math.max(0, lines.length - 1) * ENGRAVING_CONFIG.lineGap;
+      let startY = topY + 266 - totalHeight / 2 + ENGRAVING_CONFIG.epitaphFontSize / 2;
 
-      epitaphLines.forEach(function(line, index) {
-        drawEngravedLine(ctx, {
-          text: line,
-          x: 512,
-          y: config.epitaphStartY + index * config.epitaphLineHeight,
-          font: epitaphFont,
-          mainColor: config.epitaphColor,
-          shadowColor: "rgba(3, 5, 6, 0.14)",
-          highlightColor: "rgba(220, 230, 226, 0.075)"
+      lines.forEach((line, index) => {
+        drawWornText(ctx, line, centerX, startY + index * (ENGRAVING_CONFIG.epitaphFontSize + ENGRAVING_CONFIG.lineGap), {
+          font: `500 ${ENGRAVING_CONFIG.epitaphFontSize}px ${fontFamily}`
         });
       });
 
-      applyTextWear(ctx, canvas.width, canvas.height, config.wearAmount);
+      addWearNoise(ctx, canvas.width, canvas.height, ENGRAVING_CONFIG.wearAmount);
+      ctx.restore();
 
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-
-      if (THREE.SRGBColorSpace) {
-        texture.colorSpace = THREE.SRGBColorSpace;
+      if (state.engravingTexture) {
+        state.engravingTexture.needsUpdate = true;
       }
-
-      return texture;
     }
 
-    function makeShadowTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext("2d");
+    function attachEngravingToModel(modelGroup) {
+      createEngravingCanvas();
+      updateEngravingTexture(state.memorial);
 
-      const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
-      gradient.addColorStop(0, "rgba(0,0,0,0.42)");
-      gradient.addColorStop(0.45, "rgba(0,0,0,0.22)");
-      gradient.addColorStop(0.72, "rgba(0,0,0,0.07)");
-      gradient.addColorStop(1, "rgba(0,0,0,0)");
+      const box = new THREE.Box3().setFromObject(modelGroup);
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      box.getSize(size);
+      box.getCenter(center);
 
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
+      const planeWidth = size.x * ENGRAVING_CONFIG.planeWidthRatio;
+      const planeHeight = size.y * ENGRAVING_CONFIG.planeHeightRatio;
 
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
-    function createStoneGroup(style, showText, scale, sideAngle) {
-      const group = new THREE.Group();
-      const rotator = new THREE.Group();
-      const normalized = normalizeStyle(style);
-
-      const shape = buildTombstoneShape(normalized);
-      const geometry = new THREE.ExtrudeGeometry(shape, {
-        depth: 0.42,
-        bevelEnabled: true,
-        bevelThickness: 0.050,
-        bevelSize: 0.050,
-        bevelSegments: 12,
-        curveSegments: 72
-      });
-
-      geometry.center();
-      geometry.computeVertexNormals();
-
-      const stoneMesh = new THREE.Mesh(geometry, createStoneMaterial());
-      stoneMesh.position.y = 0.30;
-      rotator.add(stoneMesh);
-
-      const baseMesh = new THREE.Mesh(new THREE.BoxGeometry(3.24, 0.34, 1.02), createBaseMaterial());
-      baseMesh.position.set(0, -1.78, -0.02);
-      rotator.add(baseMesh);
-
-      const lipMesh = new THREE.Mesh(new THREE.BoxGeometry(2.88, 0.15, 0.86), createBaseMaterial());
-      lipMesh.position.set(0, -1.49, 0.02);
-      rotator.add(lipMesh);
-
-      if (showText) {
-        const textTexture = updateEngravingTexture(getMemorialData());
-
-        const textMat = new THREE.MeshBasicMaterial({
-          map: textTexture,
-          transparent: true,
-          depthWrite: false,
-          depthTest: false,
-          alphaTest: 0.012,
-          opacity: ENGRAVING_CONFIG.opacity
-        });
-
-        textMat.polygonOffset = true;
-        textMat.polygonOffsetFactor = -1;
-        textMat.polygonOffsetUnits = -1;
-
-        mainTextPlane = new THREE.Mesh(
-          new THREE.PlaneGeometry(ENGRAVING_CONFIG.planeWidth, ENGRAVING_CONFIG.planeHeight),
-          textMat
-        );
-
-        mainTextPlane.position.set(
-          ENGRAVING_CONFIG.positionX,
-          ENGRAVING_CONFIG.positionY,
-          ENGRAVING_CONFIG.positionZ
-        );
-
-        mainTextPlane.renderOrder = 3;
-        rotator.add(mainTextPlane);
-      }
-
-      rotator.rotation.y = sideAngle;
-      group.add(rotator);
-
-      const shadowMat = new THREE.MeshBasicMaterial({
-        map: makeShadowTexture(),
+      const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+      const material = new THREE.MeshStandardMaterial({
+        map: state.engravingTexture,
         transparent: true,
+        opacity: ENGRAVING_CONFIG.opacity,
         depthWrite: false,
-        opacity: 0.86
+        roughness: 1,
+        metalness: 0,
+        alphaTest: 0.01,
+        polygonOffset: true,
+        polygonOffsetFactor: -2,
+        polygonOffsetUnits: -2
       });
 
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.80, 1.18), shadowMat);
-      shadow.position.set(0, -1.95, -0.50);
-      group.add(shadow);
+      const plane = new THREE.Mesh(geometry, material);
+      plane.name = "engravingPlane";
+      plane.renderOrder = 3;
 
-      group.scale.set(scale, scale, scale);
-      group.position.y = PREVIEW_Y;
+      plane.position.x = center.x * -1;
+      plane.position.y = (size.y * ENGRAVING_CONFIG.offsetYRatio) + 0.1;
+      plane.position.z = (size.z / 2) + ENGRAVING_CONFIG.offsetZ;
 
-      group.userData.parts = {
-        rotator: rotator,
-        stoneMesh: stoneMesh,
-        baseMesh: baseMesh,
-        lipMesh: lipMesh,
-        textPlane: mainTextPlane
+      modelGroup.add(plane);
+      state.engravingMesh = plane;
+    }
+
+    function prepareStoneMaterial(mesh) {
+      const original = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+      let map = original?.map || null;
+      let normalMap = original?.normalMap || null;
+      let roughnessMap = original?.roughnessMap || null;
+
+      const stoneMaterial = new THREE.MeshStandardMaterial({
+        map,
+        normalMap,
+        roughnessMap,
+        color: new THREE.Color("#b9b1a5"),
+        roughness: 0.9,
+        metalness: 0.02
+      });
+
+      mesh.material = stoneMaterial;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+    }
+
+    function fitStoneModel(root) {
+      const box = new THREE.Box3().setFromObject(root);
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      box.getSize(size);
+      box.getCenter(center);
+
+      const targetHeight = 5.25;
+      const scale = targetHeight / size.y;
+      root.scale.setScalar(scale);
+
+      const scaledBox = new THREE.Box3().setFromObject(root);
+      const scaledCenter = new THREE.Vector3();
+      const scaledSize = new THREE.Vector3();
+      scaledBox.getCenter(scaledCenter);
+      scaledBox.getSize(scaledSize);
+
+      root.position.x -= scaledCenter.x;
+      root.position.y -= scaledBox.min.y + 2.18;
+      root.position.z -= scaledCenter.z;
+    }
+
+    async function loadStoneModel() {
+      clearOldStone();
+      els.errorText.style.display = "none";
+      els.loadingText.style.display = "block";
+
+      try {
+        const gltf = await state.loader.loadAsync(MODEL_URL);
+        const root = gltf.scene || gltf.scenes?.[0];
+        if (!root) throw new Error("GLB scene is empty.");
+
+        root.traverse((obj) => {
+          if (obj.isMesh) {
+            prepareStoneMaterial(obj);
+          }
+        });
+
+        fitStoneModel(root);
+        state.stoneRoot.add(root);
+        state.tombstoneModel = root;
+
+        attachEngravingToModel(root);
+
+        els.loadingText.style.display = "none";
+      } catch (error) {
+        console.error(error);
+        els.loadingText.style.display = "none";
+        els.errorText.style.display = "block";
+        els.errorText.textContent = getLangText().loadError;
+      }
+    }
+
+    function renderLoop() {
+      if (!state.renderer || !state.scene || !state.camera) return;
+
+      state.previewClock += 0.01;
+
+      if (state.stoneRoot && !state.isAnimating) {
+        state.stoneRoot.rotation.y = THREE.MathUtils.lerp(
+          state.stoneRoot.rotation.y,
+          THREE.MathUtils.degToRad(18) + Math.sin(state.previewClock) * 0.015,
+          0.08
+        );
+      }
+
+      state.renderer.render(state.scene, state.camera);
+      requestAnimationFrame(renderLoop);
+    }
+
+    function animateConfirm() {
+      if (!state.stoneRoot || state.isAnimating) return;
+      state.isAnimating = true;
+      els.useStoneBtn.disabled = true;
+
+      const start = {
+        x: state.stoneRoot.position.x,
+        y: state.stoneRoot.position.y,
+        z: state.stoneRoot.position.z,
+        scale: state.stoneRoot.scale.x,
+        rotY: state.stoneRoot.rotation.y
       };
 
-      return group;
-    }
+      const end = {
+        x: 0.18,
+        y: -1.26,
+        z: -0.1,
+        scale: 0.44,
+        rotY: 0
+      };
 
-    function initMainScene() {
-      const container = document.getElementById("mainStoneScene");
-      if (!container || !window.THREE) return;
+      const duration = 1200;
+      const begin = performance.now();
 
-      mainScene = new THREE.Scene();
-
-      mainCamera = new THREE.PerspectiveCamera(
-        30,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      mainCamera.position.set(0, 0.08, 7.7);
-
-      mainRenderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true
-      });
-
-      mainRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      mainRenderer.setSize(container.clientWidth, container.clientHeight);
-
-      if (THREE.SRGBColorSpace) {
-        mainRenderer.outputColorSpace = THREE.SRGBColorSpace;
+      function ease(t) {
+        return 1 - Math.pow(1 - t, 3);
       }
 
-      container.innerHTML = "";
-      container.appendChild(mainRenderer.domElement);
+      function step(now) {
+        const t = Math.min(1, (now - begin) / duration);
+        const k = ease(t);
 
-      mainScene.add(new THREE.AmbientLight(0xd7d6d0, 0.82));
+        state.stoneRoot.position.x = THREE.MathUtils.lerp(start.x, end.x, k);
+        state.stoneRoot.position.y = THREE.MathUtils.lerp(start.y, end.y, k);
+        state.stoneRoot.position.z = THREE.MathUtils.lerp(start.z, end.z, k);
+        const scale = THREE.MathUtils.lerp(start.scale, end.scale, k);
+        state.stoneRoot.scale.setScalar(scale);
+        state.stoneRoot.rotation.y = THREE.MathUtils.lerp(start.rotY, end.rotY, k);
 
-      const hemi = new THREE.HemisphereLight(0xb9c9f0, 0x3b2e24, 0.82);
-      mainScene.add(hemi);
-
-      const moonLight = new THREE.DirectionalLight(0xcbd8ff, 1.08);
-      moonLight.position.set(-5.1, 7.8, 5.7);
-      mainScene.add(moonLight);
-
-      const warmRight = new THREE.PointLight(0xffc98b, 0.82, 18, 2);
-      warmRight.position.set(2.8, -1.0, 5.0);
-      mainScene.add(warmRight);
-
-      const warmLeft = new THREE.PointLight(0xffd29a, 0.34, 14, 2);
-      warmLeft.position.set(-3.1, -1.2, 4.6);
-      mainScene.add(warmLeft);
-
-      const data = getMemorialData();
-      const confirmed = data.tombstoneConfirmed === true;
-      buildMainStone(selectedStoneStyle, confirmed);
-
-      renderMainScene();
-      window.addEventListener("resize", resizeMainScene);
-    }
-
-    function buildMainStone(style, finalMode) {
-      selectedStoneStyle = normalizeStyle(style);
-
-      if (!mainScene) return;
-
-      if (mainStoneGroup) {
-        mainScene.remove(mainStoneGroup);
-      }
-
-      mainTextPlane = null;
-
-      const scale = finalMode ? FINAL_SCALE : PREVIEW_SCALE;
-      const sideAngle = finalMode ? FINAL_ANGLE : PREVIEW_ANGLE;
-
-      mainStoneGroup = createStoneGroup(selectedStoneStyle, true, scale, sideAngle);
-      mainStoneGroup.position.y = finalMode ? FINAL_Y : PREVIEW_Y;
-
-      mainScene.add(mainStoneGroup);
-      renderMainScene();
-    }
-
-    function renderMainScene() {
-      if (!mainRenderer || !mainScene || !mainCamera) return;
-      mainRenderer.render(mainScene, mainCamera);
-    }
-
-    function resizeMainScene() {
-      const container = document.getElementById("mainStoneScene");
-      if (!container || !mainRenderer || !mainCamera) return;
-
-      mainRenderer.setSize(container.clientWidth, container.clientHeight);
-      mainCamera.aspect = container.clientWidth / container.clientHeight;
-      mainCamera.updateProjectionMatrix();
-      renderMainScene();
-    }
-
-    function rebuildMainTextTexture() {
-      if (!mainTextPlane || !mainTextPlane.material) return;
-
-      const texture = updateEngravingTexture(getMemorialData());
-
-      if (mainTextPlane.material.map) {
-        mainTextPlane.material.map.dispose();
-      }
-
-      mainTextPlane.material.map = texture;
-      mainTextPlane.material.needsUpdate = true;
-
-      renderMainScene();
-    }
-
-    function initMiniScene(containerId, style) {
-      const container = document.getElementById(containerId);
-      if (!container || !window.THREE) return;
-
-      const scene = new THREE.Scene();
-
-      const camera = new THREE.PerspectiveCamera(
-        32,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      camera.position.set(0, 0.08, 7.2);
-
-      const renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true
-      });
-
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setSize(container.clientWidth, container.clientHeight);
-
-      if (THREE.SRGBColorSpace) {
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
-      }
-
-      container.innerHTML = "";
-      container.appendChild(renderer.domElement);
-
-      scene.add(new THREE.AmbientLight(0xd7d6d0, 0.86));
-
-      const light = new THREE.DirectionalLight(0xcbd8ff, 0.96);
-      light.position.set(-3, 5, 5);
-      scene.add(light);
-
-      const warm = new THREE.PointLight(0xffcf92, 0.44, 12, 2);
-      warm.position.set(2, -0.6, 4);
-      scene.add(warm);
-
-      const group = createStoneGroup(style, false, 0.65, -0.18);
-      group.position.y = -0.26;
-      scene.add(group);
-
-      renderer.render(scene, camera);
-      miniScenes.push({ container, renderer, camera, scene });
-    }
-
-    function resizeMiniScenes() {
-      miniScenes.forEach(function(item) {
-        const width = item.container.clientWidth;
-        const height = item.container.clientHeight;
-        item.renderer.setSize(width, height);
-        item.camera.aspect = width / height;
-        item.camera.updateProjectionMatrix();
-        item.renderer.render(item.scene, item.camera);
-      });
-    }
-
-    function selectStone(style, button) {
-      if (isPlanting) return;
-
-      selectedStoneStyle = normalizeStyle(style);
-
-      const data = getMemorialData();
-      data.tombstoneStyle = selectedStoneStyle;
-      data.tombstoneConfirmed = false;
-      saveMemorialData(data);
-
-      document.body.classList.remove("memorial-mode");
-
-      document.querySelectorAll(".stone-option").forEach(function(btn) {
-        btn.classList.remove("active");
-      });
-
-      if (button) button.classList.add("active");
-
-      buildMainStone(selectedStoneStyle, false);
-    }
-
-    function easeOutCubic(t) {
-      return 1 - Math.pow(1 - t, 3);
-    }
-
-    function animateStoneToFinal(callback) {
-      if (!mainStoneGroup) {
-        callback();
-        return;
-      }
-
-      const parts = mainStoneGroup.userData.parts || {};
-      const start = performance.now();
-      const duration = 1300;
-
-      function frame(now) {
-        const raw = Math.min((now - start) / duration, 1);
-        const t = easeOutCubic(raw);
-
-        const scale = PREVIEW_SCALE + (FINAL_SCALE - PREVIEW_SCALE) * t;
-        const y = PREVIEW_Y + (FINAL_Y - PREVIEW_Y) * t;
-        const angle = PREVIEW_ANGLE + (FINAL_ANGLE - PREVIEW_ANGLE) * t;
-
-        mainStoneGroup.scale.set(scale, scale, scale);
-        mainStoneGroup.position.y = y;
-
-        if (parts.rotator) {
-          parts.rotator.rotation.y = angle;
-        }
-
-        renderMainScene();
-
-        if (raw < 1) {
-          requestAnimationFrame(frame);
+        if (t < 1) {
+          requestAnimationFrame(step);
         } else {
-          callback();
+          localStorage.setItem("selectedStoneStyle", "rounded-real");
+          localStorage.setItem("selectedStoneModel", MODEL_URL);
+          sessionStorage.setItem("memorialStoneAnimated", "1");
+          window.location.href = "cemetery.html";
         }
       }
 
-      requestAnimationFrame(frame);
+      requestAnimationFrame(step);
     }
 
-    function confirmStone() {
-      if (isPlanting) return;
+    function bindEvents() {
+      window.addEventListener("resize", resizeScene);
 
-      isPlanting = true;
-
-      const data = getMemorialData();
-      data.tombstoneStyle = selectedStoneStyle;
-      data.tombstoneConfirmed = true;
-      saveMemorialData(data);
-
-      document.body.classList.add("planting");
-
-      animateStoneToFinal(function() {
-        document.body.classList.remove("planting");
-        document.body.classList.add("memorial-mode");
-        isPlanting = false;
-        loadExtraMemorialInfo();
-        renderPlacedItems();
+      els.languageSelect.addEventListener("change", (event) => {
+        state.language = event.target.value;
+        localStorage.setItem("siteLanguage", state.language);
+        applyLanguage();
       });
-    }
 
-    function editStoneAgain() {
-      if (isPlanting) return;
-
-      const data = getMemorialData();
-      data.tombstoneConfirmed = false;
-      saveMemorialData(data);
-
-      document.body.classList.remove("memorial-mode", "planting");
-      buildMainStone(selectedStoneStyle, false);
-    }
-
-    function initFromSavedData() {
-      const data = getMemorialData();
-      selectedStoneStyle = normalizeStyle(data.tombstoneStyle || "rounded");
-
-      const activeButton = document.querySelector('[data-style="' + selectedStoneStyle + '"]');
-      if (activeButton) {
-        document.querySelectorAll(".stone-option").forEach(function(btn) {
-          btn.classList.remove("active");
-        });
-        activeButton.classList.add("active");
-      }
-
-      if (data.tombstoneConfirmed === true) {
-        document.body.classList.add("memorial-mode");
-      }
-    }
-
-    function openPanel(id) {
-      closeAllPanels();
-      const panel = document.getElementById(id);
-      if (panel) panel.classList.add("show");
-    }
-
-    function closeAllPanels() {
-      document.querySelectorAll(".modal-layer").forEach(function(panel) {
-        panel.classList.remove("show");
+      els.backBtn.addEventListener("click", () => {
+        window.location.href = "create.html";
       });
-    }
 
-    function closePanels(event) {
-      if (event.target.classList.contains("modal-layer")) {
-        closeAllPanels();
-      }
-    }
+      els.useStoneBtn.addEventListener("click", animateConfirm);
 
-    function showPhotos(containerId, photos) {
-      const container = document.getElementById(containerId);
-      const text = getText();
-      if (!container) return;
-
-      container.innerHTML = "";
-
-      if (!photos || photos.length === 0) {
-        container.innerHTML = '<p class="empty-text">' + text.noPhotos + '</p>';
-        return;
-      }
-
-      photos.forEach(function(photo) {
-        const box = document.createElement("div");
-        box.className = "gallery-photo";
-        box.onclick = function() { openPhotoLightbox(photo); };
-
-        const img = document.createElement("img");
-        img.src = photo;
-
-        box.appendChild(img);
-        container.appendChild(box);
-      });
-    }
-
-    function openPhotoLightbox(src) {
-      const lightbox = document.getElementById("photoLightbox");
-      const image = document.getElementById("lightboxImage");
-      if (!lightbox || !image) return;
-
-      image.src = src;
-      lightbox.classList.add("show");
-    }
-
-    function closePhotoLightbox() {
-      const lightbox = document.getElementById("photoLightbox");
-      const image = document.getElementById("lightboxImage");
-      if (!lightbox || !image) return;
-
-      lightbox.classList.remove("show");
-      image.src = "";
-    }
-
-    function loadExtraMemorialInfo() {
-      const data = getMemorialData();
-      const text = getText();
-
-      const storyDisplay = document.getElementById("petStoryDisplay");
-
-      if (storyDisplay) {
-        if (data.story) {
-          storyDisplay.textContent = data.story;
-          storyDisplay.classList.remove("empty-text");
-        } else {
-          storyDisplay.textContent = text.noStory;
-          storyDisplay.classList.add("empty-text");
+      window.addEventListener("storage", (event) => {
+        if (event.key === "myPetMemorial") {
+          state.memorial = getMemorialData();
+          updateEngravingTexture(state.memorial);
         }
-      }
-
-      const publicPhotos = data.publicPhotos && data.publicPhotos.length ? data.publicPhotos : (data.photo ? [data.photo] : []);
-      const privatePhotos = data.privatePhotos || [];
-
-      showPhotos("publicPhotosDisplay", publicPhotos);
-      showPhotos("privatePhotosDisplay", privatePhotos);
-
-      renderMessages();
-    }
-
-    function getMessages() {
-      try {
-        return JSON.parse(localStorage.getItem("memorialMessages") || "[]");
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function renderMessages() {
-      const list = document.getElementById("messageList");
-      const text = getText();
-      if (!list) return;
-
-      const messages = getMessages();
-      list.innerHTML = "";
-
-      if (!messages.length) {
-        list.innerHTML = '<div class="message-item empty-text">' + text.noMessages + '</div>';
-        return;
-      }
-
-      messages.forEach(function(item) {
-        const div = document.createElement("div");
-        div.className = "message-item";
-        div.textContent = item;
-        list.appendChild(div);
+        if (event.key === "siteLanguage") {
+          state.language = localStorage.getItem("siteLanguage") || "zh";
+          applyLanguage();
+        }
       });
     }
 
-    function addMessage() {
-      const input = document.getElementById("messageInput");
-      if (!input) return;
-
-      const value = input.value.trim();
-      if (!value) return;
-
-      const messages = getMessages();
-      messages.unshift(value);
-      localStorage.setItem("memorialMessages", JSON.stringify(messages.slice(0, 20)));
-
-      input.value = "";
-      renderMessages();
+    function init() {
+      state.memorial = getMemorialData();
+      createScene();
+      resizeScene();
+      applyLanguage();
+      bindEvents();
+      loadStoneModel();
+      renderLoop();
     }
 
-    function getPlacedItems() {
-      try {
-        return JSON.parse(localStorage.getItem("memorialPlacedItems") || "[]");
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function renderPlacedItems() {
-      const box = document.getElementById("placedItemsList");
-      const text = getText();
-      if (!box) return;
-
-      const items = getPlacedItems();
-      box.innerHTML = "";
-
-      items.forEach(function(item) {
-        const div = document.createElement("div");
-        div.className = "placed-item-badge";
-
-        if (item === "can") div.textContent = "🥫 " + text.placedCan;
-        if (item === "ball") div.textContent = "🎾 " + text.placedBall;
-        if (item === "seed") div.textContent = "🌾 " + text.placedSeed;
-        if (item === "flower") div.textContent = "🌸 " + text.placedFlower;
-
-        box.appendChild(div);
-      });
-    }
-
-    function placeGift(type) {
-      const items = getPlacedItems();
-      items.unshift(type);
-      localStorage.setItem("memorialPlacedItems", JSON.stringify(items.slice(0, 8)));
-      renderPlacedItems();
-    }
-
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "Escape") {
-        closePhotoLightbox();
-        closeAllPanels();
-      }
-    });
-
-    window.addEventListener("storage", function(event) {
-      if (event.key === "myPetMemorial") {
-        rebuildMainTextTexture();
-        loadExtraMemorialInfo();
-      }
-    });
-
-    window.addEventListener("DOMContentLoaded", function() {
-      initFromSavedData();
-
-      initMainScene();
-      initMiniScene("miniRounded", "rounded");
-      initMiniScene("miniSquare", "square");
-      initMiniScene("miniArch", "arch");
-
-      const savedLanguage = localStorage.getItem("siteLanguage") || "zh";
-      changeLanguage(savedLanguage);
-
-      loadExtraMemorialInfo();
-      renderPlacedItems();
-
-      window.addEventListener("resize", function() {
-        resizeMiniScenes();
-        resizeMainScene();
-      });
-    });
+    init();
   </script>
 </body>
 </html>
