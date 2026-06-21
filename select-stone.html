@@ -297,7 +297,30 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    const MODEL_URL = "assets/models/tombstone-real.glb?v=5";
+    const MODEL_URL = "assets/models/tombstone-real.glb?v=6";
+
+    const MODEL_VIEW_CONFIG = {
+      // 只调这里：GLB 墓碑在选择页的大小、位置、角度
+      targetHeight: 4.55,
+      modelBottomY: -2.02,
+
+      previewX: 0.16,
+      previewY: -0.46,
+      previewZ: 0,
+      previewScale: 0.88,
+      previewRotYDeg: 8,
+
+      finalX: 0.06,
+      finalY: -0.96,
+      finalZ: -0.08,
+      finalScale: 0.58,
+      finalRotYDeg: 0,
+
+      cameraX: 0,
+      cameraY: 1.28,
+      cameraZ: 9.6,
+      shadowY: -2.08
+    };
 
     const ENGRAVING_CONFIG = {
       planeWidthRatio: 0.56,
@@ -440,7 +463,7 @@
       const canvas = els.canvas;
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
-      camera.position.set(0, 1.45, 9.2);
+      camera.position.set(MODEL_VIEW_CONFIG.cameraX, MODEL_VIEW_CONFIG.cameraY, MODEL_VIEW_CONFIG.cameraZ);
 
       const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -485,14 +508,14 @@
         new THREE.ShadowMaterial({ opacity: 0.15 })
       );
       shadowPlane.rotation.x = -Math.PI / 2;
-      shadowPlane.position.set(0, -2.2, 0.5);
+      shadowPlane.position.set(0, MODEL_VIEW_CONFIG.shadowY, 0.5);
       shadowPlane.receiveShadow = true;
       scene.add(shadowPlane);
 
       const stoneRoot = new THREE.Group();
-      stoneRoot.position.set(0.42, -0.64, 0);
-      stoneRoot.rotation.y = THREE.MathUtils.degToRad(18);
-      stoneRoot.scale.setScalar(1.06);
+      stoneRoot.position.set(MODEL_VIEW_CONFIG.previewX, MODEL_VIEW_CONFIG.previewY, MODEL_VIEW_CONFIG.previewZ);
+      stoneRoot.rotation.y = THREE.MathUtils.degToRad(MODEL_VIEW_CONFIG.previewRotYDeg);
+      stoneRoot.scale.setScalar(MODEL_VIEW_CONFIG.previewScale);
       scene.add(stoneRoot);
 
       state.scene = scene;
@@ -671,7 +694,7 @@
       const firstBox = new THREE.Box3().setFromObject(root);
       const firstSize = new THREE.Vector3();
       firstBox.getSize(firstSize);
-      const targetHeight = 5.35;
+      const targetHeight = MODEL_VIEW_CONFIG.targetHeight;
       const scale = targetHeight / Math.max(firstSize.y, 0.001);
       root.scale.setScalar(scale);
 
@@ -680,7 +703,7 @@
       box.getCenter(center);
       root.position.x -= center.x;
       root.position.z -= center.z;
-      root.position.y -= box.min.y + 2.18;
+      root.position.y -= box.min.y - MODEL_VIEW_CONFIG.modelBottomY;
     }
 
     function attachEngraving(root) {
@@ -780,7 +803,7 @@
       if (!state.renderer || !state.scene || !state.camera) return;
       state.previewClock += 0.01;
       if (state.stoneRoot && state.isLoaded && !state.isAnimating) {
-        const target = THREE.MathUtils.degToRad(18) + Math.sin(state.previewClock) * 0.012;
+        const target = THREE.MathUtils.degToRad(MODEL_VIEW_CONFIG.previewRotYDeg) + Math.sin(state.previewClock) * 0.006;
         state.stoneRoot.rotation.y = THREE.MathUtils.lerp(state.stoneRoot.rotation.y, target, 0.06);
       }
       state.renderer.render(state.scene, state.camera);
@@ -799,7 +822,13 @@
         scale: state.stoneRoot.scale.x,
         rotY: state.stoneRoot.rotation.y
       };
-      const end = { x: 0.18, y: -1.26, z: -0.1, scale: 0.44, rotY: 0 };
+      const end = {
+        x: MODEL_VIEW_CONFIG.finalX,
+        y: MODEL_VIEW_CONFIG.finalY,
+        z: MODEL_VIEW_CONFIG.finalZ,
+        scale: MODEL_VIEW_CONFIG.finalScale,
+        rotY: THREE.MathUtils.degToRad(MODEL_VIEW_CONFIG.finalRotYDeg)
+      };
       const duration = 1250;
       const begin = performance.now();
       function ease(t) { return 1 - Math.pow(1 - t, 3); }
