@@ -297,49 +297,50 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    const MODEL_URL = "assets/models/tombstone-real.glb?v=6";
+    const MODEL_URL = "assets/models/tombstone-real.glb?v=7";
 
     const MODEL_VIEW_CONFIG = {
       // 只调这里：GLB 墓碑在选择页的大小、位置、角度
-      targetHeight: 4.55,
-      modelBottomY: -2.02,
+      targetHeight: 3.82,
+      modelBottomY: -1.88,
 
-      previewX: 0.16,
-      previewY: -0.46,
+      previewX: -0.10,
+      previewY: -0.26,
       previewZ: 0,
-      previewScale: 0.88,
-      previewRotYDeg: 8,
+      previewScale: 0.82,
+      previewRotYDeg: 5,
 
-      finalX: 0.06,
-      finalY: -0.96,
+      finalX: 0.00,
+      finalY: -0.86,
       finalZ: -0.08,
-      finalScale: 0.58,
+      finalScale: 0.54,
       finalRotYDeg: 0,
 
       cameraX: 0,
-      cameraY: 1.28,
-      cameraZ: 9.6,
-      shadowY: -2.08
+      cameraY: 1.18,
+      cameraZ: 9.8,
+      shadowY: -1.92
     };
 
     const ENGRAVING_CONFIG = {
-      planeWidthRatio: 0.56,
-      planeHeightRatio: 0.46,
-      offsetYRatio: 0.06,
-      offsetZ: 0.018,
-      frontZSign: 1,
-      opacity: 0.86,
+      // v7：刻字层改成固定尺寸和固定位置，不再用模型包围盒自动放大
+      planeWidth: 1.16,
+      planeHeight: 1.42,
+      planeX: 0,
+      planeY: -0.08,
+      planeZ: 0.075,
+      opacity: 0.76,
       canvasWidth: 1400,
       canvasHeight: 1400,
-      nameFontSize: 124,
-      dateFontSize: 48,
-      epitaphFontSize: 56,
-      lineGap: 22,
+      nameFontSize: 92,
+      dateFontSize: 36,
+      epitaphFontSize: 42,
+      lineGap: 18,
       maxEpitaphLines: 3,
-      textColor: "rgba(68, 72, 75, 0.88)",
-      darkShadow: "rgba(12, 14, 16, 0.30)",
-      softHighlight: "rgba(255, 255, 255, 0.10)",
-      wearAmount: 0.035
+      textColor: "rgba(52, 56, 58, 0.78)",
+      darkShadow: "rgba(10, 12, 14, 0.24)",
+      softHighlight: "rgba(235, 240, 238, 0.08)",
+      wearAmount: 0.030
     };
 
     const I18N = {
@@ -666,7 +667,7 @@
       drawEngravedText(ctx, dateLine, centerX, topY + 138, dateFont);
 
       ctx.font = epitaphFont;
-      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.64, ENGRAVING_CONFIG.maxEpitaphLines);
+      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.54, ENGRAVING_CONFIG.maxEpitaphLines);
       const step = ENGRAVING_CONFIG.epitaphFontSize + ENGRAVING_CONFIG.lineGap;
       const startY = topY + 288 - ((lines.length - 1) * step) / 2;
       lines.forEach(function(line, index) {
@@ -710,22 +711,17 @@
       createEngravingCanvas();
       updateEngravingTexture();
 
-      const box = new THREE.Box3().setFromObject(root);
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
-
-      const planeWidth = size.x * ENGRAVING_CONFIG.planeWidthRatio;
-      const planeHeight = size.y * ENGRAVING_CONFIG.planeHeightRatio;
-      const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+      const geometry = new THREE.PlaneGeometry(
+        ENGRAVING_CONFIG.planeWidth,
+        ENGRAVING_CONFIG.planeHeight
+      );
       const material = new THREE.MeshBasicMaterial({
         map: state.engravingTexture,
         transparent: true,
         opacity: ENGRAVING_CONFIG.opacity,
         depthWrite: false,
         depthTest: true,
-        side: THREE.DoubleSide,
+        side: THREE.FrontSide,
         alphaTest: 0.01,
         polygonOffset: true,
         polygonOffsetFactor: -2,
@@ -735,9 +731,9 @@
       plane.name = "dynamicCanvasEngraving";
       plane.renderOrder = 8;
       plane.position.set(
-        center.x,
-        center.y + size.y * ENGRAVING_CONFIG.offsetYRatio,
-        center.z + ENGRAVING_CONFIG.frontZSign * (size.z / 2 + ENGRAVING_CONFIG.offsetZ)
+        ENGRAVING_CONFIG.planeX,
+        ENGRAVING_CONFIG.planeY,
+        ENGRAVING_CONFIG.planeZ
       );
       root.add(plane);
       state.engravingMesh = plane;
