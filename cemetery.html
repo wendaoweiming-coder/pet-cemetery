@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>选择墓碑 - 星眠宠物纪念园</title>
+  <title>纪念园 - 星眠宠物纪念园</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -87,9 +87,9 @@
     /* 关键：模型只在这个舞台里渲染，不再占满整个页面 */
     #stageWrap {
       position: absolute;
-      left: 54.5%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(1);
+      left: 50.2%;
+      top: 59.8%;
+      transform: translate(-50%, -50%) scale(0.68);
       transform-origin: 50% 50%;
       width: min(48vw, 860px);
       height: min(84vh, 880px);
@@ -286,11 +286,12 @@
     }
   </style>
 </head>
-<body>
+<body class="placed-mode">
   <div class="page">
     <div class="brand" id="brandText">星眠宠物纪念园</div>
     <div class="top-actions">
-      <button class="glass-btn" id="backBtn">返回修改</button>
+      <button class="glass-btn" id="backBtn">编辑</button>
+      <button class="glass-btn" id="changeStoneBtn">更换墓碑</button>
       <select class="lang-select" id="languageSelect">
         <option value="zh">简体中文</option>
         <option value="zh-TW">繁體中文</option>
@@ -377,10 +378,14 @@
   <script>
     (function () {
       const TEXTS = {
-        zh: { brand: "星眠宠物纪念园", back: "返回修改", title: "选择墓碑", subtitle: "墓碑会慢慢转正，并安静地落到纪念园中。", panelTitle: "墓碑样式", panelSubtitle: "选择一个墓碑，中间预览会立刻变化。", stoneName: "圆顶墓碑", stoneDesc: "真实石材圆顶墓碑。", use: "使用这个墓碑", loading: "正在加载墓碑模型...", loadError: "墓碑模型加载失败，请检查 tombstone-real.glb。" },
-        "zh-TW": { brand: "星眠寵物紀念園", back: "返回修改", title: "選擇墓碑", subtitle: "墓碑會慢慢轉正，並安靜地落到紀念園中。", panelTitle: "墓碑樣式", panelSubtitle: "選擇一個墓碑，中間預覽會立刻變化。", stoneName: "圓頂墓碑", stoneDesc: "真實石材圓頂墓碑。", use: "使用這個墓碑", loading: "正在載入墓碑模型...", loadError: "墓碑模型載入失敗，請檢查 tombstone-real.glb。" },
-        en: { brand: "Starlit Pet Memorial Garden", back: "Back", title: "Choose a Tombstone", subtitle: "The tombstone will gently turn forward and settle into the memorial garden.", panelTitle: "Stone Style", panelSubtitle: "Choose a tombstone and the preview will update immediately.", stoneName: "Rounded Headstone", stoneDesc: "A realistic stone rounded headstone.", use: "Use This Stone", loading: "Loading tombstone model...", loadError: "Failed to load tombstone-real.glb." },
-        ja: { brand: "星眠ペット記念園", back: "戻る", title: "墓碑を選ぶ", subtitle: "墓碑はゆっくり正面を向き、静かに記念園へ収まります。", panelTitle: "墓碑スタイル", panelSubtitle: "墓碑を選ぶと中央プレビューがすぐ変わります。", stoneName: "丸型墓碑", stoneDesc: "リアルな石材の丸型墓碑です。", use: "この墓碑を使う", loading: "墓碑モデルを読み込み中...", loadError: "tombstone-real.glb の読み込みに失敗しました。" }
+        zh: { brand: "星眠宠物纪念园", back: "编辑",
+        changeStone: "更换墓碑", title: "选择墓碑", subtitle: "墓碑会慢慢转正，并安静地落到纪念园中。", panelTitle: "墓碑样式", panelSubtitle: "选择一个墓碑，中间预览会立刻变化。", stoneName: "圆顶墓碑", stoneDesc: "真实石材圆顶墓碑。", use: "使用这个墓碑", loading: "正在加载墓碑模型...", loadError: "墓碑模型加载失败，请检查 tombstone-real.glb。" },
+        "zh-TW": { brand: "星眠寵物紀念園", back: "編輯",
+        changeStone: "更換墓碑", title: "選擇墓碑", subtitle: "墓碑會慢慢轉正，並安靜地落到紀念園中。", panelTitle: "墓碑樣式", panelSubtitle: "選擇一個墓碑，中間預覽會立刻變化。", stoneName: "圓頂墓碑", stoneDesc: "真實石材圓頂墓碑。", use: "使用這個墓碑", loading: "正在載入墓碑模型...", loadError: "墓碑模型載入失敗，請檢查 tombstone-real.glb。" },
+        en: { brand: "Starlit Pet Memorial Garden", back: "Edit",
+        changeStone: "Change Stone", title: "Choose a Tombstone", subtitle: "The tombstone will gently turn forward and settle into the memorial garden.", panelTitle: "Stone Style", panelSubtitle: "Choose a tombstone and the preview will update immediately.", stoneName: "Rounded Headstone", stoneDesc: "A realistic stone rounded headstone.", use: "Use This Stone", loading: "Loading tombstone model...", loadError: "Failed to load tombstone-real.glb." },
+        ja: { brand: "星眠ペット記念園", back: "編集",
+        changeStone: "墓碑を変更", title: "墓碑を選ぶ", subtitle: "墓碑はゆっくり正面を向き、静かに記念園へ収まります。", panelTitle: "墓碑スタイル", panelSubtitle: "墓碑を選ぶと中央プレビューがすぐ変わります。", stoneName: "丸型墓碑", stoneDesc: "リアルな石材の丸型墓碑です。", use: "この墓碑を使う", loading: "墓碑モデルを読み込み中...", loadError: "tombstone-real.glb の読み込みに失敗しました。" }
       };
 
       const MODEL_PATH = "./assets/models/tombstone-real.glb";
@@ -404,8 +409,8 @@
         previewTop: 50.0,
         previewScale: 1.00,
         finalLeft: 50.2,
-        finalTop: 63.2,
-        finalScale: 0.50
+        finalTop: 59.8,
+        finalScale: 0.68
       };
 
       const ENGRAVE = {
@@ -415,15 +420,15 @@
         planeY: 0.97,
         planeZ: 0.42,
         canvasSize: 1536,
-        nameSize: 222,
-        dateSize: 82,
-        epitaphSize: 88,
-        nameY: 510,
-        dateY: 728,
-        epitaphY: 980,
-        lineGap: 118,
+        nameSize: 255,
+        dateSize: 96,
+        epitaphSize: 104,
+        nameY: 500,
+        dateY: 720,
+        epitaphY: 965,
+        lineGap: 128,
         maxLines: 3,
-        maxWidthRatio: 0.62
+        maxWidthRatio: 0.70
       };
 
       const stageWrap = document.getElementById("stageWrap");
@@ -445,6 +450,8 @@
         localStorage.setItem("siteLanguage", value);
         document.getElementById("brandText").textContent = text.brand;
         document.getElementById("backBtn").textContent = text.back;
+        const changeStoneBtn = document.getElementById("changeStoneBtn");
+        if (changeStoneBtn) changeStoneBtn.textContent = text.changeStone || "更换墓碑";
         document.getElementById("heroTitle").textContent = text.title;
         document.getElementById("heroSubtitle").textContent = text.subtitle;
         document.getElementById("panelTitle").textContent = text.panelTitle;
@@ -508,12 +515,12 @@
         ctx.textBaseline = "middle";
 
         // 这里只画“文字形状遮罩”，真正的凹陷、高光、阴影交给下面的 ShaderMaterial 生成
-        ctx.fillStyle = "rgba(255,255,255,0.86)";
+        ctx.fillStyle = "rgba(255,255,255,0.96)";
         ctx.fillText(text, x, y);
 
         // 轻微扩边，让字槽有厚度
         ctx.lineWidth = Math.max(2, fontSize * 0.035);
-        ctx.strokeStyle = "rgba(255,255,255,0.30)";
+        ctx.strokeStyle = "rgba(255,255,255,0.42)";
         ctx.strokeText(text, x, y);
 
         // 很少量磨损：让边缘不那么数码，但不影响可读性
@@ -659,7 +666,7 @@
           uniforms: {
             map: { value: engravingTexture },
             texel: { value: new THREE.Vector2(1 / ENGRAVE.canvasSize, 1 / ENGRAVE.canvasSize) },
-            opacityValue: { value: 0.78 }
+            opacityValue: { value: 0.92 }
           },
           vertexShader: [
             "varying vec2 vUv;",
@@ -680,7 +687,7 @@
             "}",
             "void main() {",
             "  float a = texture2D(map, vUv).a;",
-            "  if (a < 0.016) discard;",
+            "  if (a < 0.012) discard;",
             "  float l1 = texture2D(map, vUv - vec2(texel.x * 2.0, 0.0)).a;",
             "  float r1 = texture2D(map, vUv + vec2(texel.x * 2.0, 0.0)).a;",
             "  float u1 = texture2D(map, vUv + vec2(0.0, texel.y * 2.0)).a;",
@@ -696,18 +703,18 @@
             "  float grain1 = hash(floor(vUv * 380.0));",
             "  float grain2 = hash(floor(vUv * 910.0));",
             "  float wear = smoothstep(0.08, 0.92, grain1) * 0.16 + smoothstep(0.78, 1.0, grain2) * 0.18;",
-            "  vec3 groove = vec3(0.135, 0.140, 0.135);",
-            "  vec3 coldDust = vec3(0.300, 0.300, 0.275);",
+            "  vec3 groove = vec3(0.095, 0.100, 0.098);",
+            "  vec3 coldDust = vec3(0.210, 0.215, 0.205);",
             "  vec3 brightRim = vec3(0.610, 0.600, 0.540);",
-            "  vec3 deepShadow = vec3(0.060, 0.065, 0.062);",
+            "  vec3 deepShadow = vec3(0.035, 0.038, 0.038);",
             "  vec3 color = mix(groove, coldDust, grain1 * 0.18);",
             "  color = mix(color, brightRim, bevelLight * 0.42);",
             "  color = mix(color, deepShadow, bevelDark * 0.54);",
             "  color *= 0.92 + grain2 * 0.12;",
             "  float inner = smoothstep(0.08, 0.82, a);",
             "  float edge = clamp(edgeFine * 1.8 + edgeWide * 0.7, 0.0, 1.0);",
-            "  float alpha = (inner * 0.30 + edge * 0.36) * opacityValue;",
-            "  alpha *= 1.0 - wear;",
+            "  float alpha = (inner * 0.48 + edge * 0.44) * opacityValue;",
+            "  alpha *= 1.0 - wear * 0.55;",
             "  gl_FragColor = vec4(color, alpha);",
             "}"
           ].join("\n"),
@@ -754,6 +761,14 @@
         pivot.scale.setScalar(VIEW.previewScale);
       }
 
+      function setFinalPoseImmediately() {
+        applyStagePose(STAGE_POSE.finalLeft, STAGE_POSE.finalTop, STAGE_POSE.finalScale);
+        pivot.position.set(VIEW.finalX, VIEW.finalY, VIEW.finalZ);
+        pivot.rotation.set(0, VIEW.finalRotY, 0);
+        pivot.scale.setScalar(VIEW.finalScale);
+        document.body.classList.add("placed-mode");
+      }
+
       function loadModel() {
         const loader = new THREE.GLTFLoader();
         let finished = false;
@@ -769,10 +784,11 @@
           const scaledSize = centerAndScaleModel(stoneRoot);
           attachEngraving(stoneRoot, scaledSize);
           pivot.add(stoneRoot);
-          setPreviewPose();
+          setFinalPoseImmediately();
           isLoaded = true;
           loadingEl.style.display = "none";
-          useBtn.disabled = false;
+          if (useBtn) useBtn.disabled = false;
+          renderFinalPanels();
         }, undefined, function (error) {
           finished = true;
           clearTimeout(timer);
@@ -971,8 +987,10 @@
       function init() {
         applyLanguage(lang());
         backBtn.addEventListener("click", function () { window.location.href = "./create.html"; });
+        const changeStoneBtn = document.getElementById("changeStoneBtn");
+        if (changeStoneBtn) changeStoneBtn.addEventListener("click", function () { window.location.href = "./select-stone.html"; });
         langSelect.addEventListener("change", function (e) { applyLanguage(e.target.value); updateEngravingTexture(); });
-        useBtn.addEventListener("click", animateToFinal);
+        if (useBtn) useBtn.addEventListener("click", animateToFinal);
         window.addEventListener("resize", resizeScene);
         window.addEventListener("storage", function (event) { if (event.key === "myPetMemorial") updateEngravingTexture(); });
         document.addEventListener("keydown", function(event) { if (event.key === "Escape") closeFinalPanels(); });
