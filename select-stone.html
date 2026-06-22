@@ -85,8 +85,8 @@
     /* 关键：模型只在这个舞台里渲染，不再占满整个页面 */
     #stageWrap {
       position: absolute;
-      left: 59%;
-      top: 53%;
+      left: 54.5%;
+      top: 50%;
       transform: translate(-50%, -50%);
       width: min(48vw, 860px);
       height: min(84vh, 880px);
@@ -171,7 +171,7 @@
       const VIEW = {
         targetHeight: 3.22,
         previewX: 0.00,
-        previewY: 0.30,
+        previewY: 0.34,
         previewZ: 0,
         previewScale: 0.90,
         previewRotY: -0.34,
@@ -183,21 +183,21 @@
       };
 
       const ENGRAVE = {
-        planeWidth: 1.58,
-        planeHeight: 1.72,
+        planeWidth: 1.50,
+        planeHeight: 1.68,
         planeX: 0.00,
-        planeY: 1.28,
+        planeY: 1.07,
         planeZ: 0.42,
         canvasSize: 1536,
-        nameSize: 260,
-        dateSize: 92,
-        epitaphSize: 104,
-        nameY: 560,
-        dateY: 765,
-        epitaphY: 995,
-        lineGap: 118,
+        nameSize: 235,
+        dateSize: 82,
+        epitaphSize: 92,
+        nameY: 500,
+        dateY: 700,
+        epitaphY: 970,
+        lineGap: 108,
         maxLines: 3,
-        maxWidthRatio: 0.74
+        maxWidthRatio: 0.70
       };
 
       const stageEl = document.getElementById("stage");
