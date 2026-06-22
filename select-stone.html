@@ -87,7 +87,8 @@
       position: absolute;
       left: 54.5%;
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(1);
+      transform-origin: 50% 50%;
       width: min(48vw, 860px);
       height: min(84vh, 880px);
       z-index: 9;
@@ -176,30 +177,40 @@
         previewScale: 0.90,
         previewRotY: -0.34,
         finalX: 0.00,
-        finalY: -0.72,
-        finalZ: -0.16,
-        finalScale: 0.58,
-        finalRotY: 0
+        finalY: 0.14,
+        finalZ: 0.00,
+        finalScale: 0.88,
+        finalRotY: 0.00
+      };
+
+      const STAGE_POSE = {
+        previewLeft: 54.5,
+        previewTop: 50.0,
+        previewScale: 1.00,
+        finalLeft: 50.2,
+        finalTop: 63.2,
+        finalScale: 0.47
       };
 
       const ENGRAVE = {
-        planeWidth: 1.50,
-        planeHeight: 1.68,
+        planeWidth: 1.52,
+        planeHeight: 1.78,
         planeX: 0.00,
-        planeY: 1.07,
+        planeY: 0.97,
         planeZ: 0.42,
         canvasSize: 1536,
-        nameSize: 235,
-        dateSize: 82,
-        epitaphSize: 92,
-        nameY: 500,
-        dateY: 700,
-        epitaphY: 970,
-        lineGap: 108,
+        nameSize: 214,
+        dateSize: 78,
+        epitaphSize: 84,
+        nameY: 440,
+        dateY: 648,
+        epitaphY: 888,
+        lineGap: 126,
         maxLines: 3,
-        maxWidthRatio: 0.70
+        maxWidthRatio: 0.62
       };
 
+      const stageWrap = document.getElementById("stageWrap");
       const stageEl = document.getElementById("stage");
       const loadingEl = document.getElementById("stageLoading");
       const useBtn = document.getElementById("useStoneBtn");
@@ -434,7 +445,14 @@
         });
       }
 
+      function applyStagePose(left, top, scale) {
+        stageWrap.style.left = left + "%";
+        stageWrap.style.top = top + "%";
+        stageWrap.style.transform = "translate(-50%, -50%) scale(" + scale + ")";
+      }
+
       function setPreviewPose() {
+        applyStagePose(STAGE_POSE.previewLeft, STAGE_POSE.previewTop, STAGE_POSE.previewScale);
         pivot.position.set(VIEW.previewX, VIEW.previewY, VIEW.previewZ);
         pivot.rotation.set(0, VIEW.previewRotY, 0);
         pivot.scale.setScalar(VIEW.previewScale);
@@ -472,19 +490,40 @@
         if (!isLoaded || isAnimating) return;
         isAnimating = true;
         useBtn.disabled = true;
-        const start = { x: pivot.position.x, y: pivot.position.y, z: pivot.position.z, s: pivot.scale.x, r: pivot.rotation.y };
-        const end = { x: VIEW.finalX, y: VIEW.finalY, z: VIEW.finalZ, s: VIEW.finalScale, r: VIEW.finalRotY };
+        const start = {
+          x: pivot.position.x,
+          y: pivot.position.y,
+          z: pivot.position.z,
+          s: pivot.scale.x,
+          r: pivot.rotation.y,
+          left: STAGE_POSE.previewLeft,
+          top: STAGE_POSE.previewTop,
+          wrapScale: STAGE_POSE.previewScale
+        };
+        const end = {
+          x: VIEW.finalX,
+          y: VIEW.finalY,
+          z: VIEW.finalZ,
+          s: VIEW.finalScale,
+          r: VIEW.finalRotY,
+          left: STAGE_POSE.finalLeft,
+          top: STAGE_POSE.finalTop,
+          wrapScale: STAGE_POSE.finalScale
+        };
         const t0 = performance.now();
-        const duration = 1000;
+        const duration = 1080;
         function ease(t) { return 1 - Math.pow(1 - t, 3); }
+        function mix(a, b, k) { return a + (b - a) * k; }
         function step(now) {
           const p = Math.min(1, (now - t0) / duration);
           const k = ease(p);
-          pivot.position.set(start.x + (end.x - start.x) * k, start.y + (end.y - start.y) * k, start.z + (end.z - start.z) * k);
-          pivot.scale.setScalar(start.s + (end.s - start.s) * k);
-          pivot.rotation.y = start.r + (end.r - start.r) * k;
-          if (p < 1) requestAnimationFrame(step);
-          else {
+          pivot.position.set(mix(start.x, end.x, k), mix(start.y, end.y, k), mix(start.z, end.z, k));
+          pivot.scale.setScalar(mix(start.s, end.s, k));
+          pivot.rotation.y = mix(start.r, end.r, k);
+          applyStagePose(mix(start.left, end.left, k), mix(start.top, end.top, k), mix(start.wrapScale, end.wrapScale, k));
+          if (p < 1) {
+            requestAnimationFrame(step);
+          } else {
             localStorage.setItem("selectedStoneStyle", "rounded-real-glb");
             localStorage.setItem("selectedStoneModel", MODEL_PATH);
             window.location.href = "./cemetery.html";
