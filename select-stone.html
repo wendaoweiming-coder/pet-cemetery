@@ -191,7 +191,7 @@
       min-height: 540px;
     }
     .viewer-wrap::after {
-      /* v13：关闭旧的前景遮挡层。它会把 GLB 底座“吃掉”，看起来像模型不完整。 */
+      /* v14：关闭旧的前景遮挡层。它会把 GLB 底座“吃掉”，看起来像模型不完整。 */
       content: none;
     }
     #stoneCanvas { position: relative; z-index: 1; width: 100%; height: 100%; display: block; border-radius: 24px; background: transparent; }
@@ -301,23 +301,23 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    const MODEL_URL = "assets/models/tombstone-real.glb?v=13";
+    const MODEL_URL = "assets/models/tombstone-real.glb?v=14";
 
     const MODEL_VIEW_CONFIG = {
-      // v13：只校准 GLB 模型的展示位置，不再改页面布局。
+      // v14：只校准 GLB 模型的展示位置，不再改页面布局。
       // targetHeight 控制模型自身大小；previewX/previewY 控制模型在画面中的位置。
       targetHeight: 4.42,
       modelBottomY: -1.96,
 
       // 按用户红线：整体往左收，保持当前大小，角度沿用已认可方向。
-      previewX: -1.72,
+      previewX: -1.24,
       previewY: 0.16,
       previewZ: 0,
       previewScale: 0.94,
       previewRotYDeg: -16,
 
       // 确认后的落位同步向左，避免动画结束又偏回去。
-      finalX: -0.72,
+      finalX: -0.42,
       finalY: -0.90,
       finalZ: -0.08,
       finalScale: 0.56,
@@ -330,19 +330,19 @@
     };
 
     const ENGRAVING_CONFIG = {
-      // v13：刻字层不再跑到墓碑外，改为较小的正面刻字区。
-      planeWidth: 0.76,
-      planeHeight: 0.98,
-      planeX: -0.04,
-      planeY: -0.20,
-      planeZ: 0.108,
-      opacity: 0.88,
+      // v14：刻字层不再跑到墓碑外，改为较小的正面刻字区。
+      planeWidth: 0.92,
+      planeHeight: 1.20,
+      planeX: 0.20,
+      planeY: 0.15,
+      planeZ: 0.118,
+      opacity: 0.84,
       canvasWidth: 1400,
       canvasHeight: 1400,
-      nameFontSize: 136,
-      dateFontSize: 54,
-      epitaphFontSize: 58,
-      lineGap: 20,
+      nameFontSize: 92,
+      dateFontSize: 40,
+      epitaphFontSize: 42,
+      lineGap: 22,
       maxEpitaphLines: 3,
       textColor: "rgba(28, 32, 35, 0.76)",
       darkShadow: "rgba(4, 5, 6, 0.22)",
@@ -615,26 +615,39 @@
       return lines;
     }
 
-    function drawEngravedText(ctx, text, x, y, font) {
+    function fitFontToWidth(ctx, text, font, maxWidth) {
+      if (!text || !maxWidth) return font;
+      let sizeMatch = font.match(/(\d+(?:\.\d+)?)px/);
+      if (!sizeMatch) return font;
+      let size = Number(sizeMatch[1]);
+      ctx.font = font;
+      while (size > 24 && ctx.measureText(text).width > maxWidth) {
+        size -= 2;
+        ctx.font = font.replace(/\d+(?:\.\d+)?px/, size + "px");
+      }
+      return ctx.font;
+    }
+
+    function drawEngravedText(ctx, text, x, y, font, maxWidth) {
       if (!text) return;
       ctx.save();
-      ctx.font = font;
+      ctx.font = fitFontToWidth(ctx, text, font, maxWidth);
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
       ctx.fillStyle = ENGRAVING_CONFIG.softHighlight;
-      ctx.fillText(text, x - 1.2, y - 1.1);
+      ctx.fillText(text, x - 0.9, y - 0.9);
 
       ctx.fillStyle = ENGRAVING_CONFIG.darkShadow;
-      ctx.fillText(text, x + 1.4, y + 1.6);
+      ctx.fillText(text, x + 1.1, y + 1.25);
 
       ctx.globalAlpha = 1;
       ctx.fillStyle = ENGRAVING_CONFIG.textColor;
       ctx.fillText(text, x, y);
 
-      ctx.globalAlpha = 0.22;
-      ctx.fillStyle = "rgba(0,0,0,0.22)";
-      ctx.fillText(text, x + 0.5, y + 0.6);
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = "rgba(0,0,0,0.18)";
+      ctx.fillText(text, x + 0.38, y + 0.48);
       ctx.restore();
     }
 
@@ -662,23 +675,24 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const centerX = canvas.width / 2;
-      const topY = 300;
+      const topY = 330;
       const fontFamily = "'Noto Serif SC','Noto Serif TC','Noto Serif JP','Microsoft YaHei','PingFang SC','Hiragino Sans',serif";
       const nameFont = "700 " + ENGRAVING_CONFIG.nameFontSize + "px " + fontFamily;
       const dateFont = "500 " + ENGRAVING_CONFIG.dateFontSize + "px " + fontFamily;
       const epitaphFont = "500 " + ENGRAVING_CONFIG.epitaphFontSize + "px " + fontFamily;
+      const safeWidth = canvas.width * 0.54;
 
       const dateLine = [data.birthDate, data.deathDate].filter(Boolean).join(" - ");
 
-      drawEngravedText(ctx, data.name, centerX, topY, nameFont);
-      drawEngravedText(ctx, dateLine, centerX, topY + 130, dateFont);
+      drawEngravedText(ctx, data.name, centerX, topY, nameFont, safeWidth);
+      drawEngravedText(ctx, dateLine, centerX, topY + 125, dateFont, safeWidth);
 
       ctx.font = epitaphFont;
-      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.42, ENGRAVING_CONFIG.maxEpitaphLines);
+      const lines = wrapText(ctx, data.epitaph, safeWidth, ENGRAVING_CONFIG.maxEpitaphLines);
       const step = ENGRAVING_CONFIG.epitaphFontSize + ENGRAVING_CONFIG.lineGap;
-      const startY = topY + 300 - ((lines.length - 1) * step) / 2;
+      const startY = topY + 285 - ((lines.length - 1) * step) / 2;
       lines.forEach(function(line, index) {
-        drawEngravedText(ctx, line, centerX, startY + index * step, epitaphFont);
+        drawEngravedText(ctx, line, centerX, startY + index * step, epitaphFont, safeWidth);
       });
 
       applyTextWear(ctx, canvas.width, canvas.height, ENGRAVING_CONFIG.wearAmount);
