@@ -602,13 +602,13 @@
 
         scene.add(new THREE.HemisphereLight(0xdce8ff, 0x2b211a, 1.20));
         scene.add(new THREE.AmbientLight(0xffffff, 0.72));
-        const moon = new THREE.DirectionalLight(0xbfd6ff, 0.82);
+        const moon = new THREE.DirectionalLight(0xbfd6ff, 0.96);
         moon.position.set(-3.8, 5.8, 5.4);
         scene.add(moon);
-        const warm = new THREE.DirectionalLight(0xffcf96, 0.82);
+        const warm = new THREE.DirectionalLight(0xffcf96, 1.08);
         warm.position.set(4.8, 2.4, 3.6);
         scene.add(warm);
-        const fill = new THREE.DirectionalLight(0xe9eefc, 0.24);
+        const fill = new THREE.DirectionalLight(0xe9eefc, 0.34);
         fill.position.set(0.0, 2.0, 5.8);
         scene.add(fill);
 
@@ -726,38 +726,18 @@
       function tuneMaterial(root) {
         root.traverse(function (child) {
           if (!child.isMesh) return;
-
           child.castShadow = false;
           child.receiveShadow = false;
-
-          if (!child.material) return;
-
-          const arr = Array.isArray(child.material) ? child.material : [child.material];
-
-          arr.forEach(function (mat) {
-            // 运行时修改 GLB 材质，不改模型文件本身
-            if (mat.map) {
-              mat.map.encoding = THREE.sRGBEncoding;
-              mat.map.anisotropy = 8;
-              mat.map.needsUpdate = true;
-            }
-
-            // 石材颜色：压暗、降饱和、偏冷灰，减少“塑料白”
-            if (mat.color) {
-              mat.color.setRGB(0.64, 0.62, 0.55);
-            }
-
-            // 石头不是金属，高粗糙度，弱反光
-            if ("roughness" in mat) mat.roughness = 1.0;
-            if ("metalness" in mat) mat.metalness = 0.0;
-            if ("envMapIntensity" in mat) mat.envMapIntensity = 0.08;
-
-            // 不要透明，不要亮面
-            mat.transparent = false;
-            mat.opacity = 1.0;
-
-            mat.needsUpdate = true;
-          });
+          if (child.material) {
+            const arr = Array.isArray(child.material) ? child.material : [child.material];
+            arr.forEach(function (mat) {
+              if (mat.map) mat.map.encoding = THREE.sRGBEncoding;
+              if (mat.color && mat.color.offsetHSL) mat.color.offsetHSL(0, -0.02, 0.04);
+              if ("roughness" in mat) mat.roughness = 0.96;
+              if ("metalness" in mat) mat.metalness = 0.02;
+              mat.needsUpdate = true;
+            });
+          }
         });
       }
 
