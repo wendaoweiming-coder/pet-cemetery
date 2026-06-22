@@ -355,9 +355,9 @@
       <h2>献上一份小礼物</h2>
       <p>选择一个小物件，轻轻放在墓碑旁。</p>
       <div class="simple-list">
-        <button class="simple-action" onclick="placeFinalGift('🥫 罐头')">🥫 罐头</button>
-        <button class="simple-action" onclick="placeFinalGift('🎾 小球')">🎾 小球</button>
-        <button class="simple-action" onclick="placeFinalGift('🌸 花')">🌸 花</button>
+        <button class="simple-action" onclick="placeFinalGift('can')">🥫 罐头</button>
+        <button class="simple-action" onclick="placeFinalGift('ball')">🎾 小球</button>
+        <button class="simple-action" onclick="placeFinalGift('flower')">🌸 花</button>
       </div>
       <div class="simple-list" id="giftListFinal"></div>
     </div>
@@ -438,7 +438,7 @@
       const langSelect = document.getElementById("languageSelect");
       const backBtn = document.getElementById("backBtn");
 
-      let renderer, scene, camera, pivot, stoneRoot, engravingPlane, engravingTexture;
+      let renderer, scene, camera, pivot, stoneRoot, engravingPlane, engravingTexture, giftGroup;
       let isLoaded = false;
       let isAnimating = false;
 
@@ -606,6 +606,9 @@
 
         pivot = new THREE.Group();
         scene.add(pivot);
+
+        giftGroup = new THREE.Group();
+        pivot.add(giftGroup);
 
         scene.add(new THREE.HemisphereLight(0xdce8ff, 0x2b211a, 1.20));
         scene.add(new THREE.AmbientLight(0xffffff, 0.72));
@@ -789,6 +792,7 @@
           loadingEl.style.display = "none";
           if (useBtn) useBtn.disabled = false;
           renderFinalPanels();
+          syncGiftObjects();
         }, undefined, function (error) {
           finished = true;
           clearTimeout(timer);
@@ -859,6 +863,175 @@
       }
 
 
+
+      function normalizeGiftType(item) {
+        const value = String(item || "");
+        if (value === "can" || value.indexOf("罐") >= 0 || value.indexOf("Can") >= 0 || value.indexOf("🥫") >= 0) return "can";
+        if (value === "ball" || value.indexOf("球") >= 0 || value.indexOf("Ball") >= 0 || value.indexOf("🎾") >= 0) return "ball";
+        if (value === "flower" || value.indexOf("花") >= 0 || value.indexOf("Flower") >= 0 || value.indexOf("🌸") >= 0) return "flower";
+        return value || "gift";
+      }
+
+      function giftLabel(type) {
+        if (type === "can") return "🥫 罐头";
+        if (type === "ball") return "🎾 小球";
+        if (type === "flower") return "🌸 花";
+        return String(type || "");
+      }
+
+      function disposeObject3D(object) {
+        object.traverse(function(child) {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            const arr = Array.isArray(child.material) ? child.material : [child.material];
+            arr.forEach(function(mat) { if (mat) mat.dispose(); });
+          }
+        });
+      }
+
+      function makeCanGift() {
+        const g = new THREE.Group();
+
+        const metal = new THREE.MeshStandardMaterial({
+          color: 0xb8b2a6,
+          roughness: 0.72,
+          metalness: 0.15
+        });
+        const label = new THREE.MeshStandardMaterial({
+          color: 0x8a5a48,
+          roughness: 0.86,
+          metalness: 0.02
+        });
+        const dark = new THREE.MeshStandardMaterial({
+          color: 0x5f5a52,
+          roughness: 0.9,
+          metalness: 0.05
+        });
+
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.22, 32), metal);
+        body.position.y = 0.11;
+        g.add(body);
+
+        const band = new THREE.Mesh(new THREE.CylinderGeometry(0.108, 0.108, 0.11, 32, 1, true), label);
+        band.position.y = 0.11;
+        g.add(band);
+
+        const top = new THREE.Mesh(new THREE.CylinderGeometry(0.108, 0.108, 0.018, 32), dark);
+        top.position.y = 0.225;
+        g.add(top);
+
+        g.scale.setScalar(0.90);
+        return g;
+      }
+
+      function makeBallGift() {
+        const ball = new THREE.Mesh(
+          new THREE.SphereGeometry(0.13, 32, 18),
+          new THREE.MeshStandardMaterial({
+            color: 0xd7c37a,
+            roughness: 0.82,
+            metalness: 0.0
+          })
+        );
+        ball.position.y = 0.13;
+
+        const g = new THREE.Group();
+        g.add(ball);
+
+        const seam = new THREE.Mesh(
+          new THREE.TorusGeometry(0.132, 0.006, 8, 48),
+          new THREE.MeshStandardMaterial({
+            color: 0xf0e2a2,
+            roughness: 0.85,
+            metalness: 0.0
+          })
+        );
+        seam.rotation.x = Math.PI / 2;
+        seam.position.y = 0.13;
+        g.add(seam);
+
+        g.scale.setScalar(0.92);
+        return g;
+      }
+
+      function makeFlowerGift() {
+        const g = new THREE.Group();
+
+        const stemMat = new THREE.MeshStandardMaterial({
+          color: 0x4f6b42,
+          roughness: 0.9,
+          metalness: 0.0
+        });
+        const petalMat = new THREE.MeshStandardMaterial({
+          color: 0xc7b7ad,
+          roughness: 0.95,
+          metalness: 0.0
+        });
+        const centerMat = new THREE.MeshStandardMaterial({
+          color: 0xb59b5e,
+          roughness: 0.92,
+          metalness: 0.0
+        });
+
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.32, 10), stemMat);
+        stem.position.y = 0.16;
+        stem.rotation.z = -0.45;
+        g.add(stem);
+
+        const center = new THREE.Mesh(new THREE.SphereGeometry(0.035, 16, 10), centerMat);
+        center.position.set(0.10, 0.30, 0.00);
+        g.add(center);
+
+        for (let i = 0; i < 6; i += 1) {
+          const p = new THREE.Mesh(new THREE.SphereGeometry(0.038, 16, 10), petalMat);
+          const a = (Math.PI * 2 * i) / 6;
+          p.scale.set(1.35, 0.65, 0.45);
+          p.position.set(0.10 + Math.cos(a) * 0.052, 0.30 + Math.sin(a) * 0.052, 0);
+          g.add(p);
+        }
+
+        g.scale.setScalar(0.88);
+        return g;
+      }
+
+      function makeGiftObject(type) {
+        if (type === "can") return makeCanGift();
+        if (type === "ball") return makeBallGift();
+        if (type === "flower") return makeFlowerGift();
+        return makeBallGift();
+      }
+
+      function syncGiftObjects() {
+        if (!giftGroup) return;
+
+        while (giftGroup.children.length) {
+          const child = giftGroup.children.pop();
+          disposeObject3D(child);
+        }
+
+        const rawItems = getFinalGifts();
+        const types = [];
+        rawItems.forEach(function(item) {
+          const type = normalizeGiftType(item);
+          if (types.indexOf(type) === -1) types.push(type);
+        });
+
+        const slots = [
+          { x: -0.58, y: 0.02, z: 0.68, r: 0.10 },
+          { x: 0.56, y: 0.02, z: 0.70, r: -0.18 },
+          { x: -0.18, y: 0.02, z: 0.82, r: 0.32 }
+        ];
+
+        types.slice(0, 3).forEach(function(type, index) {
+          const obj = makeGiftObject(type);
+          const slot = slots[index] || slots[0];
+          obj.position.set(slot.x, slot.y, slot.z);
+          obj.rotation.y = slot.r;
+          giftGroup.add(obj);
+        });
+      }
+
+
       function getMemorialForFinal() {
         try {
           return JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
@@ -915,11 +1088,12 @@
         renderFinalPanels();
       };
 
-      window.placeFinalGift = function(name) {
-        const gifts = getFinalGifts();
-        gifts.unshift(name);
+      window.placeFinalGift = function(type) {
+        const gifts = getFinalGifts().map(normalizeGiftType);
+        gifts.unshift(normalizeGiftType(type));
         localStorage.setItem("memorialPlacedItems", JSON.stringify(gifts.slice(0, 8)));
         renderFinalPanels();
+        syncGiftObjects();
       };
 
       function renderFinalPanels() {
@@ -977,7 +1151,7 @@
           gifts.forEach(function(gift) {
             const div = document.createElement("div");
             div.className = "simple-item";
-            div.textContent = gift;
+            div.textContent = giftLabel(normalizeGiftType(gift));
             giftList.appendChild(div);
           });
         }
