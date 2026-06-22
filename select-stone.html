@@ -292,12 +292,12 @@
         ctx.textBaseline = "middle";
 
         // 这里只画“文字形状遮罩”，真正的凹陷、高光、阴影交给下面的 ShaderMaterial 生成
-        ctx.fillStyle = "rgba(255,255,255,0.92)";
+        ctx.fillStyle = "rgba(255,255,255,0.86)";
         ctx.fillText(text, x, y);
 
         // 轻微扩边，让字槽有厚度
         ctx.lineWidth = Math.max(2, fontSize * 0.035);
-        ctx.strokeStyle = "rgba(255,255,255,0.42)";
+        ctx.strokeStyle = "rgba(255,255,255,0.30)";
         ctx.strokeText(text, x, y);
 
         // 很少量磨损：让边缘不那么数码，但不影响可读性
@@ -443,7 +443,7 @@
           uniforms: {
             map: { value: engravingTexture },
             texel: { value: new THREE.Vector2(1 / ENGRAVE.canvasSize, 1 / ENGRAVE.canvasSize) },
-            opacityValue: { value: 0.82 }
+            opacityValue: { value: 0.78 }
           },
           vertexShader: [
             "varying vec2 vUv;",
@@ -457,22 +457,41 @@
             "uniform vec2 texel;",
             "uniform float opacityValue;",
             "varying vec2 vUv;",
+            "float hash(vec2 p) {",
+            "  p = fract(p * vec2(123.34, 456.21));",
+            "  p += dot(p, p + 45.32);",
+            "  return fract(p.x * p.y);",
+            "}",
             "void main() {",
             "  float a = texture2D(map, vUv).a;",
-            "  if (a < 0.018) discard;",
-            "  float l = texture2D(map, vUv - vec2(texel.x * 2.0, 0.0)).a;",
-            "  float r = texture2D(map, vUv + vec2(texel.x * 2.0, 0.0)).a;",
-            "  float u = texture2D(map, vUv + vec2(0.0, texel.y * 2.0)).a;",
-            "  float d = texture2D(map, vUv - vec2(0.0, texel.y * 2.0)).a;",
-            "  float bevel = (r + d - l - u) * 0.55;",
-            "  float edge = abs(r - l) + abs(u - d);",
-            "  vec3 groove = vec3(0.18, 0.19, 0.19);",
-            "  vec3 dark = vec3(0.10, 0.105, 0.105);",
-            "  vec3 light = vec3(0.56, 0.56, 0.52);",
-            "  vec3 color = groove;",
-            "  color = mix(color, dark, clamp(-bevel * 1.4 + edge * 0.18, 0.0, 0.55));",
-            "  color = mix(color, light, clamp(bevel * 1.25, 0.0, 0.36));",
-            "  float alpha = a * opacityValue * (0.42 + edge * 0.32);",
+            "  if (a < 0.016) discard;",
+            "  float l1 = texture2D(map, vUv - vec2(texel.x * 2.0, 0.0)).a;",
+            "  float r1 = texture2D(map, vUv + vec2(texel.x * 2.0, 0.0)).a;",
+            "  float u1 = texture2D(map, vUv + vec2(0.0, texel.y * 2.0)).a;",
+            "  float d1 = texture2D(map, vUv - vec2(0.0, texel.y * 2.0)).a;",
+            "  float l2 = texture2D(map, vUv - vec2(texel.x * 5.0, 0.0)).a;",
+            "  float r2 = texture2D(map, vUv + vec2(texel.x * 5.0, 0.0)).a;",
+            "  float u2 = texture2D(map, vUv + vec2(0.0, texel.y * 5.0)).a;",
+            "  float d2 = texture2D(map, vUv - vec2(0.0, texel.y * 5.0)).a;",
+            "  float edgeFine = abs(r1 - l1) + abs(u1 - d1);",
+            "  float edgeWide = abs(r2 - l2) + abs(u2 - d2);",
+            "  float bevelLight = clamp((l2 + u2 - r2 - d2) * 0.85 + edgeFine * 0.10, 0.0, 1.0);",
+            "  float bevelDark = clamp((r2 + d2 - l2 - u2) * 0.95 + edgeFine * 0.18, 0.0, 1.0);",
+            "  float grain1 = hash(floor(vUv * 380.0));",
+            "  float grain2 = hash(floor(vUv * 910.0));",
+            "  float wear = smoothstep(0.08, 0.92, grain1) * 0.16 + smoothstep(0.78, 1.0, grain2) * 0.18;",
+            "  vec3 groove = vec3(0.135, 0.140, 0.135);",
+            "  vec3 coldDust = vec3(0.300, 0.300, 0.275);",
+            "  vec3 brightRim = vec3(0.610, 0.600, 0.540);",
+            "  vec3 deepShadow = vec3(0.060, 0.065, 0.062);",
+            "  vec3 color = mix(groove, coldDust, grain1 * 0.18);",
+            "  color = mix(color, brightRim, bevelLight * 0.42);",
+            "  color = mix(color, deepShadow, bevelDark * 0.54);",
+            "  color *= 0.92 + grain2 * 0.12;",
+            "  float inner = smoothstep(0.08, 0.82, a);",
+            "  float edge = clamp(edgeFine * 1.8 + edgeWide * 0.7, 0.0, 1.0);",
+            "  float alpha = (inner * 0.30 + edge * 0.36) * opacityValue;",
+            "  alpha *= 1.0 - wear;",
             "  gl_FragColor = vec4(color, alpha);",
             "}"
           ].join("\n"),
