@@ -43,6 +43,7 @@
     .hero-copy {
       position: absolute; top: 52px; left: 62%; transform: translateX(-50%); z-index: 14;
       width: min(620px, 44vw); text-align: center; pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease;
     }
     .hero-copy h1 {
       margin: 0; font-size: clamp(46px, 4.2vw, 76px); line-height: 1.05;
@@ -54,6 +55,7 @@
     }
     .left-panel {
       position: absolute; left: 32px; top: 150px; width: 410px; z-index: 18;
+      transition: opacity .35s ease, transform .35s ease;
     }
     .panel-title {
       margin: 0 0 8px; font-size: 34px; font-weight: 850;
@@ -101,6 +103,173 @@
       color: rgba(255,255,255,.92); font-size: 18px; font-weight: 750;
       text-shadow: 0 4px 16px rgba(0,0,0,.30); white-space: nowrap; pointer-events: none;
     }
+
+    body.final-placing .left-panel,
+    body.final-placing .hero-copy,
+    body.placed-mode .left-panel,
+    body.placed-mode .hero-copy {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.final-placing .hero-copy,
+    body.placed-mode .hero-copy {
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .final-dock {
+      position: absolute;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%) translateY(18px);
+      z-index: 32;
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 999px;
+      background: rgba(32, 32, 28, 0.54);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+
+    body.placed-mode .final-dock {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .final-dock button {
+      min-width: 72px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.95);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .final-dock button:hover {
+      background: rgba(255,255,255,.15);
+    }
+
+    .simple-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,.58);
+    }
+
+    .simple-panel.show { display: flex; }
+
+    .simple-card {
+      position: relative;
+      width: min(720px, 92vw);
+      max-height: 82vh;
+      overflow: auto;
+      padding: 30px;
+      border-radius: 28px;
+      background: rgba(255,250,245,.96);
+      color: #42362f;
+      box-shadow: 0 24px 80px rgba(0,0,0,.42);
+    }
+
+    .simple-card h2 {
+      margin: 0 0 16px;
+      font-size: 25px;
+    }
+
+    .simple-card p {
+      margin: 0;
+      line-height: 1.8;
+      color: rgba(66,54,47,.78);
+    }
+
+    .simple-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(66,54,47,.10);
+      color: #42362f;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .simple-input {
+      width: 100%;
+      min-height: 110px;
+      resize: vertical;
+      border-radius: 18px;
+      border: 1px solid rgba(66,54,47,.18);
+      padding: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #42362f;
+      background: rgba(255,255,255,.64);
+    }
+
+    .simple-action {
+      margin-top: 14px;
+      height: 44px;
+      padding: 0 22px;
+      border: none;
+      border-radius: 999px;
+      background: #6d5a4d;
+      color: #fffaf5;
+      font-size: 15px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .simple-list {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .simple-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(66,54,47,.07);
+      color: rgba(66,54,47,.76);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .simple-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .simple-photo {
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(66,54,47,.08);
+    }
+
+    .simple-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     @media (max-width: 900px) {
       .brand { top: 16px; left: 16px; font-size: 16px; }
       .top-actions { top: 14px; right: 14px; gap: 8px; }
@@ -154,6 +323,53 @@
       <div id="stage"></div>
       <div class="loading-text" id="stageLoading">正在加载墓碑模型...</div>
     </div>
+
+    <div class="final-dock" id="finalDock">
+      <button onclick="openFinalPanel('storyPanelFinal')">故事</button>
+      <button onclick="openFinalPanel('photosPanelFinal')">相册</button>
+      <button onclick="openFinalPanel('giftPanelFinal')">礼物</button>
+      <button onclick="openFinalPanel('messagePanelFinal')">留言</button>
+    </div>
+  </div>
+
+  <div class="simple-panel" id="storyPanelFinal" onclick="closeFinalPanelByBg(event)">
+    <div class="simple-card">
+      <button class="simple-close" onclick="closeFinalPanels()">×</button>
+      <h2>宠物故事</h2>
+      <p id="storyTextFinal">还没有写下故事。</p>
+    </div>
+  </div>
+
+  <div class="simple-panel" id="photosPanelFinal" onclick="closeFinalPanelByBg(event)">
+    <div class="simple-card">
+      <button class="simple-close" onclick="closeFinalPanels()">×</button>
+      <h2>记忆相册</h2>
+      <div class="simple-grid" id="photosGridFinal"></div>
+    </div>
+  </div>
+
+  <div class="simple-panel" id="giftPanelFinal" onclick="closeFinalPanelByBg(event)">
+    <div class="simple-card">
+      <button class="simple-close" onclick="closeFinalPanels()">×</button>
+      <h2>献上一份小礼物</h2>
+      <p>选择一个小物件，轻轻放在墓碑旁。</p>
+      <div class="simple-list">
+        <button class="simple-action" onclick="placeFinalGift('🥫 罐头')">🥫 罐头</button>
+        <button class="simple-action" onclick="placeFinalGift('🎾 小球')">🎾 小球</button>
+        <button class="simple-action" onclick="placeFinalGift('🌸 花')">🌸 花</button>
+      </div>
+      <div class="simple-list" id="giftListFinal"></div>
+    </div>
+  </div>
+
+  <div class="simple-panel" id="messagePanelFinal" onclick="closeFinalPanelByBg(event)">
+    <div class="simple-card">
+      <button class="simple-close" onclick="closeFinalPanels()">×</button>
+      <h2>留言</h2>
+      <textarea id="messageInputFinal" class="simple-input" placeholder="写下一句话..."></textarea>
+      <button class="simple-action" onclick="addFinalMessage()">留下留言</button>
+      <div class="simple-list" id="messageListFinal"></div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
@@ -189,7 +405,7 @@
         previewScale: 1.00,
         finalLeft: 50.2,
         finalTop: 63.2,
-        finalScale: 0.50
+        finalScale: 0.54
       };
 
       const ENGRAVE = {
@@ -199,15 +415,15 @@
         planeY: 0.97,
         planeZ: 0.42,
         canvasSize: 1536,
-        nameSize: 222,
-        dateSize: 82,
-        epitaphSize: 88,
-        nameY: 510,
-        dateY: 728,
-        epitaphY: 980,
-        lineGap: 118,
+        nameSize: 255,
+        dateSize: 96,
+        epitaphSize: 104,
+        nameY: 500,
+        dateY: 720,
+        epitaphY: 965,
+        lineGap: 128,
         maxLines: 3,
-        maxWidthRatio: 0.62
+        maxWidthRatio: 0.70
       };
 
       const stageWrap = document.getElementById("stageWrap");
@@ -292,12 +508,12 @@
         ctx.textBaseline = "middle";
 
         // 这里只画“文字形状遮罩”，真正的凹陷、高光、阴影交给下面的 ShaderMaterial 生成
-        ctx.fillStyle = "rgba(255,255,255,0.86)";
+        ctx.fillStyle = "rgba(255,255,255,0.96)";
         ctx.fillText(text, x, y);
 
         // 轻微扩边，让字槽有厚度
         ctx.lineWidth = Math.max(2, fontSize * 0.035);
-        ctx.strokeStyle = "rgba(255,255,255,0.30)";
+        ctx.strokeStyle = "rgba(255,255,255,0.42)";
         ctx.strokeText(text, x, y);
 
         // 很少量磨损：让边缘不那么数码，但不影响可读性
@@ -443,7 +659,7 @@
           uniforms: {
             map: { value: engravingTexture },
             texel: { value: new THREE.Vector2(1 / ENGRAVE.canvasSize, 1 / ENGRAVE.canvasSize) },
-            opacityValue: { value: 0.78 }
+            opacityValue: { value: 0.92 }
           },
           vertexShader: [
             "varying vec2 vUv;",
@@ -464,7 +680,7 @@
             "}",
             "void main() {",
             "  float a = texture2D(map, vUv).a;",
-            "  if (a < 0.016) discard;",
+            "  if (a < 0.012) discard;",
             "  float l1 = texture2D(map, vUv - vec2(texel.x * 2.0, 0.0)).a;",
             "  float r1 = texture2D(map, vUv + vec2(texel.x * 2.0, 0.0)).a;",
             "  float u1 = texture2D(map, vUv + vec2(0.0, texel.y * 2.0)).a;",
@@ -480,18 +696,18 @@
             "  float grain1 = hash(floor(vUv * 380.0));",
             "  float grain2 = hash(floor(vUv * 910.0));",
             "  float wear = smoothstep(0.08, 0.92, grain1) * 0.16 + smoothstep(0.78, 1.0, grain2) * 0.18;",
-            "  vec3 groove = vec3(0.135, 0.140, 0.135);",
-            "  vec3 coldDust = vec3(0.300, 0.300, 0.275);",
+            "  vec3 groove = vec3(0.095, 0.100, 0.098);",
+            "  vec3 coldDust = vec3(0.210, 0.215, 0.205);",
             "  vec3 brightRim = vec3(0.610, 0.600, 0.540);",
-            "  vec3 deepShadow = vec3(0.060, 0.065, 0.062);",
+            "  vec3 deepShadow = vec3(0.035, 0.038, 0.038);",
             "  vec3 color = mix(groove, coldDust, grain1 * 0.18);",
             "  color = mix(color, brightRim, bevelLight * 0.42);",
             "  color = mix(color, deepShadow, bevelDark * 0.54);",
             "  color *= 0.92 + grain2 * 0.12;",
             "  float inner = smoothstep(0.08, 0.82, a);",
             "  float edge = clamp(edgeFine * 1.8 + edgeWide * 0.7, 0.0, 1.0);",
-            "  float alpha = (inner * 0.30 + edge * 0.36) * opacityValue;",
-            "  alpha *= 1.0 - wear;",
+            "  float alpha = (inner * 0.48 + edge * 0.44) * opacityValue;",
+            "  alpha *= 1.0 - wear * 0.55;",
             "  gl_FragColor = vec4(color, alpha);",
             "}"
           ].join("\n"),
@@ -570,6 +786,8 @@
         if (!isLoaded || isAnimating) return;
         isAnimating = true;
         useBtn.disabled = true;
+        document.body.classList.add("final-placing");
+
         const start = {
           x: pivot.position.x,
           y: pivot.position.y,
@@ -601,12 +819,19 @@
           pivot.scale.setScalar(mix(start.s, end.s, k));
           pivot.rotation.y = mix(start.r, end.r, k);
           applyStagePose(mix(start.left, end.left, k), mix(start.top, end.top, k), mix(start.wrapScale, end.wrapScale, k));
+
           if (p < 1) {
             requestAnimationFrame(step);
           } else {
             localStorage.setItem("selectedStoneStyle", "rounded-real-glb");
             localStorage.setItem("selectedStoneModel", MODEL_PATH);
-            window.location.href = "./cemetery.html";
+            document.body.classList.remove("final-placing");
+            document.body.classList.add("placed-mode");
+            useBtn.disabled = false;
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState(null, "", "./cemetery.html");
+            }
+            renderFinalPanels();
           }
         }
         requestAnimationFrame(step);
@@ -617,6 +842,132 @@
         if (renderer && scene && camera) renderer.render(scene, camera);
       }
 
+
+      function getMemorialForFinal() {
+        try {
+          return JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function getFinalMessages() {
+        try {
+          return JSON.parse(localStorage.getItem("memorialMessages") || "[]");
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function getFinalGifts() {
+        try {
+          return JSON.parse(localStorage.getItem("memorialPlacedItems") || "[]");
+        } catch (error) {
+          return [];
+        }
+      }
+
+      window.openFinalPanel = function(id) {
+        renderFinalPanels();
+        document.querySelectorAll(".simple-panel").forEach(function(panel) {
+          panel.classList.remove("show");
+        });
+        const panel = document.getElementById(id);
+        if (panel) panel.classList.add("show");
+      };
+
+      window.closeFinalPanels = function() {
+        document.querySelectorAll(".simple-panel").forEach(function(panel) {
+          panel.classList.remove("show");
+        });
+      };
+
+      window.closeFinalPanelByBg = function(event) {
+        if (event.target.classList.contains("simple-panel")) {
+          closeFinalPanels();
+        }
+      };
+
+      window.addFinalMessage = function() {
+        const input = document.getElementById("messageInputFinal");
+        const value = input.value.trim();
+        if (!value) return;
+        const messages = getFinalMessages();
+        messages.unshift(value);
+        localStorage.setItem("memorialMessages", JSON.stringify(messages.slice(0, 20)));
+        input.value = "";
+        renderFinalPanels();
+      };
+
+      window.placeFinalGift = function(name) {
+        const gifts = getFinalGifts();
+        gifts.unshift(name);
+        localStorage.setItem("memorialPlacedItems", JSON.stringify(gifts.slice(0, 8)));
+        renderFinalPanels();
+      };
+
+      function renderFinalPanels() {
+        const data = getMemorialForFinal();
+
+        const storyBox = document.getElementById("storyTextFinal");
+        if (storyBox) {
+          const story = data.story || data.petStory || "";
+          storyBox.textContent = story || "还没有写下故事。";
+          storyBox.className = story ? "" : "empty-text";
+        }
+
+        const photosBox = document.getElementById("photosGridFinal");
+        if (photosBox) {
+          photosBox.innerHTML = "";
+          const photos = [];
+          if (data.photo) photos.push(data.photo);
+          if (Array.isArray(data.publicPhotos)) photos.push.apply(photos, data.publicPhotos);
+          if (Array.isArray(data.privatePhotos)) photos.push.apply(photos, data.privatePhotos);
+
+          if (!photos.length) {
+            photosBox.innerHTML = '<p class="empty-text">还没有上传照片。</p>';
+          } else {
+            photos.forEach(function(src) {
+              const div = document.createElement("div");
+              div.className = "simple-photo";
+              const img = document.createElement("img");
+              img.src = src;
+              div.appendChild(img);
+              photosBox.appendChild(div);
+            });
+          }
+        }
+
+        const messageList = document.getElementById("messageListFinal");
+        if (messageList) {
+          const messages = getFinalMessages();
+          messageList.innerHTML = "";
+          if (!messages.length) {
+            messageList.innerHTML = '<div class="simple-item empty-text">还没有留言。</div>';
+          } else {
+            messages.forEach(function(msg) {
+              const div = document.createElement("div");
+              div.className = "simple-item";
+              div.textContent = msg;
+              messageList.appendChild(div);
+            });
+          }
+        }
+
+        const giftList = document.getElementById("giftListFinal");
+        if (giftList) {
+          const gifts = getFinalGifts();
+          giftList.innerHTML = "";
+          gifts.forEach(function(gift) {
+            const div = document.createElement("div");
+            div.className = "simple-item";
+            div.textContent = gift;
+            giftList.appendChild(div);
+          });
+        }
+      }
+
+
       function init() {
         applyLanguage(lang());
         backBtn.addEventListener("click", function () { window.location.href = "./create.html"; });
@@ -624,6 +975,7 @@
         useBtn.addEventListener("click", animateToFinal);
         window.addEventListener("resize", resizeScene);
         window.addEventListener("storage", function (event) { if (event.key === "myPetMemorial") updateEngravingTexture(); });
+        document.addEventListener("keydown", function(event) { if (event.key === "Escape") closeFinalPanels(); });
         createScene();
         loadModel();
         loop();
