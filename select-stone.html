@@ -183,21 +183,21 @@
       };
 
       const ENGRAVE = {
-        planeWidth: 1.05,
-        planeHeight: 1.24,
-        planeX: -0.02,
-        planeY: 1.30,
+        planeWidth: 1.22,
+        planeHeight: 1.44,
+        planeX: -0.01,
+        planeY: 1.42,
         planeZ: 0.38,
-        canvasSize: 1024,
-        nameSize: 96,
-        dateSize: 38,
-        epitaphSize: 42,
-        nameY: 260,
-        dateY: 415,
-        epitaphY: 585,
-        lineGap: 58,
+        canvasSize: 1536,
+        nameSize: 148,
+        dateSize: 56,
+        epitaphSize: 60,
+        nameY: 390,
+        dateY: 585,
+        epitaphY: 820,
+        lineGap: 82,
         maxLines: 3,
-        maxWidthRatio: 0.54
+        maxWidthRatio: 0.72
       };
 
       const stageEl = document.getElementById("stage");
@@ -277,11 +277,11 @@
         ctx.font = weight + " " + fontSize + "px " + fontFamily;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = "rgba(230,235,235,0.13)";
+        ctx.fillStyle = "rgba(245,248,248,0.16)";
         ctx.fillText(text, x - 1.0, y - 1.2);
-        ctx.fillStyle = "rgba(0,0,0,0.34)";
-        ctx.fillText(text, x + 1.4, y + 1.8);
-        ctx.fillStyle = "rgba(38,42,44,0.86)";
+        ctx.fillStyle = "rgba(0,0,0,0.38)";
+        ctx.fillText(text, x + 1.6, y + 2.0);
+        ctx.fillStyle = "rgba(34,38,40,0.92)";
         ctx.fillText(text, x, y);
         ctx.restore();
       }
