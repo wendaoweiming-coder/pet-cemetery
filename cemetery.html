@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Pet Memorial</title>
+  <title>星眠宠物纪念园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
@@ -13,9 +13,21 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      font-family: "Microsoft YaHei", Arial, sans-serif;
-      background: #0d1110;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+        "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", Arial, sans-serif;
       color: #fffaf5;
+      background: #081018;
+    }
+
+    body {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(7, 11, 19, 0.05) 0%,
+          rgba(7, 11, 19, 0.14) 54%,
+          rgba(7, 11, 19, 0.36) 100%
+        ),
+        url("cemetery-bg.png") center center / cover no-repeat;
     }
 
     button, a, select, textarea {
@@ -24,131 +36,122 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .page-bg {
+    #viewer {
       position: fixed;
       inset: 0;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(7, 11, 19, 0.05) 0%,
-          rgba(7, 11, 19, 0.13) 55%,
-          rgba(7, 11, 19, 0.30) 100%
-        ),
-        url("cemetery-bg.png") center center / cover no-repeat;
-      transform: scale(1.08);
-      transform-origin: center center;
-      z-index: 0;
-    }
-
-    .page-bg::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at center 62%, rgba(255, 231, 190, 0.08), transparent 20%),
-        radial-gradient(circle at center 64%, rgba(255, 255, 255, 0.04), transparent 32%);
+      z-index: 2;
       pointer-events: none;
     }
 
-    .page-shell {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+    #viewer canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      pointer-events: none;
+    }
+
+    .page-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at center 54%, rgba(255, 224, 150, 0.06), transparent 22%),
+        linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.18));
     }
 
     .memorial-header {
-      position: relative;
-      z-index: 30;
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 30px 34px 0;
+      position: fixed;
+      top: 28px;
+      left: 38px;
+      right: 38px;
+      z-index: 20;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 18px;
     }
 
     .memorial-logo {
-      color: rgba(255, 250, 245, 0.96);
+      color: rgba(255,255,255,0.95);
       text-decoration: none;
       font-size: 18px;
-      text-shadow: 0 3px 16px rgba(0,0,0,0.36);
+      font-weight: 700;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.35);
     }
 
     .header-actions {
       display: flex;
-      gap: 12px;
       align-items: center;
+      gap: 12px;
     }
 
     .soft-button,
-    .language-select,
-    .bottom-button {
-      border: 1px solid rgba(255, 250, 245, 0.30);
-      background: rgba(255, 250, 245, 0.08);
-      color: #fffaf5;
-      padding: 10px 16px;
+    .language-select {
+      height: 48px;
       border-radius: 999px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      text-decoration: none;
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.25s ease;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(8, 12, 18, 0.60);
+      color: rgba(255,255,255,0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 10px 28px rgba(0,0,0,0.22);
+      font-size: 15px;
+      font-weight: 650;
     }
 
-    .soft-button:hover,
-    .language-select:hover,
-    .bottom-button:hover {
-      background: rgba(255, 250, 245, 0.16);
-      border-color: rgba(255, 250, 245, 0.42);
+    .soft-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      padding: 0 20px;
+      text-decoration: none;
     }
 
     .language-select {
-      min-width: 146px;
+      min-width: 132px;
+      padding: 0 18px;
+      cursor: pointer;
     }
 
     .language-select option {
-      color: #2d2520;
-      background: #fffaf5;
+      color: #111;
+      background: #fff;
     }
 
-    .main-stage {
-      position: relative;
-      flex: 1;
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 34px 116px;
+    .loading-text,
+    .error-text {
+      position: fixed;
+      left: 50%;
+      top: 53%;
+      transform: translate(-50%, -50%);
+      z-index: 30;
+      color: rgba(255,255,255,0.92);
+      font-size: 18px;
+      font-weight: 700;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.34);
+      pointer-events: none;
     }
 
-    .stone-scene-wrap {
-      position: relative;
-      width: min(350px, 43vw);
-      height: min(445px, 55vh);
-      min-width: 300px;
-      min-height: 390px;
-      transform: translate(-72px, 4px);
-    }
-
-    #stoneScene {
-      position: absolute;
-      inset: 0;
-      border-radius: 26px;
+    .error-text {
+      max-width: 520px;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: rgba(72, 18, 18, 0.74);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: none;
+      line-height: 1.7;
+      text-align: center;
     }
 
     .bottom-dock {
       position: fixed;
       left: 50%;
       bottom: 26px;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%);
       z-index: 40;
       display: flex;
       gap: 12px;
@@ -156,9 +159,28 @@
       border-radius: 999px;
       background: rgba(20, 22, 20, 0.36);
       border: 1px solid rgba(255, 250, 245, 0.16);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 18px 40px rgba(0,0,0,0.24);
+    }
+
+    .bottom-button {
+      min-width: 76px;
+      height: 48px;
+      padding: 0 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.95);
+      font-size: 16px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .bottom-button:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.13);
     }
 
     .modal-layer {
@@ -204,7 +226,7 @@
     .modal-card h2 {
       margin: 0 0 18px;
       font-size: 26px;
-      font-weight: 500;
+      font-weight: 650;
       color: #4b3d35;
     }
 
@@ -225,7 +247,7 @@
     .photo-block h3 {
       margin: 0 0 14px;
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 650;
       color: #4b3d35;
     }
 
@@ -240,8 +262,8 @@
       border-radius: 18px;
       overflow: hidden;
       background: rgba(120, 95, 70, 0.08);
-      border: 1px solid rgba(134, 103, 75, 0.16);
-      cursor: zoom-in;
+      border: 1px solid rgba(134, 104, 76, 0.16);
+      cursor: pointer;
     }
 
     .gallery-photo img {
@@ -251,138 +273,149 @@
       display: block;
     }
 
-    .gift-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .message-input {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 18px;
+      border: 1px solid rgba(75, 61, 53, 0.16);
+      padding: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #4b3d35;
+      background: rgba(255,255,255,0.64);
     }
 
-    .gift-buttons button,
-    .message-box button {
+    .modal-action {
+      margin-top: 14px;
+      height: 44px;
+      padding: 0 22px;
       border: none;
-      background: #715843;
-      color: #fffaf5;
-      padding: 11px 16px;
       border-radius: 999px;
+      background: #6d5a4d;
+      color: #fffaf5;
+      font-size: 15px;
+      font-weight: 650;
       cursor: pointer;
+    }
+
+    .message-list {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .message-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(75, 61, 53, 0.07);
+      color: rgba(75, 61, 53, 0.76);
+      line-height: 1.7;
       font-size: 14px;
     }
 
-    .animal-status {
-      margin-top: 14px;
-      padding: 13px 15px;
-      border-radius: 18px;
-      background: rgba(118, 91, 66, 0.08);
-      color: rgba(75, 61, 53, 0.66);
-      font-size: 13px;
-      line-height: 1.6;
+    .gift-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 18px 0;
     }
 
-    .placed-items {
-      margin-top: 14px;
+    .gift-item {
+      height: 92px;
+      border: 1px solid rgba(75, 61, 53, 0.12);
+      border-radius: 20px;
+      background: rgba(75, 61, 53, 0.06);
+      cursor: pointer;
+      font-size: 28px;
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      min-height: 28px;
-    }
-
-    .placed-item-badge {
-      display: inline-flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(113, 88, 67, 0.10);
-      color: rgba(75, 61, 53, 0.72);
-      font-size: 13px;
-    }
-
-    .message-box textarea {
-      width: 100%;
-      height: 108px;
-      border: 1px solid rgba(134, 103, 75, 0.22);
-      background: rgba(255,255,255,0.72);
       color: #4b3d35;
-      padding: 14px;
-      border-radius: 18px;
-      font-size: 14px;
-      resize: none;
     }
 
-    .message-list { margin-top: 14px; }
+    .gift-item span {
+      font-size: 13px;
+      color: rgba(75, 61, 53, 0.62);
+    }
 
-    .message-item {
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(134, 103, 75, 0.14);
-      color: rgba(75, 61, 53, 0.72);
-      line-height: 1.6;
-      font-size: 14px;
+    .placed-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .placed-item-badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(75, 61, 53, 0.08);
+      color: rgba(75, 61, 53, 0.70);
+      font-size: 13px;
     }
 
     .photo-lightbox {
       position: fixed;
       inset: 0;
-      z-index: 200;
-      background: rgba(5, 7, 8, 0.86);
+      z-index: 160;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 28px;
+      background: rgba(0,0,0,0.78);
+      padding: 26px;
+      cursor: pointer;
     }
 
     .photo-lightbox.show { display: flex; }
 
     .photo-lightbox img {
-      max-width: min(92vw, 1100px);
+      max-width: min(920px, 92vw);
       max-height: 86vh;
-      object-fit: contain;
-      border-radius: 18px;
-      box-shadow: 0 26px 80px rgba(0,0,0,0.55);
-    }
-
-    .lightbox-close {
-      position: fixed;
-      top: 22px;
-      right: 24px;
-      width: 42px;
-      height: 42px;
-      border: 1px solid rgba(255,255,255,0.32);
-      background: rgba(255,255,255,0.10);
-      color: #fffaf5;
-      border-radius: 50%;
-      font-size: 26px;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 210;
+      border-radius: 22px;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.55);
     }
 
     @media (max-width: 760px) {
       .memorial-header {
-        padding: 22px 16px 0;
+        top: 16px;
+        left: 16px;
+        right: 16px;
         align-items: flex-start;
       }
 
+      .memorial-logo { font-size: 15px; }
+
       .header-actions {
-        flex-direction: column;
-        align-items: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
-      .stone-scene-wrap {
-        width: min(90vw, 360px);
-        height: min(56vh, 440px);
-        transform: translateY(56px);
+      .soft-button,
+      .language-select {
+        height: 40px;
+        font-size: 13px;
+        padding: 0 14px;
+        min-width: auto;
       }
 
       .bottom-dock {
-        width: calc(100vw - 24px);
-        justify-content: center;
-        flex-wrap: wrap;
-        border-radius: 28px;
-        bottom: 18px;
+        bottom: 16px;
+        gap: 8px;
+        padding: 9px;
       }
 
-      .photo-gallery {
+      .bottom-button {
+        min-width: 62px;
+        height: 42px;
+        padding: 0 14px;
+        font-size: 14px;
+      }
+
+      .photo-gallery,
+      .gift-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
@@ -390,74 +423,56 @@
 </head>
 
 <body>
-  <div class="page-bg"></div>
+  <div id="viewer"></div>
+  <div class="page-vignette"></div>
 
-  <div class="page-shell">
-    <header class="memorial-header">
-      <a href="index.html" class="memorial-logo" data-key="logo">Starlit Pet Memorial Garden</a>
+  <header class="memorial-header">
+    <a href="index.html" class="memorial-logo" data-key="logo">星眠宠物纪念园</a>
 
-      <div class="header-actions">
-        <a href="create.html" class="soft-button" data-key="editBtn">Edit Info</a>
-        <a href="select-stone.html" class="soft-button" data-key="changeStoneBtn">Change Stone</a>
+    <div class="header-actions">
+      <a href="create.html" class="soft-button" data-key="editBtn">编辑</a>
+      <a href="select-stone.html" class="soft-button" data-key="changeStoneBtn">更换墓碑</a>
 
-        <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
-          <option value="zh">简体中文</option>
-          <option value="zh-TW">繁體中文</option>
-          <option value="ja">日本語</option>
-          <option value="ko">한국어</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-          <option value="de">Deutsch</option>
-          <option value="pt">Português</option>
-          <option value="it">Italiano</option>
-          <option value="th">ไทย</option>
-          <option value="vi">Tiếng Việt</option>
-          <option value="id">Bahasa Indonesia</option>
-          <option value="ms">Bahasa Melayu</option>
-          <option value="hi">हिन्दी</option>
-          <option value="ar">العربية</option>
-        </select>
-      </div>
-    </header>
+      <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
+        <option value="zh">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+      </select>
+    </div>
+  </header>
 
-    <main class="main-stage">
-      <div class="stone-scene-wrap">
-        <div id="stoneScene"></div>
-      </div>
-    </main>
-  </div>
+  <div class="loading-text" id="loadingText">正在加载纪念碑...</div>
+  <div class="error-text" id="errorText">墓碑模型加载失败，请检查 assets/models/tombstone-real.glb</div>
 
   <div class="bottom-dock">
-    <button class="bottom-button" onclick="openPanel('storyPanel')" data-key="storyBtn">Story</button>
-    <button class="bottom-button" onclick="openPanel('photosPanel')" data-key="photosBtn">Photos</button>
-    <button class="bottom-button" onclick="openPanel('giftPanel')" data-key="giftBtn">Gift</button>
-    <button class="bottom-button" onclick="openPanel('messagePanel')" data-key="messageBtnShort">Messages</button>
+    <button class="bottom-button" onclick="openPanel('storyPanel')" data-key="storyBtn">故事</button>
+    <button class="bottom-button" onclick="openPanel('photosPanel')" data-key="photosBtn">相册</button>
+    <button class="bottom-button" onclick="openPanel('giftPanel')" data-key="giftBtn">礼物</button>
+    <button class="bottom-button" onclick="openPanel('messagePanel')" data-key="messageBtnShort">留言</button>
   </div>
 
   <div class="modal-layer" id="storyPanel" onclick="closePanels(event)">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="storyTitle">Pet Story</h2>
-      <p id="petStoryDisplay" class="empty-text">No story has been written yet.</p>
+      <h2 data-key="storyTitle">宠物故事</h2>
+      <p id="petStoryDisplay" class="empty-text">还没有写下故事。</p>
     </div>
   </div>
 
   <div class="modal-layer" id="photosPanel" onclick="closePanels(event)">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="photosTitle">Memory Photos</h2>
+      <h2 data-key="photosTitle">记忆相册</h2>
 
       <div class="photo-block">
-        <h3 data-key="publicPhotosTitle">Public Memory Photos</h3>
+        <h3 data-key="publicPhotosTitle">公开照片</h3>
         <div id="publicPhotosDisplay" class="photo-gallery"></div>
       </div>
 
       <div class="photo-block">
-        <h3 data-key="privatePhotosTitle">Private Memory Photos</h3>
-        <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">
-          These photos are currently shown only in your browser demo.
-        </p>
+        <h3 data-key="privatePhotosTitle">私密照片</h3>
+        <p class="empty-text" style="margin-bottom:12px;" data-key="privatePhotosDesc">这些照片目前只在你的浏览器演示中显示。</p>
         <div id="privatePhotosDisplay" class="photo-gallery"></div>
       </div>
     </div>
@@ -466,86 +481,129 @@
   <div class="modal-layer" id="giftPanel" onclick="closePanels(event)">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="giftTitle">Offer a small gift</h2>
+      <h2 data-key="giftTitle">献上一份小礼物</h2>
+      <p data-key="giftDesc">选择一个小物件，轻轻放在墓碑旁。</p>
 
-      <div class="gift-buttons">
-        <button onclick="placeGift('can')" data-key="giftCan">Place a can</button>
-        <button onclick="placeGift('ball')" data-key="giftBall">Place a ball</button>
-        <button onclick="placeGift('seed')" data-key="giftSeed">Place seeds</button>
-        <button onclick="placeGift('flower')" data-key="giftFlower">Place flowers</button>
+      <div class="gift-grid">
+        <button class="gift-item" onclick="placeGift('can')">🥫<span data-key="giftCan">罐头</span></button>
+        <button class="gift-item" onclick="placeGift('ball')">🎾<span data-key="giftBall">小球</span></button>
+        <button class="gift-item" onclick="placeGift('flower')">🌸<span data-key="giftFlower">花</span></button>
       </div>
 
-      <div class="animal-status" id="animalStatus" data-key="animalStatus">
-        Quiet gifts may bring gentle visitors.
-      </div>
-
-      <div class="placed-items" id="placedItemsList"></div>
+      <p id="animalStatus" class="empty-text" data-key="animalHint">有些小动物也许会被温柔吸引过来。</p>
+      <div id="placedItemsList" class="placed-items"></div>
     </div>
   </div>
 
   <div class="modal-layer" id="messagePanel" onclick="closePanels(event)">
-    <div class="modal-card message-box">
+    <div class="modal-card">
       <button class="modal-close" onclick="closeAllPanels()">×</button>
-      <h2 data-key="messageTitle">Leave a message</h2>
-      <textarea id="messageInput" data-placeholder-key="messagePlaceholder" placeholder="Write a few quiet words..."></textarea>
-      <br /><br />
-      <button onclick="addMessage()" data-key="messageSendBtn">Leave message</button>
+      <h2 data-key="messageTitle">留言</h2>
+      <textarea id="messageInput" class="message-input" data-placeholder-key="messagePlaceholder" placeholder="写下一句话..."></textarea>
+      <button class="modal-action" onclick="addMessage()" data-key="sendMessage">留下留言</button>
       <div id="messageList" class="message-list"></div>
     </div>
   </div>
 
   <div class="photo-lightbox" id="photoLightbox" onclick="closePhotoLightbox()">
-    <button class="lightbox-close" onclick="closePhotoLightbox()">×</button>
-    <img id="lightboxImage" src="" alt="" />
+    <img id="lightboxImage" alt="memory photo" />
   </div>
 
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    let currentLang = "en";
-    let scene, camera, renderer, stoneGroup, textPlane;
+    const MODEL_PATH = "./assets/models/tombstone-real.glb";
 
-    const FINAL_SCALE = 0.56;
-    const FINAL_Y = -0.38;
-    const FINAL_ANGLE = 0;
+    const FINAL_VIEW = {
+      targetHeight: 3.22,
+      groupX: 0.00,
+      groupY: -1.70,
+      groupZ: 0.00,
+      groupScale: 0.78,
+      groupRotY: 0.00
+    };
 
-    const ENGRAVING_CONFIG = {
-      planeWidth: 2.08,
-      planeHeight: 2.62,
-      positionX: 0,
-      positionY: 0.28,
-      positionZ: 0.292,
-      opacity: 0.88,
-
-      // 冷灰石刻色：可见，但不是白贴纸
-      mainColor: "rgba(128, 139, 138, 0.66)",
-      dateColor: "rgba(116, 127, 126, 0.54)",
-      epitaphColor: "rgba(120, 131, 130, 0.58)",
-
-      // 凹陷阴影与边缘冷光
-      shadowColor: "rgba(6, 9, 10, 0.38)",
-      highlightColor: "rgba(190, 202, 198, 0.16)",
-
-      wearAmount: 0.018,
-      grainAmount: 0.030,
-
-      nameSize: 76,
-      dateSize: 33,
-      epitaphSize: 35,
-
-      nameY: 318,
-      dateY: 432,
-      epitaphStartY: 556,
-      epitaphLineHeight: 51,
-
-      epitaphMaxWidth: 500,
-      maxEpitaphLines: 3
+    const ENGRAVE = {
+      planeWidth: 1.52,
+      planeHeight: 1.78,
+      planeX: 0.00,
+      planeY: 0.97,
+      planeZ: 0.42,
+      canvasSize: 1536,
+      nameSize: 222,
+      dateSize: 82,
+      epitaphSize: 88,
+      nameY: 510,
+      dateY: 728,
+      epitaphY: 980,
+      lineGap: 118,
+      maxLines: 3,
+      maxWidthRatio: 0.62
     };
 
     const translations = {
+      zh: {
+        logo: "星眠宠物纪念园",
+        editBtn: "编辑",
+        changeStoneBtn: "更换墓碑",
+        storyBtn: "故事",
+        photosBtn: "相册",
+        giftBtn: "礼物",
+        messageBtnShort: "留言",
+        storyTitle: "宠物故事",
+        photosTitle: "记忆相册",
+        publicPhotosTitle: "公开照片",
+        privatePhotosTitle: "私密照片",
+        privatePhotosDesc: "这些照片目前只在你的浏览器演示中显示。",
+        giftTitle: "献上一份小礼物",
+        giftDesc: "选择一个小物件，轻轻放在墓碑旁。",
+        giftCan: "罐头",
+        giftBall: "小球",
+        giftFlower: "花",
+        animalHint: "有些小动物也许会被温柔吸引过来。",
+        messageTitle: "留言",
+        messagePlaceholder: "写下一句话...",
+        sendMessage: "留下留言",
+        noStory: "还没有写下故事。",
+        noPhotos: "还没有上传照片。",
+        noMessages: "还没有留言。",
+        placedCan: "放下了罐头",
+        placedBall: "放下了小球",
+        placedFlower: "放下了花"
+      },
+      "zh-TW": {
+        logo: "星眠寵物紀念園",
+        editBtn: "編輯",
+        changeStoneBtn: "更換墓碑",
+        storyBtn: "故事",
+        photosBtn: "相冊",
+        giftBtn: "禮物",
+        messageBtnShort: "留言",
+        storyTitle: "寵物故事",
+        photosTitle: "記憶相冊",
+        publicPhotosTitle: "公開照片",
+        privatePhotosTitle: "私密照片",
+        privatePhotosDesc: "這些照片目前只在你的瀏覽器演示中顯示。",
+        giftTitle: "獻上一份小禮物",
+        giftDesc: "選擇一個小物件，輕輕放在墓碑旁。",
+        giftCan: "罐頭",
+        giftBall: "小球",
+        giftFlower: "花",
+        animalHint: "有些小動物也許會被溫柔吸引過來。",
+        messageTitle: "留言",
+        messagePlaceholder: "寫下一句話...",
+        sendMessage: "留下留言",
+        noStory: "還沒有寫下故事。",
+        noPhotos: "還沒有上傳照片。",
+        noMessages: "還沒有留言。",
+        placedCan: "放下了罐頭",
+        placedBall: "放下了小球",
+        placedFlower: "放下了花"
+      },
       en: {
         logo: "Starlit Pet Memorial Garden",
-        editBtn: "Edit Info",
+        editBtn: "Edit",
         changeStoneBtn: "Change Stone",
         storyBtn: "Story",
         photosBtn: "Photos",
@@ -553,96 +611,29 @@
         messageBtnShort: "Messages",
         storyTitle: "Pet Story",
         photosTitle: "Memory Photos",
-        publicPhotosTitle: "Public Memory Photos",
-        privatePhotosTitle: "Private Memory Photos",
+        publicPhotosTitle: "Public Photos",
+        privatePhotosTitle: "Private Photos",
         privatePhotosDesc: "These photos are currently shown only in your browser demo.",
-        giftTitle: "Offer a small gift",
-        giftCan: "Place a can",
-        giftBall: "Place a ball",
-        giftSeed: "Place seeds",
-        giftFlower: "Place flowers",
-        animalStatus: "Quiet gifts may bring gentle visitors.",
-        messageTitle: "Leave a message",
-        messagePlaceholder: "Write a few quiet words...",
-        messageSendBtn: "Leave message",
+        giftTitle: "Leave a Small Gift",
+        giftDesc: "Choose a small item and place it gently beside the stone.",
+        giftCan: "Can",
+        giftBall: "Ball",
+        giftFlower: "Flower",
+        animalHint: "Some little animals may be drawn here by kindness.",
+        messageTitle: "Messages",
+        messagePlaceholder: "Write a message...",
+        sendMessage: "Leave Message",
         noStory: "No story has been written yet.",
-        noPhotos: "No photos yet.",
+        noPhotos: "No photos have been uploaded yet.",
         noMessages: "No messages yet.",
-        defaultName: "Luna",
-        defaultWords: "Thank you for walking through this life with me.",
-        placedCan: "Can placed",
-        placedBall: "Ball placed",
-        placedSeed: "Seeds placed",
-        placedFlower: "Flowers placed"
-      },
-      zh: {
-        logo: "星眠宠物纪念园",
-        editBtn: "修改信息",
-        changeStoneBtn: "更换墓碑",
-        storyBtn: "故事",
-        photosBtn: "相册",
-        giftBtn: "礼物",
-        messageBtnShort: "留言",
-        storyTitle: "宠物故事",
-        photosTitle: "回忆相册",
-        publicPhotosTitle: "公开回忆照片",
-        privatePhotosTitle: "私密回忆照片",
-        privatePhotosDesc: "这些照片目前只会显示在你的浏览器演示中。",
-        giftTitle: "放置一个小礼物",
-        giftCan: "放一个罐头",
-        giftBall: "放一个球",
-        giftSeed: "放一些鸟食",
-        giftFlower: "放一些花",
-        animalStatus: "安静的小礼物，可能会吸引温柔的访客。",
-        messageTitle: "留言",
-        messagePlaceholder: "写几句安静的话...",
-        messageSendBtn: "留下留言",
-        noStory: "还没有写下故事。",
-        noPhotos: "还没有照片。",
-        noMessages: "还没有留言。",
-        defaultName: "豆豆",
-        defaultWords: "谢谢你陪我走过这段人生",
-        placedCan: "已放置罐头",
-        placedBall: "已放置球",
-        placedSeed: "已放置鸟食",
-        placedFlower: "已放置花"
-      },
-      "zh-TW": {
-        logo: "星眠寵物紀念園",
-        editBtn: "修改資料",
-        changeStoneBtn: "更換墓碑",
-        storyBtn: "故事",
-        photosBtn: "相冊",
-        giftBtn: "禮物",
-        messageBtnShort: "留言",
-        storyTitle: "寵物故事",
-        photosTitle: "回憶相冊",
-        publicPhotosTitle: "公開回憶照片",
-        privatePhotosTitle: "私密回憶照片",
-        privatePhotosDesc: "這些照片目前只會顯示在你的瀏覽器演示中。",
-        giftTitle: "放置一個小禮物",
-        giftCan: "放一個罐頭",
-        giftBall: "放一個球",
-        giftSeed: "放一些鳥食",
-        giftFlower: "放一些花",
-        animalStatus: "安靜的小禮物，可能會吸引溫柔的訪客。",
-        messageTitle: "留言",
-        messagePlaceholder: "寫幾句安靜的話...",
-        messageSendBtn: "留下留言",
-        noStory: "還沒有寫下故事。",
-        noPhotos: "還沒有照片。",
-        noMessages: "還沒有留言。",
-        defaultName: "豆豆",
-        defaultWords: "謝謝你陪我走過這段人生",
-        placedCan: "已放置罐頭",
-        placedBall: "已放置球",
-        placedSeed: "已放置鳥食",
-        placedFlower: "已放置花"
+        placedCan: "Placed a can",
+        placedBall: "Placed a ball",
+        placedFlower: "Placed a flower"
       },
       ja: {
-        logo: "星眠ペットメモリアルガーデン",
-        editBtn: "情報を編集",
-        changeStoneBtn: "墓石を変更",
+        logo: "星眠ペット記念園",
+        editBtn: "編集",
+        changeStoneBtn: "墓碑を変更",
         storyBtn: "物語",
         photosBtn: "写真",
         giftBtn: "贈り物",
@@ -651,55 +642,401 @@
         photosTitle: "思い出の写真",
         publicPhotosTitle: "公開写真",
         privatePhotosTitle: "非公開写真",
-        privatePhotosDesc: "これらの写真は現在、このブラウザのデモ内だけで表示されます。",
+        privatePhotosDesc: "これらの写真は現在ブラウザ上のデモでのみ表示されます。",
         giftTitle: "小さな贈り物を置く",
-        giftCan: "缶詰を置く",
-        giftBall: "ボールを置く",
-        giftSeed: "鳥の餌を置く",
-        giftFlower: "花を置く",
-        animalStatus: "静かな贈り物は、やさしい訪問者を呼ぶかもしれません。",
+        giftDesc: "小さな品を選んで、墓碑のそばにそっと置きます。",
+        giftCan: "缶詰",
+        giftBall: "ボール",
+        giftFlower: "花",
+        animalHint: "やさしさに惹かれて、小さな動物が来るかもしれません。",
         messageTitle: "メッセージ",
-        messagePlaceholder: "静かな言葉を書いてください...",
-        messageSendBtn: "メッセージを残す",
+        messagePlaceholder: "ひと言を書いてください...",
+        sendMessage: "メッセージを残す",
         noStory: "まだ物語は書かれていません。",
-        noPhotos: "まだ写真はありません。",
-        noMessages: "まだメッセージはありません。",
-        defaultName: "ルナ",
-        defaultWords: "一緒に歩いてくれてありがとう",
+        noPhotos: "写真はまだありません。",
+        noMessages: "メッセージはまだありません。",
         placedCan: "缶詰を置きました",
         placedBall: "ボールを置きました",
-        placedSeed: "鳥の餌を置きました",
         placedFlower: "花を置きました"
       }
     };
 
-    ["ko", "es", "fr", "de", "pt", "it", "th", "vi", "id", "ms", "hi", "ar"].forEach(function(lang) {
-      translations[lang] = translations.en;
-    });
+    let currentLang = normalizeLanguage(localStorage.getItem("siteLanguage") || "zh");
+    let renderer, scene, camera, pivot, stoneRoot, engravingPlane, engravingTexture;
+
+    function normalizeLanguage(lang) {
+      if (lang === "zh-CN") return "zh";
+      if (lang === "zh-Hant") return "zh-TW";
+      if (translations[lang]) return lang;
+      return "zh";
+    }
 
     function getText() {
-      return translations[currentLang] || translations.en;
+      return translations[currentLang] || translations.zh;
     }
 
     function getMemorialData() {
       try {
-        return JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+        const raw = JSON.parse(localStorage.getItem("myPetMemorial") || "{}");
+        return {
+          name: raw.name || raw.petName || raw.pet_name || "豆豆",
+          birthDate: raw.birthDate || raw.birth || raw.birthday || "2015.08.20",
+          deathDate: raw.deathDate || raw.death || raw.passingDate || "2026.05.12",
+          epitaph: raw.epitaph || raw.message || raw.words || raw.lastWords || "谢谢你陪我走过这段人生",
+          story: raw.story || raw.petStory || "",
+          photo: raw.photo || "",
+          publicPhotos: raw.publicPhotos || raw.photos || [],
+          privatePhotos: raw.privatePhotos || []
+        };
       } catch (error) {
-        return {};
+        return {
+          name: "豆豆",
+          birthDate: "2015.08.20",
+          deathDate: "2026.05.12",
+          epitaph: "谢谢你陪我走过这段人生",
+          story: "",
+          photo: "",
+          publicPhotos: [],
+          privatePhotos: []
+        };
       }
     }
 
-    function normalizeStyle(style) {
-      if (style === "square") return "square";
-      if (style === "arch") return "arch";
-      return "rounded";
+    function formatDate(value) {
+      return String(value || "").replace(/-/g, ".").replace(/\//g, ".");
+    }
+
+    function wrapText(ctx, text, maxWidth, maxLines) {
+      const units = Array.from(String(text || ""));
+      const lines = [];
+      let line = "";
+
+      for (let i = 0; i < units.length; i += 1) {
+        const test = line + units[i];
+        if (ctx.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = units[i];
+          if (lines.length >= maxLines - 1) break;
+        } else {
+          line = test;
+        }
+      }
+
+      if (line && lines.length < maxLines) lines.push(line);
+
+      if (lines.length === maxLines) {
+        const all = units.join("");
+        if (lines.join("").length < all.length) {
+          let last = lines[lines.length - 1];
+          while (last.length > 1 && ctx.measureText(last + "…").width > maxWidth) {
+            last = last.slice(0, -1);
+          }
+          lines[lines.length - 1] = last + "…";
+        }
+      }
+
+      return lines;
+    }
+
+    function drawEngravedMask(ctx, text, x, y, fontSize, weight) {
+      if (!text) return;
+
+      const fontFamily = '"Noto Serif CJK SC", "Noto Serif SC", "Microsoft YaHei", "PingFang SC", "Noto Sans JP", serif';
+
+      ctx.save();
+      ctx.font = weight + " " + fontSize + "px " + fontFamily;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.fillStyle = "rgba(255,255,255,0.86)";
+      ctx.fillText(text, x, y);
+
+      ctx.lineWidth = Math.max(2, fontSize * 0.035);
+      ctx.strokeStyle = "rgba(255,255,255,0.30)";
+      ctx.strokeText(text, x, y);
+
+      const metric = ctx.measureText(text);
+      const width = metric.width;
+      const height = fontSize * 0.86;
+      const wearCount = Math.max(10, Math.floor(fontSize * 0.12));
+
+      ctx.globalCompositeOperation = "destination-out";
+      for (let i = 0; i < wearCount; i += 1) {
+        const rx = x - width / 2 + Math.random() * width;
+        const ry = y - height / 2 + Math.random() * height;
+        const r = 0.35 + Math.random() * 1.10;
+        ctx.beginPath();
+        ctx.arc(rx, ry, r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(0,0,0,0.040)";
+        ctx.fill();
+      }
+
+      ctx.globalCompositeOperation = "source-over";
+      ctx.restore();
+    }
+
+    function createEngravingTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = ENGRAVE.canvasSize;
+      canvas.height = ENGRAVE.canvasSize;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const data = getMemorialData();
+      const cx = canvas.width / 2;
+      const maxWidth = canvas.width * ENGRAVE.maxWidthRatio;
+      const dateLine = (formatDate(data.birthDate) + " - " + formatDate(data.deathDate)).trim();
+
+      drawEngravedMask(ctx, data.name, cx, ENGRAVE.nameY, ENGRAVE.nameSize, 700);
+      drawEngravedMask(ctx, dateLine, cx, ENGRAVE.dateY, ENGRAVE.dateSize, 500);
+
+      ctx.save();
+      ctx.font = "600 " + ENGRAVE.epitaphSize + "px Microsoft YaHei";
+      const lines = wrapText(ctx, data.epitaph, maxWidth, ENGRAVE.maxLines);
+      ctx.restore();
+
+      const startY = ENGRAVE.epitaphY - ((lines.length - 1) * ENGRAVE.lineGap) / 2;
+      lines.forEach(function(line, index) {
+        drawEngravedMask(ctx, line, cx, startY + index * ENGRAVE.lineGap, ENGRAVE.epitaphSize, 600);
+      });
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.needsUpdate = true;
+      tex.encoding = THREE.sRGBEncoding;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      return tex;
+    }
+
+    function createCarvedMaterial() {
+      engravingTexture = createEngravingTexture();
+
+      return new THREE.ShaderMaterial({
+        uniforms: {
+          map: { value: engravingTexture },
+          texel: { value: new THREE.Vector2(1 / ENGRAVE.canvasSize, 1 / ENGRAVE.canvasSize) },
+          opacityValue: { value: 0.78 }
+        },
+        vertexShader: [
+          "varying vec2 vUv;",
+          "void main() {",
+          "  vUv = uv;",
+          "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+          "}"
+        ].join("\n"),
+        fragmentShader: [
+          "uniform sampler2D map;",
+          "uniform vec2 texel;",
+          "uniform float opacityValue;",
+          "varying vec2 vUv;",
+          "float hash(vec2 p) {",
+          "  p = fract(p * vec2(123.34, 456.21));",
+          "  p += dot(p, p + 45.32);",
+          "  return fract(p.x * p.y);",
+          "}",
+          "void main() {",
+          "  float a = texture2D(map, vUv).a;",
+          "  if (a < 0.016) discard;",
+          "  float l1 = texture2D(map, vUv - vec2(texel.x * 2.0, 0.0)).a;",
+          "  float r1 = texture2D(map, vUv + vec2(texel.x * 2.0, 0.0)).a;",
+          "  float u1 = texture2D(map, vUv + vec2(0.0, texel.y * 2.0)).a;",
+          "  float d1 = texture2D(map, vUv - vec2(0.0, texel.y * 2.0)).a;",
+          "  float l2 = texture2D(map, vUv - vec2(texel.x * 5.0, 0.0)).a;",
+          "  float r2 = texture2D(map, vUv + vec2(texel.x * 5.0, 0.0)).a;",
+          "  float u2 = texture2D(map, vUv + vec2(0.0, texel.y * 5.0)).a;",
+          "  float d2 = texture2D(map, vUv - vec2(0.0, texel.y * 5.0)).a;",
+          "  float edgeFine = abs(r1 - l1) + abs(u1 - d1);",
+          "  float edgeWide = abs(r2 - l2) + abs(u2 - d2);",
+          "  float bevelLight = clamp((l2 + u2 - r2 - d2) * 0.85 + edgeFine * 0.10, 0.0, 1.0);",
+          "  float bevelDark = clamp((r2 + d2 - l2 - u2) * 0.95 + edgeFine * 0.18, 0.0, 1.0);",
+          "  float grain1 = hash(floor(vUv * 380.0));",
+          "  float grain2 = hash(floor(vUv * 910.0));",
+          "  float wear = smoothstep(0.08, 0.92, grain1) * 0.16 + smoothstep(0.78, 1.0, grain2) * 0.18;",
+          "  vec3 groove = vec3(0.135, 0.140, 0.135);",
+          "  vec3 coldDust = vec3(0.300, 0.300, 0.275);",
+          "  vec3 brightRim = vec3(0.610, 0.600, 0.540);",
+          "  vec3 deepShadow = vec3(0.060, 0.065, 0.062);",
+          "  vec3 color = mix(groove, coldDust, grain1 * 0.18);",
+          "  color = mix(color, brightRim, bevelLight * 0.42);",
+          "  color = mix(color, deepShadow, bevelDark * 0.54);",
+          "  color *= 0.92 + grain2 * 0.12;",
+          "  float inner = smoothstep(0.08, 0.82, a);",
+          "  float edge = clamp(edgeFine * 1.8 + edgeWide * 0.7, 0.0, 1.0);",
+          "  float alpha = (inner * 0.30 + edge * 0.36) * opacityValue;",
+          "  alpha *= 1.0 - wear;",
+          "  gl_FragColor = vec4(color, alpha);",
+          "}"
+        ].join("\n"),
+        transparent: true,
+        depthWrite: false,
+        depthTest: false,
+        side: THREE.DoubleSide
+      });
+    }
+
+    function initScene() {
+      if (!window.THREE || !THREE.GLTFLoader) {
+        showError();
+        return;
+      }
+
+      const viewer = document.getElementById("viewer");
+
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 1.45, 7.4);
+      camera.lookAt(new THREE.Vector3(0, 1.10, 0));
+
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x000000, 0);
+      renderer.outputEncoding = THREE.sRGBEncoding;
+
+      viewer.appendChild(renderer.domElement);
+
+      pivot = new THREE.Group();
+      scene.add(pivot);
+
+      scene.add(new THREE.HemisphereLight(0xdce8ff, 0x2b211a, 1.20));
+      scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+
+      const moon = new THREE.DirectionalLight(0xbfd6ff, 0.96);
+      moon.position.set(-3.8, 5.8, 5.4);
+      scene.add(moon);
+
+      const warm = new THREE.DirectionalLight(0xffcf96, 1.08);
+      warm.position.set(4.8, 2.4, 3.6);
+      scene.add(warm);
+
+      const fill = new THREE.DirectionalLight(0xe9eefc, 0.34);
+      fill.position.set(0.0, 2.0, 5.8);
+      scene.add(fill);
+
+      loadModel();
+      renderLoop();
+    }
+
+    function centerAndScaleModel(model) {
+      model.updateMatrixWorld(true);
+
+      const box = new THREE.Box3().setFromObject(model);
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+
+      box.getSize(size);
+      box.getCenter(center);
+
+      model.position.x -= center.x;
+      model.position.z -= center.z;
+      model.position.y -= box.min.y;
+
+      const scale = FINAL_VIEW.targetHeight / Math.max(size.y, 0.0001);
+      model.scale.setScalar(scale);
+      model.updateMatrixWorld(true);
+    }
+
+    function tuneMaterial(root) {
+      root.traverse(function(child) {
+        if (!child.isMesh) return;
+
+        child.castShadow = false;
+        child.receiveShadow = false;
+
+        const arr = Array.isArray(child.material) ? child.material : [child.material];
+        arr.forEach(function(mat) {
+          if (!mat) return;
+          if (mat.map) mat.map.encoding = THREE.sRGBEncoding;
+          if (mat.color && mat.color.offsetHSL) mat.color.offsetHSL(0, -0.02, 0.04);
+          if ("roughness" in mat) mat.roughness = 0.96;
+          if ("metalness" in mat) mat.metalness = 0.02;
+          mat.needsUpdate = true;
+        });
+      });
+    }
+
+    function attachEngraving() {
+      if (engravingTexture) engravingTexture.dispose();
+
+      const geometry = new THREE.PlaneGeometry(ENGRAVE.planeWidth, ENGRAVE.planeHeight);
+      const material = createCarvedMaterial();
+
+      engravingPlane = new THREE.Mesh(geometry, material);
+      engravingPlane.renderOrder = 999;
+      engravingPlane.position.set(ENGRAVE.planeX, ENGRAVE.planeY, ENGRAVE.planeZ);
+
+      pivot.add(engravingPlane);
+    }
+
+    function loadModel() {
+      const loader = new THREE.GLTFLoader();
+
+      loader.load(
+        MODEL_PATH,
+        function(gltf) {
+          stoneRoot = gltf.scene;
+          tuneMaterial(stoneRoot);
+          centerAndScaleModel(stoneRoot);
+
+          pivot.add(stoneRoot);
+          attachEngraving();
+
+          pivot.position.set(FINAL_VIEW.groupX, FINAL_VIEW.groupY, FINAL_VIEW.groupZ);
+          pivot.rotation.set(0, FINAL_VIEW.groupRotY, 0);
+          pivot.scale.setScalar(FINAL_VIEW.groupScale);
+
+          document.getElementById("loadingText").style.display = "none";
+        },
+        undefined,
+        function(error) {
+          console.error(error);
+          showError();
+        }
+      );
+    }
+
+    function showError() {
+      document.getElementById("loadingText").style.display = "none";
+      document.getElementById("errorText").style.display = "block";
+    }
+
+    function renderLoop() {
+      requestAnimationFrame(renderLoop);
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    }
+
+    function resizeScene() {
+      if (!renderer || !camera) return;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    function rebuildEngravingTexture() {
+      if (!engravingPlane || !engravingPlane.material) return;
+
+      if (engravingTexture) engravingTexture.dispose();
+      engravingTexture = createEngravingTexture();
+
+      if (engravingPlane.material.uniforms && engravingPlane.material.uniforms.map) {
+        engravingPlane.material.uniforms.map.value = engravingTexture;
+      }
+
+      engravingPlane.material.needsUpdate = true;
     }
 
     function changeLanguage(lang) {
-      currentLang = translations[lang] ? lang : "en";
+      currentLang = normalizeLanguage(lang);
       localStorage.setItem("siteLanguage", currentLang);
       document.documentElement.lang = currentLang;
-      document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
 
       const select = document.getElementById("languageSelect");
       if (select) select.value = currentLang;
@@ -716,599 +1053,9 @@
         if (text[key]) el.placeholder = text[key];
       });
 
-      rebuildTextTexture();
       loadExtraMemorialInfo();
       renderPlacedItems();
-    }
-
-    function createStoneTexture(baseColor) {
-      const canvas = document.createElement("canvas");
-      canvas.width = 768;
-      canvas.height = 768;
-      const ctx = canvas.getContext("2d");
-
-      // 冷灰石材底色，不再是死黑色
-      ctx.fillStyle = baseColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const vertical = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      vertical.addColorStop(0, "rgba(255, 255, 255, 0.075)");
-      vertical.addColorStop(0.42, "rgba(255, 255, 255, 0.018)");
-      vertical.addColorStop(1, "rgba(0, 0, 0, 0.105)");
-      ctx.fillStyle = vertical;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const side = ctx.createLinearGradient(0, 0, canvas.width, 0);
-      side.addColorStop(0, "rgba(0, 0, 0, 0.085)");
-      side.addColorStop(0.48, "rgba(255, 255, 255, 0.035)");
-      side.addColorStop(1, "rgba(0, 0, 0, 0.055)");
-      ctx.fillStyle = side;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // 细颗粒：模拟花岗岩点状纹理
-      for (let i = 0; i < 5200; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const size = Math.random() * 1.35 + 0.28;
-        const light = Math.random() > 0.52 ? 255 : 0;
-        const a = Math.random() * 0.055 + 0.012;
-        ctx.fillStyle = "rgba(" + light + "," + light + "," + light + "," + a + ")";
-        ctx.fillRect(x, y, size, size);
-      }
-
-      // 长石纹：低对比，不像贴图脏污
-      for (let i = 0; i < 58; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const len = Math.random() * 260 + 80;
-        const alpha = Math.random() * 0.030 + 0.010;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.55);
-        ctx.strokeStyle = "rgba(230, 236, 232," + alpha + ")";
-        ctx.lineWidth = Math.random() * 1.2 + 0.35;
-        ctx.beginPath();
-        ctx.moveTo(-len / 2, 0);
-        ctx.bezierCurveTo(-len * 0.18, Math.random() * 14 - 7, len * 0.18, Math.random() * 14 - 7, len / 2, 0);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 少量暗裂纹，不能太明显
-      for (let i = 0; i < 10; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const len = Math.random() * 95 + 32;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 1.2);
-        ctx.strokeStyle = "rgba(25, 28, 28, 0.055)";
-        ctx.lineWidth = Math.random() * 0.9 + 0.35;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.quadraticCurveTo(len * 0.35, Math.random() * 18 - 9, len, Math.random() * 22 - 11);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1.0, 1.0);
-
-      if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
-
-      return texture;
-    }
-
-    function createStoneMaterial() {
-      const texture = createStoneTexture("#898d89");
-      return new THREE.MeshStandardMaterial({
-        color: 0xa4a7a1,
-        map: texture,
-        roughness: 0.96,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.030,
-        emissive: 0x171a1a,
-        emissiveIntensity: 0.13
-      });
-    }
-
-    function createBaseMaterial() {
-      const texture = createStoneTexture("#747873");
-      return new THREE.MeshStandardMaterial({
-        color: 0x888b85,
-        map: texture,
-        roughness: 0.98,
-        metalness: 0,
-        bumpMap: texture,
-        bumpScale: 0.026,
-        emissive: 0x121514,
-        emissiveIntensity: 0.10
-      });
-    }
-
-    function buildRoundedShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.14, -1.72);
-      s.lineTo(-1.14, 0.58);
-      s.bezierCurveTo(-1.14, 1.32, -0.68, 1.66, 0, 1.66);
-      s.bezierCurveTo(0.68, 1.66, 1.14, 1.32, 1.14, 0.58);
-      s.lineTo(1.14, -1.72);
-      s.closePath();
-      return s;
-    }
-
-    function buildSquareShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.20, -1.72);
-      s.lineTo(-1.20, 1.34);
-      s.quadraticCurveTo(-1.20, 1.64, -0.90, 1.64);
-      s.lineTo(0.90, 1.64);
-      s.quadraticCurveTo(1.20, 1.64, 1.20, 1.34);
-      s.lineTo(1.20, -1.72);
-      s.closePath();
-      return s;
-    }
-
-    function buildArchShape() {
-      const s = new THREE.Shape();
-      s.moveTo(-1.18, -1.75);
-      s.lineTo(-1.18, 0.38);
-      s.bezierCurveTo(-1.18, 1.34, -0.64, 1.78, 0, 1.78);
-      s.bezierCurveTo(0.64, 1.78, 1.18, 1.34, 1.18, 0.38);
-      s.lineTo(1.18, -1.75);
-      s.closePath();
-      return s;
-    }
-
-    function buildTombstoneShape(style) {
-      const normalized = normalizeStyle(style);
-      if (normalized === "square") return buildSquareShape();
-      if (normalized === "arch") return buildArchShape();
-      return buildRoundedShape();
-    }
-
-    function normalizeEngravingData(data) {
-      const text = getText();
-      const memorial = data || {};
-
-      const name =
-        memorial.name ||
-        memorial.petName ||
-        memorial.pet ||
-        text.defaultName ||
-        "豆豆";
-
-      const birth =
-        memorial.birthDate ||
-        memorial.birth ||
-        memorial.startDate ||
-        "";
-
-      const death =
-        memorial.deathDate ||
-        memorial.leaveDate ||
-        memorial.passDate ||
-        memorial.leave ||
-        memorial.endDate ||
-        "";
-
-      const epitaph =
-        memorial.epitaph ||
-        memorial.memory ||
-        memorial.words ||
-        memorial.message ||
-        text.defaultWords ||
-        "谢谢你陪我走过这段人生";
-
-      let dateText = "";
-      if (birth && death) {
-        dateText = birth + " - " + death;
-      } else if (birth || death) {
-        dateText = birth || death;
-      } else {
-        dateText = "2015.08.20 - 2026.05.12";
-      }
-
-      return {
-        name: String(name).trim(),
-        dateText: String(dateText).trim(),
-        epitaph: String(epitaph).trim()
-      };
-    }
-
-    function drawSoftEngravingPanel(ctx) {
-      // 只做极轻微的压暗区域，避免像一张透明贴纸
-      const gradient = ctx.createRadialGradient(512, 455, 70, 512, 455, 390);
-      gradient.addColorStop(0, "rgba(0, 0, 0, 0.020)");
-      gradient.addColorStop(0.58, "rgba(0, 0, 0, 0.010)");
-      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(160, 170, 704, 640);
-    }
-
-    function drawEngravedLine(ctx, options) {
-      ctx.save();
-
-      ctx.font = options.font;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      // 先画一层柔和暗痕，让字像压进石头
-      ctx.save();
-      ctx.globalAlpha = 0.46;
-      ctx.filter = "blur(0.65px)";
-      ctx.fillStyle = options.shadowColor;
-      ctx.fillText(options.text, options.x + 1.45, options.y + 1.65);
-      ctx.restore();
-
-      // 左上高光，模拟刻痕边缘受光
-      ctx.fillStyle = options.highlightColor;
-      ctx.fillText(options.text, options.x - 0.95, options.y - 1.05);
-
-      // 主刻痕：冷灰，不用白色
-      ctx.fillStyle = options.mainColor;
-      ctx.fillText(options.text, options.x, options.y);
-
-      // 很浅的二次暗压，不让字浮在表面
-      ctx.globalAlpha = 0.20;
-      ctx.fillStyle = "rgba(0, 0, 0, 0.30)";
-      ctx.fillText(options.text, options.x + 0.50, options.y + 0.70);
-
-      ctx.restore();
-    }
-
-    function wrapTextToLines(ctx, text, maxWidth, maxLines, font) {
-      ctx.save();
-      ctx.font = font;
-
-      const value = String(text || "").trim();
-      if (!value) {
-        ctx.restore();
-        return [];
-      }
-
-      const lines = [];
-      const hasSpace = /\s/.test(value);
-      const units = hasSpace ? value.split(/\s+/) : value.split("");
-      let current = "";
-
-      for (let i = 0; i < units.length; i++) {
-        const unit = units[i];
-        const test = hasSpace ? (current ? current + " " + unit : unit) : current + unit;
-
-        if (ctx.measureText(test).width > maxWidth && current) {
-          lines.push(current);
-          current = unit;
-        } else {
-          current = test;
-        }
-      }
-
-      if (current) lines.push(current);
-
-      const finalLines = lines.slice(0, maxLines);
-
-      if (lines.length > maxLines && finalLines.length) {
-        let last = finalLines[finalLines.length - 1];
-        while (ctx.measureText(last + "…").width > maxWidth && last.length > 0) {
-          last = last.slice(0, -1);
-        }
-        finalLines[finalLines.length - 1] = last + "…";
-      }
-
-      ctx.restore();
-      return finalLines;
-    }
-
-    function applyTextWear(ctx, width, height, amount) {
-      const image = ctx.getImageData(0, 0, width, height);
-      const data = image.data;
-
-      for (let i = 0; i < data.length; i += 4) {
-        const alpha = data[i + 3];
-
-        if (alpha > 12) {
-          const random = Math.random();
-
-          if (random < amount) {
-            data[i + 3] = Math.floor(alpha * 0.42);
-          } else if (random < amount * 2.15) {
-            data[i + 3] = Math.floor(alpha * 0.76);
-          }
-
-          // 让文字颜色轻微不均匀，像石头吃进去的刻痕
-          if (Math.random() < ENGRAVING_CONFIG.grainAmount) {
-            data[i] = Math.max(0, data[i] - 10);
-            data[i + 1] = Math.max(0, data[i + 1] - 10);
-            data[i + 2] = Math.max(0, data[i + 2] - 10);
-          }
-        }
-      }
-
-      ctx.putImageData(image, 0, 0);
-
-      // 轻微横向划痕，破坏“电脑字”的完美边缘
-      ctx.save();
-      ctx.globalCompositeOperation = "destination-out";
-      for (let i = 0; i < 24; i++) {
-        const x = 250 + Math.random() * 520;
-        const y = 250 + Math.random() * 420;
-        const w = Math.random() * 85 + 18;
-        ctx.globalAlpha = Math.random() * 0.040 + 0.012;
-        ctx.fillRect(x, y, w, 1);
-      }
-      ctx.restore();
-    }
-
-    function updateEngravingTexture(data) {
-      const config = ENGRAVING_CONFIG;
-      const canvas = document.createElement("canvas");
-      canvas.width = 1024;
-      canvas.height = 1024;
-
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      const safeData = normalizeEngravingData(data);
-      const fontStack = "'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif";
-
-      drawSoftEngravingPanel(ctx);
-
-      drawEngravedLine(ctx, {
-        text: safeData.name,
-        x: 512,
-        y: config.nameY,
-        font: "600 " + config.nameSize + "px " + fontStack,
-        mainColor: config.mainColor,
-        shadowColor: config.shadowColor,
-        highlightColor: config.highlightColor
-      });
-
-      drawEngravedLine(ctx, {
-        text: safeData.dateText,
-        x: 512,
-        y: config.dateY,
-        font: "400 " + config.dateSize + "px " + fontStack,
-        mainColor: config.dateColor,
-        shadowColor: "rgba(3, 5, 6, 0.16)",
-        highlightColor: "rgba(220, 230, 226, 0.08)"
-      });
-
-      const epitaphFont = "400 " + config.epitaphSize + "px " + fontStack;
-      const epitaphLines = wrapTextToLines(
-        ctx,
-        safeData.epitaph,
-        config.epitaphMaxWidth,
-        config.maxEpitaphLines,
-        epitaphFont
-      );
-
-      epitaphLines.forEach(function(line, index) {
-        drawEngravedLine(ctx, {
-          text: line,
-          x: 512,
-          y: config.epitaphStartY + index * config.epitaphLineHeight,
-          font: epitaphFont,
-          mainColor: config.epitaphColor,
-          shadowColor: "rgba(3, 5, 6, 0.14)",
-          highlightColor: "rgba(220, 230, 226, 0.075)"
-        });
-      });
-
-      applyTextWear(ctx, canvas.width, canvas.height, config.wearAmount);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      if (THREE.SRGBColorSpace) {
-        texture.colorSpace = THREE.SRGBColorSpace;
-      }
-      return texture;
-    }
-
-    function createTextTexture(memorial) {
-      return updateEngravingTexture(memorial || getMemorialData());
-    }
-
-    function makeShadowTexture() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext("2d");
-
-      const gradient = ctx.createRadialGradient(256, 256, 12, 256, 256, 215);
-      gradient.addColorStop(0, "rgba(0,0,0,0.42)");
-      gradient.addColorStop(0.45, "rgba(0,0,0,0.22)");
-      gradient.addColorStop(0.72, "rgba(0,0,0,0.07)");
-      gradient.addColorStop(1, "rgba(0,0,0,0)");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.needsUpdate = true;
-      return texture;
-    }
-
-    function createStoneGroup(style) {
-      const group = new THREE.Group();
-      const rotator = new THREE.Group();
-      const shape = buildTombstoneShape(style);
-
-      const geometry = new THREE.ExtrudeGeometry(shape, {
-        depth: 0.42,
-        bevelEnabled: true,
-        bevelThickness: 0.050,
-        bevelSize: 0.050,
-        bevelSegments: 12,
-        curveSegments: 72
-      });
-
-      geometry.center();
-      geometry.computeVertexNormals();
-
-      const stoneMesh = new THREE.Mesh(geometry, createStoneMaterial());
-      stoneMesh.position.y = 0.30;
-      rotator.add(stoneMesh);
-
-      const baseMesh = new THREE.Mesh(new THREE.BoxGeometry(3.24, 0.34, 1.02), createBaseMaterial());
-      baseMesh.position.set(0, -1.78, -0.02);
-      rotator.add(baseMesh);
-
-      const lipMesh = new THREE.Mesh(new THREE.BoxGeometry(2.88, 0.15, 0.86), createBaseMaterial());
-      lipMesh.position.set(0, -1.49, 0.02);
-      rotator.add(lipMesh);
-
-      const textTexture = createTextTexture(getMemorialData());
-      const textMat = new THREE.MeshBasicMaterial({
-        map: textTexture,
-        transparent: true,
-        depthWrite: false,
-        depthTest: true,
-        opacity: ENGRAVING_CONFIG.opacity
-      });
-
-      textMat.polygonOffset = true;
-      textMat.polygonOffsetFactor = -1;
-      textMat.polygonOffsetUnits = -1;
-
-      textPlane = new THREE.Mesh(
-        new THREE.PlaneGeometry(ENGRAVING_CONFIG.planeWidth, ENGRAVING_CONFIG.planeHeight),
-        textMat
-      );
-
-      textPlane.position.set(
-        ENGRAVING_CONFIG.positionX,
-        ENGRAVING_CONFIG.positionY,
-        ENGRAVING_CONFIG.positionZ
-      );
-      textPlane.renderOrder = 3;
-      rotator.add(textPlane);
-
-      rotator.rotation.y = FINAL_ANGLE;
-      group.add(rotator);
-
-      const shadowMat = new THREE.MeshBasicMaterial({
-        map: makeShadowTexture(),
-        transparent: true,
-        depthWrite: false,
-        opacity: 0.86
-      });
-
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.80, 1.18), shadowMat);
-      shadow.position.set(0, -1.95, -0.50);
-      group.add(shadow);
-
-      group.scale.set(FINAL_SCALE, FINAL_SCALE, FINAL_SCALE);
-      group.position.y = FINAL_Y;
-
-      group.userData.parts = {
-        rotator: rotator,
-        stoneMesh: stoneMesh,
-        baseMesh: baseMesh,
-        lipMesh: lipMesh,
-        textPlane: textPlane
-      };
-
-      return group;
-    }
-
-    function initStoneScene() {
-      const container = document.getElementById("stoneScene");
-      if (!container || !window.THREE) return;
-
-      scene = new THREE.Scene();
-
-      camera = new THREE.PerspectiveCamera(
-        30,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      camera.position.set(0, 0.08, 7.7);
-
-      renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true
-      });
-
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      if (THREE.SRGBColorSpace) {
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
-      }
-
-      container.innerHTML = "";
-      container.appendChild(renderer.domElement);
-
-      scene.add(new THREE.AmbientLight(0xd7d6d0, 0.82));
-
-      const hemi = new THREE.HemisphereLight(0xb9c9f0, 0x3b2e24, 0.82);
-      scene.add(hemi);
-
-      const moonLight = new THREE.DirectionalLight(0xcbd8ff, 1.08);
-      moonLight.position.set(-5.1, 7.8, 5.7);
-      scene.add(moonLight);
-
-      const warmRight = new THREE.PointLight(0xffc98b, 0.82, 18, 2);
-      warmRight.position.set(2.8, -1.0, 5.0);
-      scene.add(warmRight);
-
-      const warmLeft = new THREE.PointLight(0xffd29a, 0.34, 14, 2);
-      warmLeft.position.set(-3.1, -1.2, 4.6);
-      scene.add(warmLeft);
-
-      buildStoneFromSavedData();
-      renderScene();
-      window.addEventListener("resize", resizeStoneScene);
-    }
-
-    function buildStoneFromSavedData() {
-      if (!scene) return;
-
-      if (stoneGroup) {
-        scene.remove(stoneGroup);
-      }
-
-      textPlane = null;
-      const data = getMemorialData();
-      stoneGroup = createStoneGroup(normalizeStyle(data.tombstoneStyle || "rounded"));
-      scene.add(stoneGroup);
-      renderScene();
-    }
-
-    function renderScene() {
-      if (!renderer || !scene || !camera) return;
-      renderer.render(scene, camera);
-    }
-
-    function resizeStoneScene() {
-      const container = document.getElementById("stoneScene");
-      if (!container || !renderer || !camera) return;
-
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderScene();
-    }
-
-    function rebuildTextTexture() {
-      if (!textPlane || !textPlane.material) return;
-
-      const texture = updateEngravingTexture(getMemorialData());
-
-      if (textPlane.material.map) {
-        textPlane.material.map.dispose();
-      }
-
-      textPlane.material.map = texture;
-      textPlane.material.needsUpdate = true;
-      renderScene();
+      rebuildEngravingTexture();
     }
 
     function openPanel(id) {
@@ -1461,7 +1208,6 @@
 
         if (item === "can") div.textContent = "🥫 " + text.placedCan;
         if (item === "ball") div.textContent = "🎾 " + text.placedBall;
-        if (item === "seed") div.textContent = "🌾 " + text.placedSeed;
         if (item === "flower") div.textContent = "🌸 " + text.placedFlower;
 
         box.appendChild(div);
@@ -1473,6 +1219,11 @@
       items.unshift(type);
       localStorage.setItem("memorialPlacedItems", JSON.stringify(items.slice(0, 8)));
       renderPlacedItems();
+
+      const status = document.getElementById("animalStatus");
+      if (status && type === "can") {
+        status.textContent = "🥫 " + getText().animalHint;
+      }
     }
 
     document.addEventListener("keydown", function(event) {
@@ -1482,19 +1233,17 @@
       }
     });
 
+    window.addEventListener("resize", resizeScene);
     window.addEventListener("storage", function(event) {
       if (event.key === "myPetMemorial") {
-        buildStoneFromSavedData();
+        rebuildEngravingTexture();
         loadExtraMemorialInfo();
       }
     });
 
-    window.addEventListener("DOMContentLoaded", function() {
-      initStoneScene();
-
-      const savedLanguage = localStorage.getItem("siteLanguage") || "en";
-      changeLanguage(savedLanguage);
-
+    document.addEventListener("DOMContentLoaded", function() {
+      changeLanguage(currentLang);
+      initScene();
       loadExtraMemorialInfo();
       renderPlacedItems();
     });
