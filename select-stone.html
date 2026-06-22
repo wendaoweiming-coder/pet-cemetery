@@ -190,7 +190,21 @@
       height: min(72vh, 760px);
       min-height: 540px;
     }
-    #stoneCanvas { width: 100%; height: 100%; display: block; border-radius: 24px; background: transparent; }
+    .viewer-wrap::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 18%;
+      z-index: 4;
+      pointer-events: none;
+      background: linear-gradient(to top,
+        rgba(7, 10, 16, 0.38) 0%,
+        rgba(7, 10, 16, 0.20) 34%,
+        rgba(7, 10, 16, 0.00) 100%);
+    }
+    #stoneCanvas { position: relative; z-index: 1; width: 100%; height: 100%; display: block; border-radius: 24px; background: transparent; }
     .status-text {
       position: absolute;
       left: 50%;
@@ -297,51 +311,51 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    const MODEL_URL = "assets/models/tombstone-real.glb?v=11";
+    const MODEL_URL = "assets/models/tombstone-real.glb?v=12";
 
     const MODEL_VIEW_CONFIG = {
-      // v11：稳定加载版。使用普通 Three.js + GLTFLoader，不使用 type=module，先保证模型能正常加载。
-      targetHeight: 3.72,
-      modelBottomY: -1.88,
+      // v12：在稳定加载基础上，按红线截图校准墓碑位置、尺寸、底部遮挡和刻字大小。
+      targetHeight: 4.42,
+      modelBottomY: -1.96,
 
       // 预览位置：从 v9 的过大过左改回中间，角度加大，避免正面死板。
-      previewX: -0.38,
-      previewY: -0.02,
+      previewX: -1.18,
+      previewY: 0.12,
       previewZ: 0,
-      previewScale: 0.84,
+      previewScale: 0.94,
       previewRotYDeg: -16,
 
       // 确认后落位：保留原动画，只同步修正最终落位基准。
-      finalX: -0.28,
-      finalY: -0.82,
+      finalX: -0.42,
+      finalY: -0.92,
       finalZ: -0.08,
-      finalScale: 0.52,
+      finalScale: 0.56,
       finalRotYDeg: 0,
 
       cameraX: 0,
-      cameraY: 1.18,
+      cameraY: 1.24,
       cameraZ: 9.8,
       shadowY: -1.92
     };
 
     const ENGRAVING_CONFIG = {
-      // v11：刻字层固定贴在 GLB 墓碑正面，先保证位置可调、跟随模型。
-      planeWidth: 0.72,
-      planeHeight: 0.90,
-      planeX: 0,
-      planeY: 0.00,
-      planeZ: 0.092,
-      opacity: 0.72,
+      // v12：刻字层放大并上移到墓碑正面中上区域。
+      planeWidth: 1.14,
+      planeHeight: 1.42,
+      planeX: -0.012,
+      planeY: 0.24,
+      planeZ: 0.096,
+      opacity: 0.82,
       canvasWidth: 1400,
       canvasHeight: 1400,
-      nameFontSize: 54,
-      dateFontSize: 24,
-      epitaphFontSize: 26,
-      lineGap: 11,
+      nameFontSize: 98,
+      dateFontSize: 40,
+      epitaphFontSize: 44,
+      lineGap: 18,
       maxEpitaphLines: 3,
-      textColor: "rgba(32, 35, 37, 0.60)",
-      darkShadow: "rgba(4, 5, 6, 0.14)",
-      softHighlight: "rgba(235, 240, 238, 0.040)",
+      textColor: "rgba(30, 34, 37, 0.70)",
+      darkShadow: "rgba(4, 5, 6, 0.20)",
+      softHighlight: "rgba(235, 240, 238, 0.055)",
       wearAmount: 0.010
     };
 
@@ -657,7 +671,7 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const centerX = canvas.width / 2;
-      const topY = 430;
+      const topY = 350;
       const fontFamily = "'Noto Serif SC','Noto Serif TC','Noto Serif JP','Microsoft YaHei','PingFang SC','Hiragino Sans',serif";
       const nameFont = "700 " + ENGRAVING_CONFIG.nameFontSize + "px " + fontFamily;
       const dateFont = "500 " + ENGRAVING_CONFIG.dateFontSize + "px " + fontFamily;
@@ -669,9 +683,9 @@
       drawEngravedText(ctx, dateLine, centerX, topY + 108, dateFont);
 
       ctx.font = epitaphFont;
-      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.30, ENGRAVING_CONFIG.maxEpitaphLines);
+      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.46, ENGRAVING_CONFIG.maxEpitaphLines);
       const step = ENGRAVING_CONFIG.epitaphFontSize + ENGRAVING_CONFIG.lineGap;
-      const startY = topY + 238 - ((lines.length - 1) * step) / 2;
+      const startY = topY + 262 - ((lines.length - 1) * step) / 2;
       lines.forEach(function(line, index) {
         drawEngravedText(ctx, line, centerX, startY + index * step, epitaphFont);
       });
