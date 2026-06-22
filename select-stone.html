@@ -191,18 +191,8 @@
       min-height: 540px;
     }
     .viewer-wrap::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 18%;
-      z-index: 4;
-      pointer-events: none;
-      background: linear-gradient(to top,
-        rgba(7, 10, 16, 0.38) 0%,
-        rgba(7, 10, 16, 0.20) 34%,
-        rgba(7, 10, 16, 0.00) 100%);
+      /* v13：关闭旧的前景遮挡层。它会把 GLB 底座“吃掉”，看起来像模型不完整。 */
+      content: none;
     }
     #stoneCanvas { position: relative; z-index: 1; width: 100%; height: 100%; display: block; border-radius: 24px; background: transparent; }
     .status-text {
@@ -311,23 +301,24 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    const MODEL_URL = "assets/models/tombstone-real.glb?v=12";
+    const MODEL_URL = "assets/models/tombstone-real.glb?v=13";
 
     const MODEL_VIEW_CONFIG = {
-      // v12：在稳定加载基础上，按红线截图校准墓碑位置、尺寸、底部遮挡和刻字大小。
+      // v13：只校准 GLB 模型的展示位置，不再改页面布局。
+      // targetHeight 控制模型自身大小；previewX/previewY 控制模型在画面中的位置。
       targetHeight: 4.42,
       modelBottomY: -1.96,
 
-      // 预览位置：从 v9 的过大过左改回中间，角度加大，避免正面死板。
-      previewX: -1.18,
-      previewY: 0.12,
+      // 按用户红线：整体往左收，保持当前大小，角度沿用已认可方向。
+      previewX: -1.72,
+      previewY: 0.16,
       previewZ: 0,
       previewScale: 0.94,
       previewRotYDeg: -16,
 
-      // 确认后落位：保留原动画，只同步修正最终落位基准。
-      finalX: -0.42,
-      finalY: -0.92,
+      // 确认后的落位同步向左，避免动画结束又偏回去。
+      finalX: -0.72,
+      finalY: -0.90,
       finalZ: -0.08,
       finalScale: 0.56,
       finalRotYDeg: 0,
@@ -339,24 +330,24 @@
     };
 
     const ENGRAVING_CONFIG = {
-      // v12：刻字层放大并上移到墓碑正面中上区域。
-      planeWidth: 1.14,
-      planeHeight: 1.42,
-      planeX: -0.012,
-      planeY: 0.24,
-      planeZ: 0.096,
-      opacity: 0.82,
+      // v13：刻字层不再跑到墓碑外，改为较小的正面刻字区。
+      planeWidth: 0.76,
+      planeHeight: 0.98,
+      planeX: -0.04,
+      planeY: -0.20,
+      planeZ: 0.108,
+      opacity: 0.88,
       canvasWidth: 1400,
       canvasHeight: 1400,
-      nameFontSize: 98,
-      dateFontSize: 40,
-      epitaphFontSize: 44,
-      lineGap: 18,
+      nameFontSize: 136,
+      dateFontSize: 54,
+      epitaphFontSize: 58,
+      lineGap: 20,
       maxEpitaphLines: 3,
-      textColor: "rgba(30, 34, 37, 0.70)",
-      darkShadow: "rgba(4, 5, 6, 0.20)",
-      softHighlight: "rgba(235, 240, 238, 0.055)",
-      wearAmount: 0.010
+      textColor: "rgba(28, 32, 35, 0.76)",
+      darkShadow: "rgba(4, 5, 6, 0.22)",
+      softHighlight: "rgba(245, 248, 246, 0.060)",
+      wearAmount: 0.008
     };
 
     const I18N = {
@@ -671,7 +662,7 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const centerX = canvas.width / 2;
-      const topY = 350;
+      const topY = 300;
       const fontFamily = "'Noto Serif SC','Noto Serif TC','Noto Serif JP','Microsoft YaHei','PingFang SC','Hiragino Sans',serif";
       const nameFont = "700 " + ENGRAVING_CONFIG.nameFontSize + "px " + fontFamily;
       const dateFont = "500 " + ENGRAVING_CONFIG.dateFontSize + "px " + fontFamily;
@@ -680,12 +671,12 @@
       const dateLine = [data.birthDate, data.deathDate].filter(Boolean).join(" - ");
 
       drawEngravedText(ctx, data.name, centerX, topY, nameFont);
-      drawEngravedText(ctx, dateLine, centerX, topY + 108, dateFont);
+      drawEngravedText(ctx, dateLine, centerX, topY + 130, dateFont);
 
       ctx.font = epitaphFont;
-      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.46, ENGRAVING_CONFIG.maxEpitaphLines);
+      const lines = wrapText(ctx, data.epitaph, canvas.width * 0.42, ENGRAVING_CONFIG.maxEpitaphLines);
       const step = ENGRAVING_CONFIG.epitaphFontSize + ENGRAVING_CONFIG.lineGap;
-      const startY = topY + 262 - ((lines.length - 1) * step) / 2;
+      const startY = topY + 300 - ((lines.length - 1) * step) / 2;
       lines.forEach(function(line, index) {
         drawEngravedText(ctx, line, centerX, startY + index * step, epitaphFont);
       });
