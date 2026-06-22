@@ -85,11 +85,11 @@
     /* 关键：模型只在这个舞台里渲染，不再占满整个页面 */
     #stageWrap {
       position: absolute;
-      left: 60%;
-      top: 60%;
+      left: 58%;
+      top: 55%;
       transform: translate(-50%, -50%);
-      width: min(42vw, 720px);
-      height: min(68vh, 700px);
+      width: min(44vw, 760px);
+      height: min(72vh, 740px);
       z-index: 9;
       pointer-events: none;
     }
@@ -169,34 +169,34 @@
       const MODEL_PATH = "./assets/models/tombstone-real.glb";
 
       const VIEW = {
-        targetHeight: 3.40,
-        previewX: 0,
-        previewY: -1.62,
+        targetHeight: 3.75,
+        previewX: -0.18,
+        previewY: -0.28,
         previewZ: 0,
         previewScale: 1.0,
         previewRotY: -0.34,
-        finalX: 0,
-        finalY: -1.86,
-        finalZ: -0.20,
-        finalScale: 0.62,
+        finalX: -0.08,
+        finalY: -0.92,
+        finalZ: -0.16,
+        finalScale: 0.58,
         finalRotY: 0
       };
 
       const ENGRAVE = {
-        widthRatio: 0.50,
-        heightRatio: 0.34,
-        yRatio: 0.56,
-        zOffset: 0.012,
+        widthRatio: 0.46,
+        heightRatio: 0.31,
+        yRatio: 0.48,
+        zOffset: 0.014,
         canvasSize: 1024,
-        nameSize: 92,
-        dateSize: 42,
-        epitaphSize: 48,
-        nameY: 270,
+        nameSize: 108,
+        dateSize: 46,
+        epitaphSize: 50,
+        nameY: 285,
         dateY: 430,
-        epitaphY: 610,
+        epitaphY: 605,
         lineGap: 66,
         maxLines: 3,
-        maxWidthRatio: 0.70
+        maxWidthRatio: 0.62
       };
 
       const stageEl = document.getElementById("stage");
